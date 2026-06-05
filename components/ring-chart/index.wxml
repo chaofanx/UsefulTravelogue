@@ -1,0 +1,11 @@
+<view class="ring-chart-container" style="width: {{width}}rpx; height: {{height}}rpx;">
+  <canvas
+    type="2d"
+    id="ring-canvas"
+    class="ring-canvas"
+  />
+  <view wx:if="{{centerText}}" class="ring-center">
+    <text class="center-value">{{centerText}}</text>
+    <text wx:if="{{centerSub}}" class="center-sub">{{centerSub}}</text>
+  </view>
+</view>

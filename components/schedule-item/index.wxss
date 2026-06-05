@@ -1,0 +1,115 @@
+.schedule-item {
+  display: flex;
+}
+
+.schedule-dot-row {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 48rpx;
+  flex-shrink: 0;
+  padding-top: 8rpx;
+}
+
+.schedule-dot {
+  width: 16rpx;
+  height: 16rpx;
+  border-radius: 50%;
+  background-color: var(--travel-brand, #38C172);
+  flex-shrink: 0;
+}
+
+.schedule-line {
+  width: 2rpx;
+  flex: 1;
+  min-height: 40rpx;
+  background-color: var(--td-component-stroke);
+  margin-top: 8rpx;
+}
+
+.schedule-content {
+  flex: 1;
+  padding-left: 20rpx;
+  padding-bottom: 28rpx;
+}
+
+.schedule-time {
+  font-size: 24rpx;
+  color: var(--td-text-color-placeholder);
+  margin-bottom: 12rpx;
+}
+
+.schedule-card {
+  background: var(--td-bg-color-container);
+  border-radius: 16rpx;
+  padding: 24rpx;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.04);
+}
+
+.schedule-place {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  min-width: 0;
+}
+
+.place-icon {
+  font-size: 32rpx;
+  margin-right: 12rpx;
+  flex-shrink: 0;
+}
+
+.place-name {
+  font-size: 28rpx;
+  font-weight: 500;
+  color: var(--td-text-color-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.schedule-actions {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  margin-left: 16rpx;
+}
+
+.map-link {
+  width: 52rpx;
+  height: 52rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12rpx;
+  background: var(--td-bg-color-secondarycontainer);
+  margin-right: 12rpx;
+}
+
+.map-icon {
+  font-size: 26rpx;
+}
+
+.edit-arrow {
+  font-size: 36rpx;
+  color: var(--td-text-color-placeholder);
+}
+
+.schedule-notes {
+  margin-top: 12rpx;
+  padding: 16rpx 20rpx;
+  background: var(--td-bg-color-secondarycontainer);
+  border-radius: 12rpx;
+  font-size: 24rpx;
+  color: var(--td-text-color-secondary);
+  line-height: 1.6;
+}
+
+.schedule-contributor {
+  font-size: 22rpx;
+  color: var(--td-text-color-placeholder);
+  margin-top: 10rpx;
+}

@@ -1,0 +1,9 @@
+{
+  "usingComponents": {
+    "book-header": "/components/book-header/index",
+    "bill-group": "/components/bill-group/index",
+    "custom-tab-bar": "/components/custom-tab-bar/index"
+  },
+  "navigationBarTitleText": "账单",
+  "navigationStyle": "custom"
+}

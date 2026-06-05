@@ -1,0 +1,25 @@
+<view class="page-bill">
+  <book-header book="{{book}}" bind:bookchange="onBookChange" />
+
+  <view class="bill-content">
+    <view class="bill-list-card">
+      <bill-group
+        wx:for="{{groupedBills}}"
+        wx:key="date"
+        group="{{item}}"
+        bind:billtap="onBillTap"
+      />
+      <view wx:if="{{groupedBills.length === 0}}" class="empty-bill">
+        <text class="empty-icon-text">📝</text>
+        <text>暂无账单记录</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="float-btn" bindtap="onAddBill">
+    <text class="float-icon">✏️</text>
+    <text class="float-text">记一笔</text>
+  </view>
+
+  <custom-tab-bar current="bill" bookId="{{bookId}}" bind:change="onTabChange" />
+</view>

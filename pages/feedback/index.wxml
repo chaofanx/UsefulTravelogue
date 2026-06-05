@@ -1,0 +1,45 @@
+<view class="page-feedback">
+  <t-navbar title="建议反馈" leftArrow bind:go-back="onBack" />
+
+  <view class="form-card">
+    <view class="form-item">
+      <view class="form-label">反馈类型</view>
+      <view class="type-options">
+        <view
+          wx:for="{{types}}"
+          wx:key="*this"
+          class="type-item {{selectedType === item ? 'active' : ''}}"
+          data-type="{{item}}"
+          bindtap="onTypeTap"
+        >
+          <text>{{item}}</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="form-item">
+      <view class="form-label">详细描述</view>
+      <textarea
+        class="form-textarea"
+        placeholder="请详细描述您遇到的问题或建议..."
+        value="{{content}}"
+        bindinput="onContentInput"
+        maxlength="500"
+      />
+      <text class="char-count">{{content.length}}/500</text>
+    </view>
+  </view>
+
+  <view class="submit-section">
+    <t-button
+      theme="primary"
+      size="large"
+      block
+      disabled="{{!content}}"
+      bind:tap="onSubmit"
+      style="background-color: var(--travel-brand, #38C172); border-color: var(--travel-brand, #38C172);"
+    >
+      提交反馈
+    </t-button>
+  </view>
+</view>

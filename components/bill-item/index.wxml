@@ -1,0 +1,13 @@
+<view class="bill-item" bindtap="onTap">
+  <view class="bill-left">
+    <travel-icon icon="{{bill.icon}}" size="{{64}}" round="{{false}}" />
+    <view class="bill-info">
+      <view class="bill-category">{{bill.category}}</view>
+      <view class="bill-meta">{{bill.time}} · {{bill.payer}}付款</view>
+      <view wx:if="{{bill.remark}}" class="bill-remark">{{bill.remark}}</view>
+    </view>
+  </view>
+  <view class="bill-right">
+    <text class="bill-amount">¥{{bill.amountText}}</text>
+  </view>
+</view>

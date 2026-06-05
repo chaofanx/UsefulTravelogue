@@ -1,0 +1,63 @@
+.page-feedback {
+  min-height: 100vh;
+  background-color: var(--td-bg-color-page);
+}
+
+.form-card {
+  margin: 24rpx 32rpx;
+  background: var(--td-bg-color-container);
+  border-radius: 24rpx;
+  padding: 32rpx 32rpx;
+}
+
+.form-item {
+  margin-bottom: 36rpx;
+}
+
+.form-label {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: var(--td-text-color-primary);
+  margin-bottom: 20rpx;
+}
+
+.type-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16rpx;
+}
+
+.type-item {
+  padding: 14rpx 28rpx;
+  border-radius: 12rpx;
+  background: var(--td-bg-color-secondarycontainer);
+  font-size: 26rpx;
+  color: var(--td-text-color-secondary);
+}
+
+.type-item.active {
+  background: var(--travel-brand, #38C172);
+  color: #fff;
+}
+
+.form-textarea {
+  width: 100%;
+  height: 240rpx;
+  background: var(--td-bg-color-secondarycontainer);
+  border-radius: 12rpx;
+  padding: 20rpx 24rpx;
+  font-size: 28rpx;
+  box-sizing: border-box;
+}
+
+.char-count {
+  text-align: right;
+  font-size: 22rpx;
+  color: var(--td-text-color-placeholder);
+  margin-top: 8rpx;
+  display: block;
+}
+
+.submit-section {
+  padding: 32rpx;
+}

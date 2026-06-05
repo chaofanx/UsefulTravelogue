@@ -1,0 +1,14 @@
+<view class="book-card" bindtap="onTap">
+  <view class="card-cover" style="background-color: {{book.coverColor || '#4A90D9'}}">
+    <view wx:if="{{book.vip}}" class="vip-badge">
+      <text class="vip-icon">💎</text>
+    </view>
+    <view class="cover-placeholder">
+      <text class="cover-text">{{book.title}}</text>
+    </view>
+  </view>
+  <view class="card-info">
+    <view class="card-title">{{book.title}}</view>
+    <view class="card-date">{{book.date}}</view>
+  </view>
+</view>

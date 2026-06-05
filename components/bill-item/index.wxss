@@ -1,0 +1,55 @@
+.bill-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24rpx 0;
+}
+
+.bill-item + .bill-item {
+  border-top: 1rpx solid var(--td-component-stroke);
+}
+
+.bill-left {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  min-width: 0;
+}
+
+.bill-info {
+  margin-left: 20rpx;
+  flex: 1;
+  min-width: 0;
+}
+
+.bill-category {
+  font-size: 28rpx;
+  font-weight: 500;
+  color: var(--td-text-color-primary);
+}
+
+.bill-meta {
+  font-size: 24rpx;
+  color: var(--td-text-color-placeholder);
+  margin-top: 6rpx;
+}
+
+.bill-remark {
+  font-size: 22rpx;
+  color: var(--td-text-color-placeholder);
+  margin-top: 4rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.bill-right {
+  margin-left: 24rpx;
+  flex-shrink: 0;
+}
+
+.bill-amount {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: var(--td-text-color-primary);
+}

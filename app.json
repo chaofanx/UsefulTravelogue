@@ -1,0 +1,42 @@
+{
+  "darkmode": true,
+  "pages": [
+    "pages/index/index",
+    "pages/book/bill/index",
+    "pages/book/schedule/index",
+    "pages/book/statistics/index",
+    "pages/createBook/index",
+    "pages/profile/index",
+    "pages/bookDetail/index",
+    "pages/addBill/index",
+    "pages/feedback/index",
+    "pages/memberList/index",
+    "pages/ticket/index"
+  ],
+  "themeLocation": "theme.json",
+  "usingComponents": {
+    "t-button": "tdesign-miniprogram/button/button",
+    "t-icon": "tdesign-miniprogram/icon/icon",
+    "t-navbar": "tdesign-miniprogram/navbar/navbar",
+    "t-popup": "tdesign-miniprogram/popup/popup"
+  },
+  "window": {
+    "navigationBarTitleText": "好用旅记",
+    "navigationStyle": "custom",
+    "navigationBarTextStyle": "@navTxtStyle"
+  },
+  "resolveAlias": {
+    "@behaviors/*": "behaviors/*"
+  },
+  "sitemapLocation": "sitemap.json",
+  "lazyCodeLoading": "requiredComponents",
+  "rendererOptions": {
+    "skyline": {
+      "disableABTest": true,
+      "defaultDisplayBlock": true,
+      "defaultContentBox": true,
+      "sdkVersionBegin": "3.4.3",
+      "sdkVersionEnd": "15.255.255"
+    }
+  }
+}

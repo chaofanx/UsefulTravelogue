@@ -1,0 +1,119 @@
+<view class="page-index">
+  <view class="top-section">
+    <view class="brand-area">
+      <view class="brand-logo">
+        <text class="logo-icon">✈️</text>
+      </view>
+      <view class="brand-text">
+        <view class="brand-name">好用旅记</view>
+        <view class="brand-desc">简单好用的多人记账、自动分账工具</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="action-section">
+    <view class="create-btn" bindtap="onCreateBook">
+      <text class="create-icon">+</text>
+      <text class="create-text">新建账本</text>
+    </view>
+    <view class="profile-btn" bindtap="onProfile">
+      <text class="profile-icon">👤</text>
+    </view>
+  </view>
+
+  <view class="book-list" wx:if="{{books.length > 0}}">
+    <view class="section-title-wrap">
+      <text class="section-title">我的账本</text>
+      <text class="section-count">{{books.length}}个</text>
+    </view>
+    <view class="book-grid">
+      <view class="book-grid-item" wx:for="{{books}}" wx:key="id">
+        <book-card book="{{item}}" bind:tap="onBookTap" />
+      </view>
+    </view>
+  </view>
+
+  <view class="empty-state" wx:else>
+    <text class="empty-icon">📒</text>
+    <text class="empty-text">还没有账本，点击上方新建吧</text>
+  </view>
+
+  <view class="bottom-section">
+    <view class="bottom-links">
+      <text class="link-item" bindtap="onShare">推荐给朋友</text>
+      <text class="link-divider">|</text>
+      <text class="link-item" bindtap="onFeedback">建议反馈</text>
+    </view>
+  </view>
+
+  <t-popup visible="{{showCreatePopup}}" placement="bottom" bind:visible-change="onPopupVisibleChange">
+    <view class="create-popup">
+      <view class="popup-handle">
+        <view class="handle-bar"></view>
+      </view>
+
+      <view class="popup-title">新建账本</view>
+
+      <view class="popup-form">
+        <view class="form-item">
+          <view class="form-label">账本名称</view>
+          <view class="name-input-wrap">
+            <input
+              class="name-input"
+              placeholder="输入名称，如「五一北京」（8字以内）"
+              maxlength="8"
+              value="{{newBookName}}"
+              bindinput="onNewBookNameInput"
+              focus="{{showCreatePopup}}"
+            />
+            <text class="name-count">{{newBookName.length}}/8</text>
+          </view>
+        </view>
+
+        <view class="form-item">
+          <view class="form-label">封面图片（可选）</view>
+          <view class="cover-upload-area" bindtap="onChooseCover">
+            <block wx:if="{{newBookCover}}">
+              <image class="cover-preview" src="{{newBookCover}}" mode="aspectFill" />
+              <view class="cover-replace">
+                <text>更换封面</text>
+              </view>
+            </block>
+            <block wx:else>
+              <text class="upload-icon">📷</text>
+              <text class="upload-text">点击上传封面</text>
+            </block>
+          </view>
+          <view wx:if="{{!newBookCover}}" class="color-options">
+            <view class="color-label">或选个底色：</view>
+            <view class="color-row">
+              <view
+                wx:for="{{coverColors}}"
+                wx:key="*this"
+                class="color-dot {{newBookColor === item ? 'selected' : ''}}"
+                style="background-color: {{item}}"
+                data-color="{{item}}"
+                bindtap="onColorPick"
+              >
+                <text wx:if="{{newBookColor === item}}" class="check-icon">✓</text>
+              </view>
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <view class="popup-footer">
+        <t-button
+          theme="primary"
+          size="large"
+          block
+          disabled="{{!newBookName}}"
+          bind:tap="onConfirmCreateBook"
+          style="background-color: var(--travel-brand, #38C172); border-color: var(--travel-brand, #38C172);"
+        >
+          完成
+        </t-button>
+      </view>
+    </view>
+  </t-popup>
+</view>

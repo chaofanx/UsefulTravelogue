@@ -1,0 +1,100 @@
+<view class="page-schedule">
+  <book-header book="{{book}}" bind:bookchange="onBookChange" />
+
+  <view class="schedule-content">
+    <view class="ticket-card" bindtap="onTicketTap">
+      <view class="ticket-left">
+        <text class="ticket-title">转发行程票根</text>
+        <text class="ticket-desc">分享你的旅程印记</text>
+      </view>
+      <view class="ticket-right">
+        <text class="ticket-icon">🎟️</text>
+        <text class="ticket-arrow">›</text>
+      </view>
+    </view>
+
+    <view class="schedule-timeline-card">
+      <block wx:for="{{groupedSchedules}}" wx:key="date">
+        <view class="date-section">
+          <view class="date-header">
+            <text class="date-text">{{item.monthDay}} {{item.dayOfWeek}}</text>
+            <text class="date-more">...</text>
+          </view>
+          <view class="date-schedules">
+            <schedule-item
+              wx:for="{{item.schedules}}"
+              wx:for-item="sch"
+              wx:key="id"
+              item="{{sch}}"
+              isLast="{{index === item.schedules.length - 1}}"
+              bind:edittap="onScheduleEdit"
+            />
+          </view>
+        </view>
+      </block>
+      <view wx:if="{{groupedSchedules.length === 0}}" class="empty-schedule">
+        <text>暂无行程安排</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="float-btn" bindtap="onAddSchedule">
+    <text class="float-icon">✏️</text>
+    <text class="float-text">记一项</text>
+  </view>
+
+  <custom-tab-bar current="schedule" bookId="{{bookId}}" bind:change="onTabChange" />
+
+  <t-popup visible="{{showFormPopup}}" placement="bottom" bind:visible-change="onFormPopupVisible">
+    <view class="schedule-form-popup">
+      <view class="popup-handle">
+        <view class="handle-bar"></view>
+      </view>
+      <view class="popup-title">{{editingId ? '编辑行程' : '添加行程'}}</view>
+
+      <view class="form-scroll">
+        <view class="form-item">
+          <view class="form-label">目的地</view>
+          <view class="location-picker" bindtap="onChooseLocation">
+            <text class="location-icon">📍</text>
+            <text class="location-text {{formLocation ? '' : 'placeholder'}}">{{formLocation || '点击选择地点'}}</text>
+            <text class="location-arrow">›</text>
+          </view>
+        </view>
+
+        <view class="form-item">
+          <view class="form-label">时段</view>
+          <view class="period-row">
+            <view
+              wx:for="{{periods}}"
+              wx:key="*this"
+              class="period-item {{formPeriod === item ? 'active' : ''}}"
+              data-period="{{item}}"
+              bindtap="onPeriodTap"
+            >
+              <text>{{item}}</text>
+            </view>
+          </view>
+        </view>
+
+        <view class="form-item">
+          <view class="form-label">备注</view>
+          <textarea
+            class="form-textarea"
+            placeholder="记录一些行程感受或实用信息..."
+            value="{{formNotes}}"
+            bindinput="onNotesInput"
+            maxlength="300"
+            auto-height
+          />
+          <text class="char-count">{{formNotes.length}}/300</text>
+        </view>
+      </view>
+
+      <view class="popup-footer">
+        <view class="footer-btn cancel-btn" bindtap="onCancelForm">取消</view>
+        <view class="footer-btn confirm-btn" bindtap="onConfirmSchedule">{{editingId ? '保存' : '添加'}}</view>
+      </view>
+    </view>
+  </t-popup>
+</view>

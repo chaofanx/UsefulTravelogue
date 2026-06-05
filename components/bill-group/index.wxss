@@ -1,0 +1,27 @@
+.bill-group {
+  margin-bottom: 8rpx;
+}
+
+.group-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24rpx 0 16rpx;
+}
+
+.group-date {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: var(--td-text-color-primary);
+}
+
+.group-summary {
+  display: flex;
+  align-items: center;
+  font-size: 24rpx;
+  color: var(--td-text-color-placeholder);
+}
+
+.summary-out {
+  margin-right: 20rpx;
+}

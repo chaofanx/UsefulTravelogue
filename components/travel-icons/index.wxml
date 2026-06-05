@@ -1,0 +1,3 @@
+<view class="travel-icon" style="background-color: {{bgColor}}; width: {{size}}rpx; height: {{size}}rpx; border-radius: {{round ? '50%' : '16rpx'}};">
+  <text class="icon-emoji">{{iconText}}</text>
+</view>

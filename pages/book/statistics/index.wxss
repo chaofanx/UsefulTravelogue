@@ -1,0 +1,183 @@
+.page-statistics {
+  min-height: 100vh;
+  background-color: var(--td-bg-color-page);
+  display: flex;
+  flex-direction: column;
+  padding-bottom: calc(100rpx + constant(safe-area-inset-bottom));
+  padding-bottom: calc(100rpx + env(safe-area-inset-bottom));
+}
+
+.statistics-content {
+  flex: 1;
+  padding: 0 32rpx;
+  margin-top: -24rpx;
+  position: relative;
+  z-index: 2;
+}
+
+.stat-card {
+  background: var(--td-bg-color-container);
+  border-radius: 24rpx;
+  padding: 28rpx;
+  margin-bottom: 20rpx;
+}
+
+.stat-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20rpx;
+}
+
+.stat-card-title {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: var(--td-text-color-primary);
+}
+
+.stat-card-total {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: var(--travel-brand, #38C172);
+}
+
+.chart-section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20rpx 0;
+}
+
+.category-list {
+  margin-top: 20rpx;
+}
+
+.settlement-card {
+  background: var(--td-bg-color-container);
+  border-radius: 24rpx;
+  padding: 28rpx;
+  margin-bottom: 20rpx;
+}
+
+.settlement-tabs {
+  display: flex;
+  margin-bottom: 28rpx;
+  border-radius: 12rpx;
+  background: var(--td-bg-color-secondarycontainer);
+  padding: 6rpx;
+}
+
+.settlement-tab {
+  flex: 1;
+  text-align: center;
+  padding: 14rpx 0;
+  font-size: 26rpx;
+  color: var(--td-text-color-placeholder);
+  border-radius: 10rpx;
+  transition: all 0.2s;
+}
+
+.settlement-tab.active {
+  background: var(--td-bg-color-container);
+  color: var(--td-text-color-primary);
+  font-weight: 600;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.06);
+}
+
+.settlement-item {
+  display: flex;
+  align-items: center;
+  padding: 20rpx 0;
+}
+
+.settlement-item + .settlement-item {
+  border-top: 1rpx solid var(--td-component-stroke);
+}
+
+.settlement-avatar {
+  width: 64rpx;
+  height: 64rpx;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.settlement-avatar-text {
+  font-size: 28rpx;
+  color: #fff;
+  font-weight: 600;
+}
+
+.settlement-info {
+  flex: 1;
+  margin-left: 20rpx;
+}
+
+.settlement-desc {
+  font-size: 28rpx;
+  color: var(--td-text-color-primary);
+}
+
+.settlement-amount {
+  flex-shrink: 0;
+}
+
+.settlement-amount-val {
+  font-size: 32rpx;
+  font-weight: 700;
+  color: var(--travel-brand, #38C172);
+}
+
+.settlement-tip {
+  padding: 16rpx 0;
+  font-size: 24rpx;
+  color: var(--td-text-color-placeholder);
+  text-align: center;
+}
+
+.settlement-btn {
+  padding: 20rpx 0;
+  text-align: center;
+  font-size: 28rpx;
+  color: var(--travel-brand, #38C172);
+  font-weight: 500;
+}
+
+.action-cards {
+  margin-bottom: 20rpx;
+}
+
+.action-card {
+  background: var(--td-bg-color-container);
+  border-radius: 24rpx;
+  margin-bottom: 16rpx;
+}
+
+.action-card-inner {
+  padding: 28rpx;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.action-card-text {
+  font-size: 28rpx;
+  color: var(--td-text-color-primary);
+  flex: 1;
+}
+
+.action-card-btn {
+  background: var(--travel-brand, #38C172);
+  color: #fff;
+  padding: 12rpx 28rpx;
+  border-radius: 20rpx;
+  font-size: 24rpx;
+  flex-shrink: 0;
+}
+
+.action-card-arrow {
+  font-size: 32rpx;
+  color: var(--td-text-color-placeholder);
+}

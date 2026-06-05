@@ -1,0 +1,291 @@
+.book-header {
+  width: 100%;
+}
+
+.header-cover {
+  width: 100%;
+  height: 420rpx;
+  position: relative;
+  overflow: hidden;
+}
+
+.cover-overlay {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.4));
+  padding: 0 32rpx;
+  box-sizing: border-box;
+}
+
+.header-top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: calc(88rpx + constant(safe-area-inset-top));
+  padding-top: calc(88rpx + env(safe-area-inset-top));
+}
+
+.back-btn {
+  width: 64rpx;
+  height: 64rpx;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(10rpx);
+}
+
+.back-icon {
+  font-size: 36rpx;
+  color: #fff;
+  font-weight: 600;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+}
+
+.action-btn {
+  width: 64rpx;
+  height: 64rpx;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(10rpx);
+}
+
+.action-icon {
+  font-size: 30rpx;
+}
+
+.header-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding-bottom: 40rpx;
+}
+
+.header-title {
+  font-size: 40rpx;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 8rpx;
+}
+
+.header-subtitle {
+  font-size: 24rpx;
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 20rpx;
+}
+
+.header-members {
+  display: flex;
+  align-items: center;
+}
+
+/* Popup shared styles */
+.popup-handle {
+  display: flex;
+  justify-content: center;
+  padding: 20rpx 0 12rpx;
+}
+
+.handle-bar {
+  width: 64rpx;
+  height: 8rpx;
+  border-radius: 4rpx;
+  background: var(--td-component-stroke);
+}
+
+.popup-title {
+  font-size: 34rpx;
+  font-weight: 700;
+  color: var(--td-text-color-primary);
+  text-align: center;
+  margin-bottom: 32rpx;
+}
+
+.popup-footer {
+  display: flex;
+  gap: 20rpx;
+  padding-top: 24rpx;
+}
+
+.footer-btn {
+  flex: 1;
+  height: 80rpx;
+  border-radius: 16rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30rpx;
+  font-weight: 500;
+}
+
+.cancel-btn {
+  background: var(--td-bg-color-secondarycontainer);
+  color: var(--td-text-color-secondary);
+}
+
+.confirm-btn {
+  background: var(--travel-brand, #38C172);
+  color: #fff;
+}
+
+.name-input-wrap {
+  display: flex;
+  align-items: center;
+  background: var(--td-bg-color-secondarycontainer);
+  border-radius: 16rpx;
+  padding: 0 24rpx;
+  height: 88rpx;
+}
+
+.name-input {
+  flex: 1;
+  font-size: 30rpx;
+  color: var(--td-text-color-primary);
+}
+
+.name-count {
+  font-size: 24rpx;
+  color: var(--td-text-color-placeholder);
+  flex-shrink: 0;
+  margin-left: 16rpx;
+}
+
+/* Setting popup */
+.setting-popup {
+  background: var(--td-bg-color-container);
+  border-radius: 32rpx 32rpx 0 0;
+  padding: 0 0 32rpx;
+  padding-bottom: calc(32rpx + constant(safe-area-inset-bottom));
+  padding-bottom: calc(32rpx + env(safe-area-inset-bottom));
+}
+
+.setting-list {
+  padding: 0 32rpx;
+}
+
+.setting-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 32rpx 0;
+}
+
+.setting-item + .setting-item {
+  border-top: 1rpx solid var(--td-component-stroke);
+}
+
+.setting-label {
+  font-size: 30rpx;
+  color: var(--td-text-color-primary);
+}
+
+.danger-text {
+  color: #FF6B6B !important;
+}
+
+.setting-value-row {
+  display: flex;
+  align-items: center;
+}
+
+.setting-value {
+  font-size: 26rpx;
+  color: var(--td-text-color-placeholder);
+  margin-right: 12rpx;
+}
+
+.setting-arrow {
+  font-size: 32rpx;
+  color: var(--td-text-color-placeholder);
+}
+
+/* Rename popup */
+.rename-popup {
+  background: var(--td-bg-color-container);
+  border-radius: 32rpx 32rpx 0 0;
+  padding: 0 32rpx 32rpx;
+  padding-bottom: calc(32rpx + constant(safe-area-inset-bottom));
+  padding-bottom: calc(32rpx + env(safe-area-inset-bottom));
+}
+
+/* Add member popup */
+.add-member-popup {
+  background: var(--td-bg-color-container);
+  border-radius: 32rpx 32rpx 0 0;
+  padding: 0 32rpx 32rpx;
+  padding-bottom: calc(32rpx + constant(safe-area-inset-bottom));
+  padding-bottom: calc(32rpx + env(safe-area-inset-bottom));
+}
+
+.member-input-row {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  margin-bottom: 24rpx;
+}
+
+.member-input-row .name-input-wrap {
+  flex: 1;
+}
+
+.add-btn {
+  flex-shrink: 0;
+  padding: 0 32rpx;
+  height: 88rpx;
+  border-radius: 16rpx;
+  background: var(--travel-brand, #38C172);
+  color: #fff;
+  font-size: 28rpx;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.current-members {
+  padding-top: 8rpx;
+}
+
+.members-tip {
+  font-size: 24rpx;
+  color: var(--td-text-color-placeholder);
+}
+
+.member-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12rpx;
+  margin-top: 16rpx;
+}
+
+.member-tag {
+  background: var(--td-bg-color-secondarycontainer);
+  padding: 10rpx 20rpx;
+  border-radius: 10rpx;
+  font-size: 26rpx;
+  color: var(--td-text-color-primary);
+  display: flex;
+  align-items: center;
+}
+
+.member-tag:first-child {
+  border: 2rpx solid var(--travel-brand, #38C172);
+}
+
+.tag-remove {
+  margin-left: 10rpx;
+  font-size: 24rpx;
+  color: var(--td-text-color-placeholder);
+}

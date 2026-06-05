@@ -1,0 +1,9 @@
+.travel-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon-emoji {
+  font-size: 28rpx;
+}

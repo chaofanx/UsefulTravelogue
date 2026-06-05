@@ -1,0 +1,41 @@
+.custom-tab-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  height: 100rpx;
+  box-sizing: content-box;
+  background: var(--td-bg-color-container);
+  border-top: 1rpx solid var(--td-component-stroke);
+  padding-bottom: constant(safe-area-inset-bottom);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.tab-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  height: 100%;
+  position: relative;
+}
+
+.tab-icon {
+  font-size: 36rpx;
+}
+
+.tab-label {
+  font-size: 22rpx;
+  color: var(--td-text-color-placeholder);
+  margin-top: 4rpx;
+}
+
+.tab-item.active .tab-label {
+  color: var(--travel-brand, #38C172);
+  font-weight: 600;
+}

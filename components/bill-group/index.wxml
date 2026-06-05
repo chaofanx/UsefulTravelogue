@@ -1,0 +1,17 @@
+<view class="bill-group">
+  <view class="group-header">
+    <view class="group-date">{{displayDate}}</view>
+    <view class="group-summary">
+      <text class="summary-out">出 ¥{{outAmount}}</text>
+      <text class="summary-in">收 ¥{{inAmount}}</text>
+    </view>
+  </view>
+  <view class="group-body">
+    <bill-item
+      wx:for="{{group.bills}}"
+      wx:key="id"
+      bill="{{item}}"
+      bind:tap="onBillTap"
+    />
+  </view>
+</view>

@@ -1,0 +1,8 @@
+{
+  "usingComponents": {
+    "t-navbar": "tdesign-miniprogram/navbar/navbar",
+    "t-button": "tdesign-miniprogram/button/button"
+  },
+  "navigationBarTitleText": "成员列表",
+  "navigationStyle": "custom"
+}

@@ -1,0 +1,117 @@
+<view class="book-header">
+  <view class="header-cover" style="background-color: {{book.coverColor || '#4A90D9'}}">
+    <view class="cover-overlay" style="padding-right: {{capsuleRight}}rpx;">
+      <view class="header-top-bar">
+        <view class="back-btn" bindtap="onBack">
+          <text class="back-icon">←</text>
+        </view>
+        <view class="header-actions">
+          <view class="action-btn" bindtap="onVip">
+            <text class="action-icon">💎</text>
+          </view>
+          <view class="action-btn" bindtap="onOpenSetting">
+            <text class="action-icon">⚙️</text>
+          </view>
+        </view>
+      </view>
+
+      <view class="header-info">
+        <view class="header-title">{{book.title}}</view>
+        <view class="header-subtitle">{{book.date}} · 与{{memberCount}}位朋友一起</view>
+        <view class="header-members" bindtap="onMemberTap">
+          <member-avatars members="{{book.members}}" maxShow="{{4}}" />
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <t-popup visible="{{showSettingPopup}}" placement="bottom" bind:visible-change="onSettingPopupVisible">
+    <view class="setting-popup">
+      <view class="popup-handle">
+        <view class="handle-bar"></view>
+      </view>
+      <view class="popup-title">账本设置</view>
+
+      <view class="setting-list">
+        <view class="setting-item" bindtap="onChangeCover">
+          <text class="setting-label">更换账本封面</text>
+          <text class="setting-arrow">›</text>
+        </view>
+
+        <view class="setting-item" bindtap="onChangeName">
+          <text class="setting-label">更换账本名称</text>
+          <view class="setting-value-row">
+            <text class="setting-value">{{book.title}}</text>
+            <text class="setting-arrow">›</text>
+          </view>
+        </view>
+
+        <view class="setting-item" bindtap="onAddMember">
+          <text class="setting-label">增加成员</text>
+          <text class="setting-arrow">›</text>
+        </view>
+
+        <view class="setting-item setting-danger" bindtap="onDisbandBook">
+          <text class="setting-label danger-text">解散账本</text>
+          <text class="setting-arrow danger-text">›</text>
+        </view>
+      </view>
+    </view>
+  </t-popup>
+
+  <t-popup visible="{{showRenamePopup}}" placement="bottom" bind:visible-change="onRenamePopupVisible">
+    <view class="rename-popup">
+      <view class="popup-handle">
+        <view class="handle-bar"></view>
+      </view>
+      <view class="popup-title">更换账本名称</view>
+      <view class="name-input-wrap">
+        <input
+          class="name-input"
+          placeholder="输入新名称（8字以内）"
+          maxlength="8"
+          value="{{editName}}"
+          bindinput="onEditNameInput"
+          focus="{{showRenamePopup}}"
+        />
+        <text class="name-count">{{editName.length}}/8</text>
+      </view>
+      <view class="popup-footer">
+        <view class="footer-btn cancel-btn" bindtap="onCancelRename">取消</view>
+        <view class="footer-btn confirm-btn" bindtap="onConfirmRename">确定</view>
+      </view>
+    </view>
+  </t-popup>
+
+  <t-popup visible="{{showAddMemberPopup}}" placement="bottom" bind:visible-change="onAddMemberPopupVisible">
+    <view class="add-member-popup">
+      <view class="popup-handle">
+        <view class="handle-bar"></view>
+      </view>
+      <view class="popup-title">增加成员</view>
+      <view class="member-input-row">
+        <view class="name-input-wrap">
+          <input
+            class="name-input"
+            placeholder="输入成员名称"
+            maxlength="10"
+            value="{{newMemberName}}"
+            bindinput="onNewMemberInput"
+            bindconfirm="onConfirmAddMember"
+            focus="{{showAddMemberPopup}}"
+          />
+        </view>
+        <view class="add-btn" bindtap="onConfirmAddMember">添加</view>
+      </view>
+      <view class="current-members" wx:if="{{book.members.length > 0}}">
+        <text class="members-tip">当前成员：</text>
+        <view class="member-tags">
+          <view class="member-tag" wx:for="{{book.members}}" wx:key="id">
+            <text>{{item.name}}</text>
+            <text class="tag-remove" wx:if="{{index > 0}}" data-id="{{item.id}}" bindtap="onRemoveMember">×</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </t-popup>
+</view>

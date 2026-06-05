@@ -1,0 +1,26 @@
+<view class="page-detail">
+  <t-navbar title="{{book.title}}" leftArrow bind:go-back="onBack" />
+
+  <view class="detail-cover" style="background-color: {{book.coverColor || '#4A90D9'}}">
+    <text class="cover-title">{{book.title}}</text>
+    <text class="cover-date">{{book.date}}</text>
+  </view>
+
+  <view class="detail-menu">
+    <view class="menu-item" bindtap="onGoBill">
+      <text class="menu-icon">💰</text>
+      <text class="menu-text">账单</text>
+      <text class="menu-arrow">›</text>
+    </view>
+    <view class="menu-item" bindtap="onGoSchedule">
+      <text class="menu-icon">📋</text>
+      <text class="menu-text">行程</text>
+      <text class="menu-arrow">›</text>
+    </view>
+    <view class="menu-item" bindtap="onGoStatistics">
+      <text class="menu-icon">📈</text>
+      <text class="menu-text">分账统计</text>
+      <text class="menu-arrow">›</text>
+    </view>
+  </view>
+</view>

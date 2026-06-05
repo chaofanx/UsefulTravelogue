@@ -1,0 +1,39 @@
+<view class="page-ticket">
+  <t-navbar title="行程票根" leftArrow bind:go-back="onBack" />
+
+  <view class="ticket-content">
+    <view class="ticket-preview">
+      <view class="ticket-card-stub">
+        <view class="ticket-top">
+          <text class="ticket-type">🎟️ 行程票根</text>
+          <text class="ticket-code">NO. 202505031422</text>
+        </view>
+        <view class="ticket-body">
+          <view class="ticket-route">
+            <text class="route-from">北京</text>
+            <text class="route-arrow">→</text>
+            <text class="route-to">环球度假区</text>
+          </view>
+          <view class="ticket-info-row">
+            <text>日期：2025年5月3日</text>
+            <text>时间：全天</text>
+          </view>
+          <view class="ticket-info-row">
+            <text>人数：4人</text>
+            <text>贡献者：张本友</text>
+          </view>
+        </view>
+        <view class="ticket-bottom">
+          <view class="ticket-perforation"></view>
+          <text class="ticket-footer-text">好用旅记 · 记录每一次美好旅程</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="share-section">
+      <button class="share-btn" open-type="share">
+        <text>📤 分享票根给朋友</text>
+      </button>
+    </view>
+  </view>
+</view>

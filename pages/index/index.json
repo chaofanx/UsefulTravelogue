@@ -1,0 +1,12 @@
+{
+  "usingComponents": {
+    "t-navbar": "tdesign-miniprogram/navbar/navbar",
+    "t-icon": "tdesign-miniprogram/icon/icon",
+    "t-popup": "tdesign-miniprogram/popup/popup",
+    "t-input": "tdesign-miniprogram/input/input",
+    "t-button": "tdesign-miniprogram/button/button",
+    "book-card": "/components/book-card/index"
+  },
+  "navigationBarTitleText": "好用旅记",
+  "navigationStyle": "custom"
+}

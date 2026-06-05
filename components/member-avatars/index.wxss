@@ -1,0 +1,55 @@
+.member-avatars {
+  display: flex;
+  align-items: center;
+}
+
+.avatar-list {
+  display: flex;
+  align-items: center;
+}
+
+.avatar-item {
+  width: 48rpx;
+  height: 48rpx;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: -12rpx;
+  border: 3rpx solid #fff;
+  overflow: hidden;
+}
+
+.avatar-item:first-child {
+  margin-left: 0;
+}
+
+.avatar-text {
+  font-size: 22rpx;
+  color: #fff;
+  font-weight: 600;
+}
+
+.avatar-extra {
+  background-color: #E8E8E8 !important;
+}
+
+.avatar-extra-text {
+  font-size: 20rpx;
+  color: #666;
+  font-weight: 500;
+}
+
+@media (prefers-color-scheme: dark) {
+  .avatar-item {
+    border-color: #333;
+  }
+
+  .avatar-extra {
+    background-color: #444 !important;
+  }
+
+  .avatar-extra-text {
+    color: #aaa;
+  }
+}

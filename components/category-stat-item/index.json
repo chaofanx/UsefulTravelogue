@@ -1,0 +1,6 @@
+{
+  "component": true,
+  "usingComponents": {
+    "travel-icon": "/components/travel-icons/index"
+  }
+}

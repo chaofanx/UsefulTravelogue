@@ -1,0 +1,25 @@
+<view class="page-members">
+  <t-navbar title="成员列表 ({{members.length}}人)" leftArrow bind:go-back="onBack" />
+
+  <view class="member-card">
+    <view class="member-item" wx:for="{{members}}" wx:key="id">
+      <view class="member-avatar" style="background-color: {{item.avatarColor}}">
+        <text class="member-avatar-text">{{item.firstChar}}</text>
+      </view>
+      <text class="member-name">{{item.name}}</text>
+      <text class="member-tag" wx:if="{{index === 0}}">创建者</text>
+    </view>
+  </view>
+
+  <view class="action-section">
+    <t-button
+      theme="primary"
+      size="large"
+      block
+      bind:tap="onInvite"
+      style="background-color: var(--travel-brand, #38C172); border-color: var(--travel-brand, #38C172);"
+    >
+      + 邀请新成员
+    </t-button>
+  </view>
+</view>

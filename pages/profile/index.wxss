@@ -1,0 +1,101 @@
+.page-profile {
+  min-height: 100vh;
+  background-color: var(--td-bg-color-page);
+}
+
+.profile-card {
+  margin: 24rpx 32rpx;
+  background: var(--td-bg-color-container);
+  border-radius: 24rpx;
+  padding: 32rpx;
+}
+
+.avatar-section {
+  display: flex;
+  align-items: center;
+}
+
+.avatar-circle {
+  width: 96rpx;
+  height: 96rpx;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.avatar-char {
+  font-size: 40rpx;
+  color: #fff;
+  font-weight: 700;
+}
+
+.user-info {
+  margin-left: 24rpx;
+}
+
+.user-name {
+  font-size: 36rpx;
+  font-weight: 600;
+  color: var(--td-text-color-primary);
+  display: block;
+}
+
+.user-desc {
+  font-size: 24rpx;
+  color: var(--td-text-color-placeholder);
+  margin-top: 8rpx;
+  display: block;
+}
+
+.menu-card {
+  margin: 0 32rpx 16rpx;
+  background: var(--td-bg-color-container);
+  border-radius: 24rpx;
+  overflow: hidden;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  padding: 28rpx 32rpx;
+}
+
+.menu-item + .menu-item {
+  border-top: 1rpx solid var(--td-component-stroke);
+}
+
+.menu-icon {
+  font-size: 36rpx;
+  margin-right: 20rpx;
+}
+
+.menu-text {
+  flex: 1;
+  font-size: 28rpx;
+  color: var(--td-text-color-primary);
+}
+
+.menu-badge {
+  font-size: 24rpx;
+  color: var(--td-text-color-placeholder);
+  margin-right: 12rpx;
+}
+
+.menu-value {
+  font-size: 24rpx;
+  color: var(--td-text-color-placeholder);
+  margin-right: 12rpx;
+}
+
+.menu-arrow {
+  font-size: 28rpx;
+  color: var(--td-text-color-placeholder);
+}
+
+.footer-info {
+  text-align: center;
+  padding: 48rpx 0;
+  font-size: 24rpx;
+  color: var(--td-text-color-placeholder);
+}

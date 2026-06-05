@@ -1,0 +1,6 @@
+{
+  "component": true,
+  "usingComponents": {
+    "bill-item": "/components/bill-item/index"
+  }
+}

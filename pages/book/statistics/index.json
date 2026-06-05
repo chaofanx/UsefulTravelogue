@@ -1,0 +1,10 @@
+{
+  "usingComponents": {
+    "book-header": "/components/book-header/index",
+    "ring-chart": "/components/ring-chart/index",
+    "category-stat-item": "/components/category-stat-item/index",
+    "custom-tab-bar": "/components/custom-tab-bar/index"
+  },
+  "navigationBarTitleText": "分账统计",
+  "navigationStyle": "custom"
+}

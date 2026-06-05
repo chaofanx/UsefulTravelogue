@@ -1,0 +1,12 @@
+<view class="custom-tab-bar">
+  <view
+    wx:for="{{tabs}}"
+    wx:key="key"
+    class="tab-item {{current === item.key ? 'active' : ''}}"
+    data-key="{{item.key}}"
+    bindtap="onTabTap"
+  >
+    <text class="tab-icon">{{item.icon}}</text>
+    <text class="tab-label">{{item.label}}</text>
+  </view>
+</view>

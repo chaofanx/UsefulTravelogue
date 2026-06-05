@@ -1,0 +1,14 @@
+<view class="category-stat-item">
+  <view class="stat-left">
+    <travel-icon icon="{{item.icon}}" size="{{64}}" round="{{false}}" />
+    <text class="stat-name">{{item.name}}</text>
+  </view>
+  <view class="stat-middle">
+    <view class="stat-bar">
+      <view class="stat-bar-fill" style="width: {{item.percent}}%; background-color: {{item.iconColor || '#38C172'}}"></view>
+    </view>
+  </view>
+  <view class="stat-right">
+    <text class="stat-amount">¥{{item.valueText}}</text>
+  </view>
+</view>

@@ -1,0 +1,29 @@
+# 微信小程序私有配置（含 appid）
+project.private.config.json
+
+# 项目配置（含 appid，请复制 project.config.tpl.json 后填入）
+project.config.json
+
+# 环境配置（含 API 地址等敏感信息）
+utils/env.js
+
+# 依赖
+node_modules/
+
+# 系统文件
+.DS_Store
+Thumbs.db
+
+# 日志
+*.log
+npm-debug.log*
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# 临时文件
+*.tmp
+*.temp

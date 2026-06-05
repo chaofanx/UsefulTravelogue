@@ -1,0 +1,15 @@
+<view class="member-avatars">
+  <view class="avatar-list">
+    <view
+      wx:for="{{displayMembers}}"
+      wx:key="id"
+      class="avatar-item"
+      style="background-color: {{item.avatarColor}}"
+    >
+      <text class="avatar-text">{{item.firstChar}}</text>
+    </view>
+    <view wx:if="{{extraCount > 0}}" class="avatar-item avatar-extra" style="background-color: #E0E0E0">
+      <text class="avatar-extra-text">+{{extraCount}}</text>
+    </view>
+  </view>
+</view>

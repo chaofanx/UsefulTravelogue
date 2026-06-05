@@ -1,0 +1,76 @@
+<view class="page-create">
+  <t-navbar title="新建账本" leftArrow bind:go-back="onBack" />
+
+  <view class="form-card">
+    <view class="form-item">
+      <view class="form-label">账本名称</view>
+      <input
+        class="form-input"
+        placeholder="输入账本名称，如「五一北京」"
+        value="{{name}}"
+        bindinput="onNameInput"
+      />
+    </view>
+
+    <view class="form-item">
+      <view class="form-label">出行日期</view>
+      <picker mode="date" value="{{date}}" bindchange="onDateChange">
+        <view class="form-picker">
+          <text class="{{date ? '' : 'placeholder'}}">{{date || '选择出行日期'}}</text>
+          <text class="picker-arrow">›</text>
+        </view>
+      </picker>
+    </view>
+
+    <view class="form-item">
+      <view class="form-label">封面颜色</view>
+      <view class="color-options">
+        <view
+          wx:for="{{colors}}"
+          wx:key="*this"
+          class="color-dot {{coverColor === item ? 'selected' : ''}}"
+          style="background-color: {{item}}"
+          data-color="{{item}}"
+          bindtap="onColorTap"
+        >
+          <text wx:if="{{coverColor === item}}" class="check-icon">✓</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="form-item">
+      <view class="form-label">添加成员</view>
+      <view class="member-input-wrap">
+        <input
+          class="form-input"
+          placeholder="输入成员名称"
+          value="{{memberInput}}"
+          bindinput="onMemberInput"
+          bindconfirm="onAddMember"
+        />
+        <view class="add-member-btn" bindtap="onAddMember">
+          <text>+ 添加</text>
+        </view>
+      </view>
+      <view class="member-list" wx:if="{{members.length > 0}}">
+        <view class="member-tag" wx:for="{{members}}" wx:key="*this">
+          <text>{{item}}</text>
+          <text class="member-remove" data-index="{{index}}" bindtap="onRemoveMember">×</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="submit-section">
+    <t-button
+      theme="primary"
+      size="large"
+      block
+      disabled="{{!name}}"
+      bind:tap="onSubmit"
+      style="background-color: var(--travel-brand, #38C172); border-color: var(--travel-brand, #38C172);"
+    >
+      创建账本
+    </t-button>
+  </view>
+</view>

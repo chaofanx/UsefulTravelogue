@@ -1,0 +1,10 @@
+{
+  "usingComponents": {
+    "book-header": "/components/book-header/index",
+    "schedule-item": "/components/schedule-item/index",
+    "custom-tab-bar": "/components/custom-tab-bar/index",
+    "t-popup": "tdesign-miniprogram/popup/popup"
+  },
+  "navigationBarTitleText": "行程",
+  "navigationStyle": "custom"
+}

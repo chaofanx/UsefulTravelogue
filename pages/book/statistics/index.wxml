@@ -1,0 +1,107 @@
+<view class="page-statistics">
+  <book-header book="{{book}}" bind:bookchange="onBookChange" />
+
+  <view class="statistics-content">
+    <view class="stat-card">
+      <view class="stat-card-header">
+        <text class="stat-card-title">个人支出（分账后）</text>
+        <text class="stat-card-total">总 ¥{{totalAmount}}</text>
+      </view>
+
+      <view class="chart-section">
+        <ring-chart
+          data="{{chartData}}"
+          width="{{320}}"
+          height="{{320}}"
+          lineWidth="{{28}}"
+          centerText="¥{{totalAmount}}"
+          centerSub="总支出"
+        />
+      </view>
+
+      <view class="category-list">
+        <category-stat-item
+          wx:for="{{categoryStatsData}}"
+          wx:key="name"
+          item="{{item}}"
+          maxValue="{{maxValue}}"
+        />
+      </view>
+    </view>
+
+    <view class="settlement-card">
+      <view class="settlement-tabs">
+        <view
+          class="settlement-tab {{settlementMode === 'smart' ? 'active' : ''}}"
+          bindtap="onSettlementMode"
+          data-mode="smart"
+        >
+          <text>智能简化分账</text>
+        </view>
+        <view
+          class="settlement-tab {{settlementMode === 'traditional' ? 'active' : ''}}"
+          bindtap="onSettlementMode"
+          data-mode="traditional"
+        >
+          <text>传统逐人分账</text>
+        </view>
+      </view>
+
+      <view class="settlement-list">
+        <view class="settlement-item" wx:for="{{settlements}}" wx:key="name">
+          <view class="settlement-avatar" style="background-color: {{item.avatarColor}}">
+            <text class="settlement-avatar-text">{{item.name}}</text>
+          </view>
+          <view class="settlement-info">
+            <text class="settlement-desc">{{item.desc}}</text>
+          </view>
+          <view class="settlement-amount">
+            <text class="settlement-amount-val">¥{{item.amountText}}</text>
+          </view>
+        </view>
+      </view>
+
+      <view class="settlement-tip">
+        <text>自动合并转账链路，多人时最快分账</text>
+      </view>
+
+      <view class="settlement-btn" bindtap="onViewTeamPlan">
+        <text>查看团队总方案</text>
+      </view>
+    </view>
+
+    <view class="action-cards">
+      <view class="action-card" bindtap="onCreatePersonal">
+        <view class="action-card-inner">
+          <text class="action-card-text">想生活记账？试试新建个人账本</text>
+          <view class="action-card-btn">
+            <text>试一试</text>
+          </view>
+        </view>
+      </view>
+
+      <view class="action-card" bindtap="onShareSettlement">
+        <view class="action-card-inner">
+          <text class="action-card-text">转发分账方案</text>
+          <text class="action-card-arrow">›</text>
+        </view>
+      </view>
+
+      <view class="action-card" bindtap="onMoreStats">
+        <view class="action-card-inner">
+          <text class="action-card-text">更多团队支出统计</text>
+          <text class="action-card-arrow">›</text>
+        </view>
+      </view>
+
+      <view class="action-card" bindtap="onExportExcel">
+        <view class="action-card-inner">
+          <text class="action-card-text">导出为 Excel 表格</text>
+          <text class="action-card-arrow">›</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <custom-tab-bar current="statistics" bookId="{{bookId}}" bind:change="onTabChange" />
+</view>

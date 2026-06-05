@@ -1,0 +1,27 @@
+<view class="schedule-item">
+  <view class="schedule-dot-row">
+    <view class="schedule-dot"></view>
+    <view class="schedule-line" wx:if="{{!isLast}}"></view>
+  </view>
+  <view class="schedule-content">
+    <view class="schedule-time">{{item.period || '全天'}}</view>
+    <view class="schedule-card" bindtap="onEditTap">
+      <view class="schedule-place">
+        <text class="place-icon">📍</text>
+        <text class="place-name">{{item.location}}</text>
+      </view>
+      <view class="schedule-actions">
+        <view wx:if="{{item.latitude}}" class="map-link" catchtap="onOpenMap">
+          <text class="map-icon">🗺️</text>
+        </view>
+        <view class="edit-arrow">›</view>
+      </view>
+    </view>
+    <view wx:if="{{item.notes}}" class="schedule-notes">
+      <text>{{item.notes}}</text>
+    </view>
+    <view class="schedule-contributor">
+      <text>{{item.contributor}} 贡献此内容</text>
+    </view>
+  </view>
+</view>

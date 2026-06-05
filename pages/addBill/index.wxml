@@ -1,0 +1,77 @@
+<view class="page-add-bill">
+  <t-navbar title="{{isEdit ? '编辑账单' : '记一笔'}}" leftArrow bind:go-back="onBack" />
+
+  <view class="form-card">
+    <view class="form-item">
+      <view class="form-label">金额</view>
+      <view class="amount-input-wrap">
+        <text class="currency">¥</text>
+        <input
+          class="amount-input"
+          type="digit"
+          placeholder="0.00"
+          value="{{amount}}"
+          bindinput="onAmountInput"
+          focus="{{!isEdit}}"
+        />
+      </view>
+    </view>
+
+    <view class="form-item">
+      <view class="form-label">分类</view>
+      <view class="category-grid">
+        <view
+          wx:for="{{categories}}"
+          wx:key="name"
+          class="category-item {{selectedCategory === item.name ? 'active' : ''}}"
+          data-name="{{item.name}}"
+          bindtap="onCategoryTap"
+        >
+          <text class="cat-emoji">{{item.icon}}</text>
+          <text class="cat-name">{{item.name}}</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="form-item">
+      <view class="form-label">付款人</view>
+      <view class="payer-options">
+        <view
+          wx:for="{{payers}}"
+          wx:key="*this"
+          class="payer-item {{selectedPayer === item ? 'active' : ''}}"
+          data-name="{{item}}"
+          bindtap="onPayerTap"
+        >
+          <text>{{item}}</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="form-item">
+      <view class="form-label">备注</view>
+      <input
+        class="form-input"
+        placeholder="添加备注（选填）"
+        value="{{remark}}"
+        bindinput="onRemarkInput"
+      />
+    </view>
+  </view>
+
+  <view class="submit-section">
+    <t-button
+      theme="primary"
+      size="large"
+      block
+      disabled="{{!amount || !selectedCategory}}"
+      bind:tap="onSubmit"
+      style="background-color: var(--travel-brand, #38C172); border-color: var(--travel-brand, #38C172);"
+    >
+      {{isEdit ? '保存修改' : '记一笔'}}
+    </t-button>
+    <view wx:if="{{isEdit}}" class="delete-section" bindtap="onDeleteBill">
+      <text class="delete-text">删除此账单</text>
+    </view>
+  </view>
+</view>

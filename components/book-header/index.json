@@ -1,0 +1,7 @@
+{
+  "component": true,
+  "usingComponents": {
+    "member-avatars": "/components/member-avatars/index",
+    "t-popup": "tdesign-miniprogram/popup/popup"
+  }
+}

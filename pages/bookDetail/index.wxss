@@ -1,0 +1,59 @@
+.page-detail {
+  min-height: 100vh;
+  background-color: var(--td-bg-color-page);
+}
+
+.detail-cover {
+  width: 100%;
+  height: 360rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.cover-title {
+  font-size: 48rpx;
+  font-weight: 700;
+  color: #fff;
+}
+
+.cover-date {
+  font-size: 28rpx;
+  color: rgba(255, 255, 255, 0.8);
+  margin-top: 12rpx;
+}
+
+.detail-menu {
+  margin: 24rpx 32rpx;
+  background: var(--td-bg-color-container);
+  border-radius: 24rpx;
+  overflow: hidden;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  padding: 32rpx;
+}
+
+.menu-item + .menu-item {
+  border-top: 1rpx solid var(--td-component-stroke);
+}
+
+.menu-icon {
+  font-size: 40rpx;
+  margin-right: 24rpx;
+}
+
+.menu-text {
+  flex: 1;
+  font-size: 30rpx;
+  font-weight: 500;
+  color: var(--td-text-color-primary);
+}
+
+.menu-arrow {
+  font-size: 30rpx;
+  color: var(--td-text-color-placeholder);
+}
