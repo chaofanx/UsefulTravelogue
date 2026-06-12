@@ -1,5 +1,9 @@
 const api = require('../../../utils/api');
 
+function dateToStr(d) {
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+}
+
 Page({
   data: {
     bookId: 0,
@@ -7,6 +11,8 @@ Page({
     groupedBills: [],
     loading: true,
     memberAliases: {},
+    isVip: false,
+    otherEmojis: [],
 
     // 表单弹层
     showFormPopup: false,
@@ -17,6 +23,11 @@ Page({
     formParticipants: [],
     participantMap: {},
     formRemark: '',
+    formDate: '',
+    formIcon: '',
+    formExclude: false,
+    todayStr: '',
+    yesterdayStr: '',
     payers: [],
     categories: [
       { name: '餐饮', icon: '🍽️' },
@@ -38,10 +49,21 @@ Page({
     }
     this.data.bookId = bookId;
     this.loadData();
+    this.loadVipAndEmojis();
   },
 
   onShow() {
     this.loadData();
+  },
+
+  // 获取会员状态（决定备注/不计分账控件显隐）和「其他」分类可选 emoji
+  loadVipAndEmojis() {
+    api.getUserProfile().then(profile => {
+      this.setData({ isVip: !!(profile && profile.vip) });
+    }).catch(() => {});
+    api.getSystemEmojis().then(data => {
+      this.setData({ otherEmojis: (data && data.emojis) || [] });
+    }).catch(() => {});
   },
 
   loadData() {
@@ -75,6 +97,9 @@ Page({
 
   resetForm() {
     const participants = [...this.data.payers];
+    const now = new Date();
+    const todayStr = dateToStr(now);
+    const yesterdayStr = dateToStr(new Date(now.getTime() - 86400000));
     this.setData({
       editingId: null,
       formAmount: '',
@@ -82,7 +107,12 @@ Page({
       formPayer: this.data.payers.length > 0 ? this.data.payers[0] : '',
       formParticipants: participants,
       participantMap: this.buildParticipantMap(participants),
-      formRemark: ''
+      formRemark: '',
+      formDate: todayStr,
+      formIcon: '',
+      formExclude: false,
+      todayStr,
+      yesterdayStr
     });
   },
 
@@ -94,6 +124,11 @@ Page({
   onBillTap(e) {
     const bill = e.detail.bill;
     const participants = bill.splitParticipants || [...this.data.payers];
+    const now = new Date();
+    const todayStr = dateToStr(now);
+    const yesterdayStr = dateToStr(new Date(now.getTime() - 86400000));
+    // 「其他」分类的自定义 emoji 直接存在 icon 字段（区别于 'other' 等内置图标名）
+    const customIcon = (bill.category === '其他' && bill.icon && bill.icon !== 'other') ? bill.icon : '';
     this.setData({
       showFormPopup: true,
       editingId: bill.id,
@@ -102,7 +137,12 @@ Page({
       formPayer: bill.payer || '',
       formParticipants: participants,
       participantMap: this.buildParticipantMap(participants),
-      formRemark: bill.remark || ''
+      formRemark: bill.remark || '',
+      formDate: bill.date || todayStr,
+      formIcon: customIcon,
+      formExclude: !!bill.excludeFromSplit,
+      todayStr,
+      yesterdayStr
     });
   },
 
@@ -117,7 +157,29 @@ Page({
   },
 
   onCategoryTap(e) {
-    this.setData({ formCategory: e.currentTarget.dataset.name });
+    const name = e.currentTarget.dataset.name;
+    this.setData({
+      formCategory: name,
+      // 切换出「其他」分类时清掉自定义 emoji
+      formIcon: name === '其他' ? this.data.formIcon : ''
+    });
+  },
+
+  onDateQuick(e) {
+    this.setData({ formDate: e.currentTarget.dataset.date });
+  },
+
+  onDatePick(e) {
+    this.setData({ formDate: e.detail.value });
+  },
+
+  onEmojiTap(e) {
+    const emoji = e.currentTarget.dataset.emoji;
+    this.setData({ formIcon: this.data.formIcon === emoji ? '' : emoji });
+  },
+
+  onExcludeChange(e) {
+    this.setData({ formExclude: !!e.detail.value });
   },
 
   onPayerTap(e) {
@@ -148,7 +210,10 @@ Page({
   },
 
   onConfirmBill() {
-    const { formAmount, formCategory, formPayer, formParticipants, formRemark, editingId, bookId } = this.data;
+    const {
+      formAmount, formCategory, formPayer, formParticipants, formRemark,
+      formDate, formIcon, formExclude, isVip, editingId, bookId
+    } = this.data;
     if (!formAmount || parseFloat(formAmount) <= 0) {
       wx.showToast({ title: '请输入金额', icon: 'none' });
       return;
@@ -168,17 +233,23 @@ Page({
 
     const now = new Date();
     const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
-    const todayStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
 
     const billData = {
       category: formCategory,
       amount: parseFloat(formAmount),
       payer: formPayer,
-      remark: formRemark || '',
-      date: todayStr,
+      date: formDate || dateToStr(now),
       time: timeStr,
       splitParticipants: formParticipants,
     };
+    if (formCategory === '其他' && formIcon) {
+      billData.icon = formIcon;
+    }
+    // 备注与不计入分账为高级会员功能，普通用户不携带这些字段
+    if (isVip) {
+      billData.remark = formRemark || '';
+      billData.excludeFromSplit = formExclude;
+    }
 
     const promise = editingId
       ? api.updateBill(bookId, editingId, billData)

@@ -1,5 +1,5 @@
 <view class="page-index">
-  <view class="top-section">
+  <view class="top-section" style="padding-top: calc({{statusBarHeight}}px + 24rpx);">
     <view class="brand-area">
       <view class="brand-logo">
         <text class="logo-icon">✈️</text>

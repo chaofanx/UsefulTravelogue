@@ -1,34 +1,7 @@
 const api = require('../../utils/api');
+const { getCapsuleInfo } = require('../../utils/capsule');
 
 const DEFAULT_COLORS = ['#4A90D9', '#FF6B6B', '#38C172', '#FFD93D', '#6C5CE7', '#FF8C42', '#45B7D1', '#96CEB4'];
-
-function getCapsuleInfo() {
-  try {
-    const windowInfo = wx.getWindowInfo();
-    const menuButton = wx.getMenuButtonBoundingClientRect();
-    const sysInfo = wx.getSystemInfoSync();
-    const pxToRpx = 750 / sysInfo.windowWidth;
-
-    return {
-      navBarHeight: windowInfo.statusBarHeight + 44,
-      statusBarHeight: windowInfo.statusBarHeight,
-      menuTop: Math.ceil(menuButton.top * pxToRpx),
-      menuRight: Math.ceil((sysInfo.windowWidth - menuButton.right) * pxToRpx),
-      menuHeight: Math.ceil(menuButton.height * pxToRpx),
-      // 胶囊左侧到屏幕右边距离 + 16rpx 间距，用于 content 右边距和 actions 定位
-      capsuleLeft: Math.ceil((sysInfo.windowWidth - menuButton.left) * pxToRpx) + 16,
-    };
-  } catch (e) {
-    return {
-      navBarHeight: 88,
-      statusBarHeight: 44,
-      menuTop: 40,
-      menuRight: 16,
-      menuHeight: 64,
-      capsuleLeft: 200,
-    };
-  }
-}
 
 Component({
   properties: {

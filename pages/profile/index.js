@@ -84,10 +84,14 @@ Page({
         wx.navigateTo({ url: '/pages/feedback/index' });
         break;
       case 'about':
-        wx.showModal({
-          title: '关于好用旅记',
-          content: '好用旅记是一款的简单好用的多人旅行记账工具。\n版本：1.0.0',
-          showCancel: false
+        api.getSystemAbout().then(data => {
+          wx.showModal({
+            title: '关于好用旅记',
+            content: (data && data.about) || '',
+            showCancel: false
+          });
+        }).catch(() => {
+          wx.showToast({ title: '获取关于信息失败', icon: 'none' });
         });
         break;
       default:

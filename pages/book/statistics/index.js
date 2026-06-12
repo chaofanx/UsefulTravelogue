@@ -12,6 +12,7 @@ Page({
     settlements: [],
     settlementMode: 'smart',
     currentUserStats: null,
+    isVip: false,
     loading: true
   },
 
@@ -26,6 +27,10 @@ Page({
       wx.navigateBack();
       return;
     }
+    // 会员状态决定是否显示导出按钮
+    api.getUserProfile().then(profile => {
+      this.setData({ isVip: !!(profile && profile.vip) });
+    }).catch(() => {});
     Promise.all([
       api.getBook(bookId),
       api.getStatistics(bookId),
@@ -125,7 +130,34 @@ Page({
   },
 
   onExportExcel() {
-    wx.showToast({ title: '导出功能开发中', icon: 'none' });
+    const { bookId } = this.data;
+    const token = api.getToken();
+    wx.showLoading({ title: '导出中...' });
+    wx.downloadFile({
+      url: `${api.BASE_URL}/books/${bookId}/export`,
+      header: { 'Authorization': token ? `Bearer ${token}` : '' },
+      success: (res) => {
+        wx.hideLoading();
+        if (res.statusCode === 200) {
+          wx.openDocument({
+            filePath: res.tempFilePath,
+            fileType: 'xlsx',
+            showMenu: true,
+            fail: () => {
+              wx.showToast({ title: '打开文件失败', icon: 'none' });
+            }
+          });
+        } else if (res.statusCode === 403) {
+          wx.showToast({ title: '导出 Excel 是高级会员专属功能', icon: 'none' });
+        } else {
+          wx.showToast({ title: '导出失败', icon: 'none' });
+        }
+      },
+      fail: () => {
+        wx.hideLoading();
+        wx.showToast({ title: '导出失败，请检查网络', icon: 'none' });
+      }
+    });
   },
 
   onTabChange(e) {

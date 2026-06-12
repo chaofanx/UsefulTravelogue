@@ -1,4 +1,5 @@
 const api = require('../../utils/api');
+const { getCapsuleInfo } = require('../../utils/capsule');
 
 const DEFAULT_COLORS = ['#4A90D9', '#FF6B6B', '#38C172', '#FFD93D', '#6C5CE7', '#FF8C42', '#45B7D1', '#96CEB4'];
 
@@ -6,6 +7,7 @@ Page({
   data: {
     books: [],
     loading: true,
+    statusBarHeight: 44,
     showCreatePopup: false,
     newBookName: '',
     newBookCover: '',
@@ -14,11 +16,35 @@ Page({
   },
 
   onLoad() {
-    this.loadBooks();
+    this.setData({ statusBarHeight: getCapsuleInfo().statusBarHeight });
   },
 
   onShow() {
-    this.loadBooks();
+    this.init();
+  },
+
+  // 进入首页先确认登录态：未登录时提示并发起登录，成功后再加载数据
+  init() {
+    if (api.hasToken()) {
+      this.loadBooks();
+      return;
+    }
+    wx.showToast({ title: '未登录，正在登录...', icon: 'none' });
+    getApp().login().then(() => {
+      wx.showToast({ title: '登录成功', icon: 'success' });
+      this.loadBooks();
+    }).catch(() => {
+      this.setData({ loading: false });
+      wx.showModal({
+        title: '未登录',
+        content: '登录失败，请检查网络后重试',
+        confirmText: '重新登录',
+        showCancel: false,
+        success: (res) => {
+          if (res.confirm) this.init();
+        }
+      });
+    });
   },
 
   loadBooks() {
@@ -27,6 +53,12 @@ Page({
       this.setData({ books: Array.isArray(books) ? books : [], loading: false });
     }).catch(err => {
       this.setData({ loading: false });
+      if (err && err.code === 401 && !this._retriedLogin) {
+        // token 失效（api 层已清除），重新走一次登录流程
+        this._retriedLogin = true;
+        this.init();
+        return;
+      }
       wx.showToast({ title: err.message || '加载失败', icon: 'none' });
     });
   },

@@ -100,7 +100,7 @@
         </view>
       </view>
 
-      <view class="action-card" bindtap="onExportExcel">
+      <view wx:if="{{isVip}}" class="action-card" bindtap="onExportExcel">
         <view class="action-card-inner">
           <text class="action-card-text">导出为 Excel 表格</text>
           <text class="action-card-arrow">›</text>

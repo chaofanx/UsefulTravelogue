@@ -1,5 +1,5 @@
 <view class="page-ticket">
-  <t-navbar title="行程票根" leftArrow bind:go-back="onBack" />
+  <nav-bar title="行程票根" leftArrow bind:back="onBack" />
 
   <view class="ticket-content">
     <view wx:if="{{ticket}}" class="ticket-preview">

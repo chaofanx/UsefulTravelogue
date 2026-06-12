@@ -146,6 +146,12 @@ function normalizeBooks(books) {
 const api = {
   BASE_URL,
 
+  hasToken() {
+    return !!getToken();
+  },
+
+  getToken,
+
   login(code, nickname, avatar) {
     const payload = { code };
     if (nickname) payload.nickname = nickname;
@@ -259,6 +265,14 @@ const api = {
 
   submitFeedback(data) {
     return post('/feedback', data);
+  },
+
+  getSystemAbout() {
+    return get('/system/about');
+  },
+
+  getSystemEmojis() {
+    return get('/system/emojis');
   }
 };
 

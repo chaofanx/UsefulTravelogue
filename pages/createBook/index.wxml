@@ -1,5 +1,5 @@
 <view class="page-create">
-  <t-navbar title="新建账本" leftArrow bind:go-back="onBack" />
+  <nav-bar title="新建账本" leftArrow bind:back="onBack" />
 
   <view class="form-card">
     <view class="form-item">

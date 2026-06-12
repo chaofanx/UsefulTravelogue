@@ -1,5 +1,6 @@
 <view class="book-header">
   <view class="header-cover" style="background-color: {{book.coverColor || '#4A90D9'}}">
+    <image wx:if="{{book.cover}}" class="cover-bg-img" src="{{book.cover}}" mode="aspectFill" />
     <view class="cover-overlay" style="padding-right: {{capsuleLeft}}rpx;">
       <view class="header-top-bar" style="padding-top: {{statusBarHeight}}px; height: {{navBarHeight}}px;">
         <view class="back-btn" style="height: {{menuHeight}}rpx; width: {{menuHeight}}rpx;" bindtap="onBack">

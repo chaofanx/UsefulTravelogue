@@ -1,5 +1,5 @@
 <view class="page-members">
-  <t-navbar title="成员列表 ({{members.length}}人)" leftArrow bind:go-back="onBack" />
+  <nav-bar title="成员列表 ({{members.length}}人)" leftArrow bind:back="onBack" />
 
   <view class="member-card">
     <view class="member-item" wx:for="{{members}}" wx:key="id">

@@ -53,3 +53,12 @@
   font-weight: 600;
   color: var(--td-text-color-primary);
 }
+
+.bill-exclude-tag {
+  font-size: 20rpx;
+  color: #FF8C42;
+  background: rgba(255, 140, 66, 0.15);
+  border-radius: 8rpx;
+  padding: 2rpx 10rpx;
+  margin-left: 12rpx;
+}

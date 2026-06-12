@@ -1,0 +1,48 @@
+.nav-bar {
+  width: 100%;
+  box-sizing: border-box;
+  flex-shrink: 0;
+}
+
+.nav-bar-content {
+  position: relative;
+  height: 44px;
+  display: flex;
+  align-items: center;
+}
+
+.nav-back {
+  position: absolute;
+  left: 24rpx;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 64rpx;
+  height: 64rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+}
+
+.nav-back-icon {
+  font-size: 40rpx;
+  color: var(--td-text-color-primary, #333);
+}
+
+.nav-title {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.nav-title-text {
+  font-size: 34rpx;
+  font-weight: 600;
+  color: var(--td-text-color-primary, #333);
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}

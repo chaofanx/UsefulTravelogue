@@ -6,10 +6,7 @@
   box-sizing: border-box;
 }
 
-.top-section {
-  padding-top: calc(88rpx + constant(safe-area-inset-top));
-  padding-top: calc(88rpx + env(safe-area-inset-top));
-}
+/* .top-section 的 padding-top 由 wxml 内联样式按设备状态栏高度设置 */
 
 .brand-area {
   display: flex;

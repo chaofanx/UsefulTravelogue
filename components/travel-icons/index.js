@@ -57,10 +57,20 @@ Component({
 
   methods: {
     updateIcon() {
-      const info = iconMap[this.data.icon] || iconMap['other'];
+      const icon = this.data.icon;
+      const info = iconMap[icon];
+      if (info) {
+        this.setData({
+          iconText: info.text,
+          bgColor: info.color + '20'
+        });
+        return;
+      }
+      // 不在映射表中的值视为自定义 emoji（「其他」分类可更换图标），直接展示
+      const fallback = iconMap['other'];
       this.setData({
-        iconText: info.text,
-        bgColor: info.color + '20'
+        iconText: icon || fallback.text,
+        bgColor: fallback.color + '20'
       });
     }
   }

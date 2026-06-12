@@ -47,6 +47,31 @@
         </view>
 
         <view class="form-item">
+          <view class="form-label">日期</view>
+          <view class="payer-options">
+            <view
+              class="payer-item {{formDate === todayStr ? 'active' : ''}}"
+              data-date="{{todayStr}}"
+              bindtap="onDateQuick"
+            >
+              <text>今天</text>
+            </view>
+            <view
+              class="payer-item {{formDate === yesterdayStr ? 'active' : ''}}"
+              data-date="{{yesterdayStr}}"
+              bindtap="onDateQuick"
+            >
+              <text>昨天</text>
+            </view>
+            <picker mode="date" value="{{formDate}}" bindchange="onDatePick">
+              <view class="payer-item {{formDate !== todayStr && formDate !== yesterdayStr ? 'active' : ''}}">
+                <text>{{formDate !== todayStr && formDate !== yesterdayStr ? formDate : '选其他日期'}}</text>
+              </view>
+            </picker>
+          </view>
+        </view>
+
+        <view class="form-item">
           <view class="form-label">分类</view>
           <view class="category-grid">
             <view
@@ -56,8 +81,23 @@
               data-name="{{item.name}}"
               bindtap="onCategoryTap"
             >
-              <text class="cat-emoji">{{item.icon}}</text>
+              <text class="cat-emoji">{{item.name === '其他' && formIcon ? formIcon : item.icon}}</text>
               <text class="cat-name">{{item.name}}</text>
+            </view>
+          </view>
+        </view>
+
+        <view wx:if="{{formCategory === '其他' && otherEmojis.length > 0}}" class="form-item">
+          <view class="form-label">更换图标（其他分类）</view>
+          <view class="emoji-grid">
+            <view
+              wx:for="{{otherEmojis}}"
+              wx:key="*this"
+              class="emoji-item {{formIcon === item ? 'active' : ''}}"
+              data-emoji="{{item}}"
+              bindtap="onEmojiTap"
+            >
+              <text>{{item}}</text>
             </view>
           </view>
         </view>
@@ -92,14 +132,22 @@
           </view>
         </view>
 
-        <view class="form-item">
-          <view class="form-label">备注</view>
+        <view wx:if="{{isVip}}" class="form-item">
+          <view class="form-label">备注 <text class="vip-tag">VIP</text></view>
           <input
             class="form-input"
             placeholder="添加备注（选填）"
             value="{{formRemark}}"
             bindinput="onRemarkInput"
           />
+        </view>
+
+        <view wx:if="{{isVip}}" class="form-item exclude-row">
+          <view class="exclude-label-wrap">
+            <view class="form-label">不计入分账 <text class="vip-tag">VIP</text></view>
+            <text class="exclude-hint">已提前分账好的支出可开启</text>
+          </view>
+          <switch checked="{{formExclude}}" bindchange="onExcludeChange" color="#38C172" />
         </view>
 
         <view wx:if="{{editingId}}" class="delete-section" bindtap="onDeleteBill">

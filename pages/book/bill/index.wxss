@@ -235,3 +235,53 @@
   background: var(--travel-brand, #38C172);
   color: #fff;
 }
+
+/* ===== 记一笔表单新增：emoji 选择 / VIP 控件 ===== */
+
+.emoji-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16rpx;
+}
+
+.emoji-item {
+  width: 80rpx;
+  height: 80rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40rpx;
+  border-radius: 16rpx;
+  background: var(--td-bg-color-secondarycontainer);
+  border: 2rpx solid transparent;
+}
+
+.emoji-item.active {
+  background: rgba(56, 193, 114, 0.15);
+  border-color: var(--travel-brand, #38C172);
+}
+
+.vip-tag {
+  font-size: 20rpx;
+  color: #B8860B;
+  background: rgba(255, 217, 61, 0.35);
+  border-radius: 8rpx;
+  padding: 2rpx 10rpx;
+  margin-left: 8rpx;
+}
+
+.exclude-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.exclude-label-wrap {
+  flex: 1;
+}
+
+.exclude-hint {
+  font-size: 22rpx;
+  color: var(--td-text-color-placeholder, #999);
+}

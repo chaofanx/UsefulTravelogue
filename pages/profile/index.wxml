@@ -1,5 +1,5 @@
 <view class="page-profile">
-  <t-navbar title="个人中心" leftArrow bind:go-back="onBack" />
+  <nav-bar title="个人中心" leftArrow bind:back="onBack" />
 
   <view class="profile-card">
     <view class="avatar-section">
@@ -33,12 +33,6 @@
     <view class="menu-item" bindtap="onMenuItem" data-type="stats">
       <text class="menu-icon">📊</text>
       <text class="menu-text">我的统计</text>
-      <text class="menu-arrow">›</text>
-    </view>
-    <view class="menu-item" bindtap="onMenuItem" data-type="books">
-      <text class="menu-icon">📒</text>
-      <text class="menu-text">我的账本</text>
-      <text class="menu-value">{{userInfo.bookCount || 0}}个</text>
       <text class="menu-arrow">›</text>
     </view>
     <view class="menu-item" bindtap="onMenuItem" data-type="setting">
