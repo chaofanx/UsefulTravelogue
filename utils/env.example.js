@@ -4,5 +4,5 @@
  * Copy this file to env.js and fill in actual values
  */
 module.exports = {
-  BASE_URL: 'https://your-api-domain.com/usefultravelogue'
+  BASE_URL: 'https://your-api-domain.com/usefultravelogue/api/v1'
 };

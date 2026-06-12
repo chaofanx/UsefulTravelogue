@@ -115,19 +115,22 @@ const api = {
     return get('/user/profile');
   },
 
-  updateUserProfile(profile) {
-    return put('/user/profile', profile);
-  },
 
   getBooks() {
     return get('/books').then(data => {
+      if (data && data.books) return normalizeBooks(data.books);
       if (Array.isArray(data)) return normalizeBooks(data);
       return data;
     });
   },
 
   createBook(book) {
-    return post('/books', book).then(data => normalizeBook(data));
+    return post('/books', {
+      title: book.title,
+      cover: book.cover,
+      cover_color: book.coverColor,
+      date: book.date
+    }).then(data => normalizeBook(data));
   },
 
   getBook(bookId) {
@@ -135,7 +138,11 @@ const api = {
   },
 
   updateBook(bookId, updates) {
-    return put(`/books/${bookId}`, updates).then(data => normalizeBook(data));
+    return put(`/books/${bookId}`, {
+      title: updates.title,
+      cover: updates.cover,
+      cover_color: updates.coverColor
+    }).then(data => normalizeBook(data));
   },
 
   deleteBook(bookId) {
@@ -170,9 +177,6 @@ const api = {
     return put(`/books/${bookId}/schedules/${scheduleId}`, schedule);
   },
 
-  deleteSchedule(bookId, scheduleId) {
-    return del(`/books/${bookId}/schedules/${scheduleId}`);
-  },
 
   addMember(bookId, member) {
     return post(`/books/${bookId}/members`, member).then(data => normalizeMember(data));
