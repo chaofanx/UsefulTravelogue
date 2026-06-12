@@ -24,6 +24,38 @@
   margin-top: 12rpx;
 }
 
+.join-banner {
+  margin: 24rpx 32rpx;
+  padding: 24rpx 32rpx;
+  background: #E8F8EE;
+  border: 2rpx solid #38C172;
+  border-radius: 16rpx;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.join-text {
+  font-size: 28rpx;
+  color: #2B7A4B;
+  font-weight: 500;
+}
+
+.join-btn {
+  padding: 12rpx 32rpx;
+  background-color: #38C172;
+  color: #fff;
+  font-size: 26rpx;
+  font-weight: 600;
+  border: none;
+  border-radius: 12rpx;
+  line-height: 1.4;
+}
+
+.join-btn::after {
+  border: none;
+}
+
 .detail-menu {
   margin: 24rpx 32rpx;
   background: var(--td-bg-color-container);

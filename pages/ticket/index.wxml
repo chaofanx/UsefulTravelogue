@@ -2,25 +2,25 @@
   <t-navbar title="行程票根" leftArrow bind:go-back="onBack" />
 
   <view class="ticket-content">
-    <view class="ticket-preview">
+    <view wx:if="{{ticket}}" class="ticket-preview">
       <view class="ticket-card-stub">
         <view class="ticket-top">
           <text class="ticket-type">🎟️ 行程票根</text>
-          <text class="ticket-code">NO. 202505031422</text>
+          <text class="ticket-code">NO. {{book.title || ''}} 第{{ticket.id}}号</text>
         </view>
         <view class="ticket-body">
           <view class="ticket-route">
-            <text class="route-from">北京</text>
+            <text class="route-from">{{book.title || ''}}</text>
             <text class="route-arrow">→</text>
-            <text class="route-to">环球度假区</text>
+            <text class="route-to">{{ticket.location}}</text>
           </view>
           <view class="ticket-info-row">
-            <text>日期：2025年5月3日</text>
-            <text>时间：全天</text>
+            <text>日期：{{formattedDate}}</text>
+            <text>时间：{{ticket.period || '全天'}}</text>
           </view>
           <view class="ticket-info-row">
-            <text>人数：4人</text>
-            <text>贡献者：张本友</text>
+            <text>人数：{{memberCount}}人</text>
+            <text>贡献者：{{ticket.contributor || ''}}</text>
           </view>
         </view>
         <view class="ticket-bottom">
@@ -28,6 +28,10 @@
           <text class="ticket-footer-text">好用旅记 · 记录每一次美好旅程</text>
         </view>
       </view>
+    </view>
+
+    <view wx:else class="ticket-empty">
+      <text>暂无行程记录</text>
     </view>
 
     <view class="share-section">

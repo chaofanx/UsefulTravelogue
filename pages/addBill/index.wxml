@@ -43,7 +43,22 @@
           data-name="{{item}}"
           bindtap="onPayerTap"
         >
-          <text>{{item}}</text>
+          <text>{{memberAliases[item] || item}}</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="form-item">
+      <view class="form-label">参与分摊的人</view>
+      <view class="payer-options">
+        <view
+          wx:for="{{payers}}"
+          wx:key="*this"
+          class="payer-item {{participantMap[item] ? 'active' : ''}}"
+          data-name="{{item}}"
+          bindtap="onParticipantTap"
+        >
+          <text>{{memberAliases[item] || item}}</text>
         </view>
       </view>
     </view>

@@ -8,11 +8,15 @@ Component({
     }
   },
 
+  data: {
+    amountText: ''
+  },
+
   observers: {
     'bill'(bill) {
       if (bill) {
         this.setData({
-          'bill.amountText': formatAmount(bill.amount)
+          amountText: formatAmount(bill.amount)
         });
       }
     }
@@ -20,7 +24,7 @@ Component({
 
   methods: {
     onTap() {
-      this.triggerEvent('tap', { bill: this.data.bill });
+      this.triggerEvent('itemtap', { bill: this.data.bill });
     }
   }
 });

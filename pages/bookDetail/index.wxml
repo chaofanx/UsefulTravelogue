@@ -6,6 +6,11 @@
     <text class="cover-date">{{book.date}}</text>
   </view>
 
+  <view class="join-banner" wx:if="{{isInvited && !isMember}}">
+    <text class="join-text">你被邀请加入此账本</text>
+    <button class="join-btn" bindtap="onJoinBook">加入账本</button>
+  </view>
+
   <view class="detail-menu">
     <view class="menu-item" bindtap="onGoBill">
       <text class="menu-icon">💰</text>

@@ -21,15 +21,11 @@
 
 .header-top-bar {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding-top: calc(88rpx + constant(safe-area-inset-top));
-  padding-top: calc(88rpx + env(safe-area-inset-top));
+  align-items: flex-end;
+  padding-bottom: 8rpx;
 }
 
 .back-btn {
-  width: 64rpx;
-  height: 64rpx;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.2);
   display: flex;
@@ -45,6 +41,7 @@
 }
 
 .header-actions {
+  position: absolute;
   display: flex;
   align-items: center;
   gap: 16rpx;
@@ -288,4 +285,48 @@
   margin-left: 10rpx;
   font-size: 24rpx;
   color: var(--td-text-color-placeholder);
+}
+
+.member-alias-list {
+  margin-top: 16rpx;
+}
+
+.alias-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12rpx;
+  gap: 12rpx;
+}
+
+.alias-row .member-tag {
+  flex-shrink: 0;
+  margin: 0;
+}
+
+.alias-input-inline {
+  flex: 1;
+  height: 60rpx;
+  background: var(--td-bg-color-secondarycontainer);
+  border-radius: 8rpx;
+  padding: 0 16rpx;
+  font-size: 24rpx;
+  box-sizing: border-box;
+}
+
+.alias-reset-inline {
+  font-size: 22rpx;
+  color: var(--travel-brand, #38C172);
+  flex-shrink: 0;
+  padding: 6rpx 8rpx;
+}
+
+.save-aliases-btn {
+  margin-top: 20rpx;
+  text-align: center;
+  padding: 16rpx;
+  background: var(--travel-brand, #38C172);
+  border-radius: 12rpx;
+  color: #fff;
+  font-size: 28rpx;
+  font-weight: 500;
 }

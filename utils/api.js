@@ -20,13 +20,51 @@ function clearToken() {
   } catch (e) {}
 }
 
+// ===== 字段命名转换（边界统一）=====
+// 后端统一 snake_case，前端统一 camelCase。
+// 出参（响应）一律转 camelCase，入参（请求体/查询）一律转回 snake_case。
+// member_aliases / memberAliases 的 value 是以「成员名」为 key 的映射，
+// 其内部 key 不能被转换，故整体保留 value 不递归。
+const PRESERVE_VALUE_KEYS = { member_aliases: true, memberAliases: true };
+
+function snakeToCamel(str) {
+  return str.replace(/_([a-zA-Z0-9])/g, (_, c) => c.toUpperCase());
+}
+
+function camelToSnake(str) {
+  return str.replace(/[A-Z]/g, (c) => '_' + c.toLowerCase());
+}
+
+function deepConvert(value, keyFn) {
+  if (Array.isArray(value)) {
+    return value.map(v => deepConvert(v, keyFn));
+  }
+  if (value && typeof value === 'object') {
+    const out = {};
+    Object.keys(value).forEach(k => {
+      const nk = keyFn(k);
+      out[nk] = PRESERVE_VALUE_KEYS[k] ? value[k] : deepConvert(value[k], keyFn);
+    });
+    return out;
+  }
+  return value;
+}
+
+function toCamel(value) {
+  return deepConvert(value, snakeToCamel);
+}
+
+function toSnake(value) {
+  return deepConvert(value, camelToSnake);
+}
+
 function request(method, path, data) {
   const token = getToken();
   return new Promise((resolve, reject) => {
     wx.request({
       url: BASE_URL + path,
       method: method,
-      data: data,
+      data: data ? toSnake(data) : data,
       header: {
         'Content-Type': 'application/json',
         'Authorization': token ? `Bearer ${token}` : ''
@@ -35,7 +73,7 @@ function request(method, path, data) {
         if (res.statusCode === 200) {
           const body = res.data;
           if (body && body.code === 0) {
-            resolve(body.data);
+            resolve(toCamel(body.data));
           } else if (res.statusCode === 401) {
             clearToken();
             reject({ code: 401, message: '未登录或登录已过期' });
@@ -72,9 +110,14 @@ function del(path) {
   return request('DELETE', path);
 }
 
+// 响应已是 camelCase。成员对象补一个语义别名 name（= nickname），
+// 供模板统一以 member.name 使用。
 function normalizeMember(m) {
+  if (!m) return m;
   return {
+    ...m,
     id: m.id || m.userId,
+    userId: m.userId || null,
     name: m.nickname || m.name || '',
     avatar: m.avatar || '',
     avatarColor: m.avatarColor || ''
@@ -90,6 +133,7 @@ function normalizeBook(book) {
   if (!book) return book;
   return {
     ...book,
+    coverColor: book.coverColor || '#4A90D9',
     members: normalizeMembers(book.members)
   };
 }
@@ -103,7 +147,10 @@ const api = {
   BASE_URL,
 
   login(code, nickname, avatar) {
-    return post('/user/login', { code, nickname, avatar }).then(data => {
+    const payload = { code };
+    if (nickname) payload.nickname = nickname;
+    if (avatar) payload.avatar = avatar;
+    return post('/user/login', payload).then(data => {
       if (data && data.token) {
         setToken(data.token);
       }
@@ -113,6 +160,10 @@ const api = {
 
   getUserProfile() {
     return get('/user/profile');
+  },
+
+  updateUserProfile(data) {
+    return put('/user/profile', data);
   },
 
 
@@ -128,7 +179,7 @@ const api = {
     return post('/books', {
       title: book.title,
       cover: book.cover,
-      cover_color: book.coverColor,
+      coverColor: book.coverColor,
       date: book.date
     }).then(data => normalizeBook(data));
   },
@@ -141,7 +192,7 @@ const api = {
     return put(`/books/${bookId}`, {
       title: updates.title,
       cover: updates.cover,
-      cover_color: updates.coverColor
+      coverColor: updates.coverColor
     }).then(data => normalizeBook(data));
   },
 
@@ -182,8 +233,16 @@ const api = {
     return post(`/books/${bookId}/members`, member).then(data => normalizeMember(data));
   },
 
+  joinBook(bookId) {
+    return post(`/books/${bookId}/join`);
+  },
+
   removeMember(bookId, memberId) {
     return del(`/books/${bookId}/members/${memberId}`);
+  },
+
+  updateBookAliases(bookId, memberAliases) {
+    return put(`/books/${bookId}/aliases`, { memberAliases: memberAliases }).then(data => normalizeBook(data));
   },
 
   getStatistics(bookId) {

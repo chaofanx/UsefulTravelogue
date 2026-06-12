@@ -1,17 +1,17 @@
 <view class="book-header">
   <view class="header-cover" style="background-color: {{book.coverColor || '#4A90D9'}}">
-    <view class="cover-overlay" style="padding-right: {{capsuleRight}}rpx;">
-      <view class="header-top-bar">
-        <view class="back-btn" bindtap="onBack">
+    <view class="cover-overlay" style="padding-right: {{capsuleLeft}}rpx;">
+      <view class="header-top-bar" style="padding-top: {{statusBarHeight}}px; height: {{navBarHeight}}px;">
+        <view class="back-btn" style="height: {{menuHeight}}rpx; width: {{menuHeight}}rpx;" bindtap="onBack">
           <text class="back-icon">←</text>
         </view>
-        <view class="header-actions">
-          <view class="action-btn" bindtap="onVip">
-            <text class="action-icon">💎</text>
-          </view>
-          <view class="action-btn" bindtap="onOpenSetting">
-            <text class="action-icon">⚙️</text>
-          </view>
+      </view>
+      <view class="header-actions" style="top: {{menuTop}}rpx; right: {{capsuleLeft}}rpx; height: {{menuHeight}}rpx;">
+        <view class="action-btn" bindtap="onVip">
+          <text class="action-icon">💎</text>
+        </view>
+        <view class="action-btn" bindtap="onOpenSetting">
+          <text class="action-icon">⚙️</text>
         </view>
       </view>
 
@@ -19,7 +19,7 @@
         <view class="header-title">{{book.title}}</view>
         <view class="header-subtitle">{{book.date}} · 与{{memberCount}}位朋友一起</view>
         <view class="header-members" bindtap="onMemberTap">
-          <member-avatars members="{{book.members}}" maxShow="{{4}}" />
+          <member-avatars members="{{book.members}}" maxShow="{{4}}" aliases="{{memberAliases}}" />
         </view>
       </view>
     </view>
@@ -104,12 +104,30 @@
         <view class="add-btn" bindtap="onConfirmAddMember">添加</view>
       </view>
       <view class="current-members" wx:if="{{book.members.length > 0}}">
-        <text class="members-tip">当前成员：</text>
-        <view class="member-tags">
-          <view class="member-tag" wx:for="{{book.members}}" wx:key="id">
-            <text>{{item.name}}</text>
-            <text class="tag-remove" wx:if="{{index > 0}}" data-id="{{item.id}}" bindtap="onRemoveMember">×</text>
+        <text class="members-tip">当前成员（点击"×"移除，下方设置别名）：</text>
+        <view class="member-alias-list">
+          <view class="alias-row" wx:for="{{book.members}}" wx:key="id">
+            <view class="member-tag">
+              <text>{{item.name}}</text>
+              <text class="tag-remove" wx:if="{{index > 0}}" data-id="{{item.id}}" bindtap="onRemoveMember">×</text>
+            </view>
+            <input
+              class="alias-input-inline"
+              placeholder="别名"
+              value="{{memberAliases[item.name] || ''}}"
+              data-name="{{item.name}}"
+              bindinput="onAliasInput"
+            />
+            <text
+              wx:if="{{memberAliases[item.name]}}"
+              class="alias-reset-inline"
+              data-name="{{item.name}}"
+              bindtap="onResetAlias"
+            >恢复</text>
           </view>
+        </view>
+        <view class="save-aliases-btn" bindtap="onSaveAliases">
+          <text>保存别名</text>
         </view>
       </view>
     </view>

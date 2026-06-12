@@ -11,7 +11,7 @@ function getTodayStr() {
 
 Page({
   data: {
-    bookId: 1,
+    bookId: 0,
     book: {},
     groupedSchedules: [],
     loading: true,
@@ -27,7 +27,12 @@ Page({
   },
 
   onLoad(options) {
-    const bookId = Number(options.id) || 1;
+    const bookId = Number(options.id);
+    if (!bookId) {
+      wx.showToast({ title: '参数错误', icon: 'none' });
+      wx.navigateBack();
+      return;
+    }
     this.data.bookId = bookId;
     this.loadData();
   },
@@ -83,7 +88,7 @@ Page({
   },
 
   onTicketTap() {
-    wx.navigateTo({ url: '/pages/ticket/index' });
+    wx.navigateTo({ url: `/pages/ticket/index?bookId=${this.data.bookId}` });
   },
 
   onAddSchedule() {

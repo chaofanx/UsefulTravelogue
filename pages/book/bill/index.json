@@ -2,7 +2,8 @@
   "usingComponents": {
     "book-header": "/components/book-header/index",
     "bill-group": "/components/bill-group/index",
-    "custom-tab-bar": "/components/custom-tab-bar/index"
+    "custom-tab-bar": "/components/custom-tab-bar/index",
+    "t-popup": "tdesign-miniprogram/popup/popup"
   },
   "navigationBarTitleText": "账单",
   "navigationStyle": "custom"

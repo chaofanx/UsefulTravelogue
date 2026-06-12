@@ -28,7 +28,7 @@
     </view>
     <view class="book-grid">
       <view class="book-grid-item" wx:for="{{books}}" wx:key="id">
-        <book-card book="{{item}}" bind:tap="onBookTap" />
+        <book-card book="{{item}}" bind:cardtap="onBookTap" />
       </view>
     </view>
   </view>

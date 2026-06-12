@@ -4,9 +4,10 @@
       wx:for="{{displayMembers}}"
       wx:key="id"
       class="avatar-item"
-      style="background-color: {{item.avatarColor}}"
+      style="background-color: {{item.avatar ? 'transparent' : item.avatarColor}}"
     >
-      <text class="avatar-text">{{item.firstChar}}</text>
+      <image wx:if="{{item.avatar}}" class="avatar-img" src="{{item.avatar}}" mode="aspectFill" />
+      <text wx:else class="avatar-text">{{item.firstChar}}</text>
     </view>
     <view wx:if="{{extraCount > 0}}" class="avatar-item avatar-extra" style="background-color: #E0E0E0">
       <text class="avatar-extra-text">+{{extraCount}}</text>

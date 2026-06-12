@@ -8,7 +8,6 @@
     "pages/createBook/index",
     "pages/profile/index",
     "pages/bookDetail/index",
-    "pages/addBill/index",
     "pages/feedback/index",
     "pages/memberList/index",
     "pages/ticket/index"

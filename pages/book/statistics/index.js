@@ -3,7 +3,7 @@ const { formatAmount } = require('../../../utils/util');
 
 Page({
   data: {
-    bookId: 1,
+    bookId: 0,
     book: {},
     totalAmount: '0',
     chartData: [],
@@ -11,6 +11,7 @@ Page({
     maxValue: 0,
     settlements: [],
     settlementMode: 'smart',
+    currentUserStats: null,
     loading: true
   },
 
@@ -19,14 +20,19 @@ Page({
   },
 
   onLoad(options) {
-    const bookId = Number(options.id) || 1;
+    const bookId = Number(options.id);
+    if (!bookId) {
+      wx.showToast({ title: '参数错误', icon: 'none' });
+      wx.navigateBack();
+      return;
+    }
     Promise.all([
       api.getBook(bookId),
       api.getStatistics(bookId),
       api.getSettlements(bookId, 'smart')
     ]).then(([book, statsData, settlementData]) => {
       const categoryStats = (statsData && statsData.categories) ? statsData.categories : [];
-      const total = statsData ? statsData.totalAmount : 0;
+      const total = statsData ? (statsData.totalAmount || 0) : 0;
 
       const statsDataFormatted = categoryStats.map(item => ({
         ...item,
@@ -40,15 +46,28 @@ Page({
       const settlementList = (settlementData && settlementData.settlements)
         ? settlementData.settlements
         : [];
-      const settlements = settlementList.map(s => ({
-        name: (s.fromUser && s.fromUser.nickname) ? s.fromUser.nickname.charAt(0) : '',
-        fullName: (s.fromUser && s.fromUser.nickname) || '',
-        avatar: (s.fromUser && s.fromUser.avatar) || '',
-        avatarColor: (s.fromUser && s.fromUser.avatarColor) || '',
-        desc: s.description || '',
-        amount: s.amount || 0,
-        amountText: formatAmount(s.amount || 0)
-      }));
+      const settlements = settlementList.map(s => {
+        const fu = s.fromUser || {};
+        return {
+          name: fu.nickname ? fu.nickname.charAt(0) : '',
+          fullName: fu.nickname || '',
+          avatar: fu.avatar || '',
+          avatarColor: fu.avatarColor || '',
+          desc: s.description || '',
+          amount: s.amount || 0,
+          amountText: formatAmount(s.amount || 0)
+        };
+      });
+
+      const cus = (statsData && statsData.currentUserStats) || null;
+      const currentUserStats = cus ? {
+        ...cus,
+        paidText: formatAmount(cus.paid),
+        shouldPayText: formatAmount(cus.shouldPay),
+        net: cus.net,
+        netText: formatAmount(Math.abs(cus.net)),
+        netLabel: cus.net >= 0 ? '应收' : '应付',
+      } : null;
 
       this.setData({
         bookId,
@@ -58,6 +77,7 @@ Page({
         categoryStatsData: statsDataFormatted,
         maxValue,
         settlements,
+        currentUserStats,
         loading: false
       });
     }).catch(err => {
@@ -73,15 +93,18 @@ Page({
       const settlementList = (settlementData && settlementData.settlements)
         ? settlementData.settlements
         : [];
-      const settlements = settlementList.map(s => ({
-        name: (s.fromUser && s.fromUser.nickname) ? s.fromUser.nickname.charAt(0) : '',
-        fullName: (s.fromUser && s.fromUser.nickname) || '',
-        avatar: (s.fromUser && s.fromUser.avatar) || '',
-        avatarColor: (s.fromUser && s.fromUser.avatarColor) || '',
-        desc: s.description || '',
-        amount: s.amount || 0,
-        amountText: formatAmount(s.amount || 0)
-      }));
+      const settlements = settlementList.map(s => {
+        const fu = s.fromUser || {};
+        return {
+          name: fu.nickname ? fu.nickname.charAt(0) : '',
+          fullName: fu.nickname || '',
+          avatar: fu.avatar || '',
+          avatarColor: fu.avatarColor || '',
+          desc: s.description || '',
+          amount: s.amount || 0,
+          amountText: formatAmount(s.amount || 0)
+        };
+      });
       this.setData({ settlements });
     }).catch(err => {
       wx.showToast({ title: err.message || '加载失败', icon: 'none' });
@@ -92,10 +115,6 @@ Page({
     api.getTeamSettlements(this.data.bookId).then(data => {
       console.log('Team plan:', data);
     }).catch(() => {});
-  },
-
-  onCreatePersonal() {
-    wx.navigateTo({ url: '/pages/createBook/index' });
   },
 
   onShareSettlement() {

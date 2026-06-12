@@ -3,12 +3,22 @@
 
   <view class="profile-card">
     <view class="avatar-section">
-      <view class="avatar-circle" style="background-color: #38C172">
-        <text class="avatar-char">张</text>
-      </view>
+      <button class="avatar-picker-btn" open-type="chooseAvatar" bindchooseavatar="onChooseAvatar">
+        <image wx:if="{{userInfo.avatar}}" class="avatar-img" src="{{userInfo.avatar}}" mode="aspectFill" />
+        <view wx:else class="avatar-circle" style="background-color: #38C172">
+          <text class="avatar-char">{{userInfo.nickname ? userInfo.nickname.charAt(0) : ''}}</text>
+        </view>
+      </button>
       <view class="user-info">
-        <text class="user-name">张本友</text>
-        <text class="user-desc">旅行记账达人</text>
+        <input
+          class="nickname-input"
+          type="nickname"
+          value="{{userInfo.nickname || ''}}"
+          placeholder="点击设置昵称"
+          maxlength="20"
+          bindblur="onNicknameSave"
+        />
+        <text class="user-desc">{{userInfo.vip ? 'VIP会员' : '旅行记账达人'}}</text>
       </view>
     </view>
   </view>
@@ -17,7 +27,7 @@
     <view class="menu-item" bindtap="onMenuItem" data-type="vip">
       <text class="menu-icon">💎</text>
       <text class="menu-text">会员中心</text>
-      <text class="menu-badge">免费用户</text>
+      <text class="menu-badge">{{userInfo.vip ? 'VIP用户' : '免费用户'}}</text>
       <text class="menu-arrow">›</text>
     </view>
     <view class="menu-item" bindtap="onMenuItem" data-type="stats">
@@ -28,7 +38,7 @@
     <view class="menu-item" bindtap="onMenuItem" data-type="books">
       <text class="menu-icon">📒</text>
       <text class="menu-text">我的账本</text>
-      <text class="menu-value">6个</text>
+      <text class="menu-value">{{userInfo.bookCount || 0}}个</text>
       <text class="menu-arrow">›</text>
     </view>
     <view class="menu-item" bindtap="onMenuItem" data-type="setting">

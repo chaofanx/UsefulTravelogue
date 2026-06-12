@@ -41,6 +41,39 @@
   color: var(--travel-brand, #38C172);
 }
 
+.my-stats-row {
+  display: flex;
+  justify-content: space-around;
+  padding: 16rpx 0 24rpx;
+  border-bottom: 1rpx solid var(--td-component-stroke);
+  margin-bottom: 16rpx;
+}
+
+.my-stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.my-stat-label {
+  font-size: 22rpx;
+  color: var(--td-text-color-placeholder);
+  margin-bottom: 6rpx;
+}
+
+.my-stat-val {
+  font-size: 34rpx;
+  font-weight: 700;
+}
+
+.my-stat-val.paid {
+  color: var(--travel-brand, #38C172);
+}
+
+.my-stat-val.owe {
+  color: #FF6B6B;
+}
+
 .chart-section {
   display: flex;
   align-items: center;

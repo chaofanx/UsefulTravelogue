@@ -22,4 +22,95 @@
   </view>
 
   <custom-tab-bar current="bill" bookId="{{bookId}}" bind:change="onTabChange" />
+
+  <t-popup visible="{{showFormPopup}}" placement="bottom" bind:visible-change="onFormPopupVisible">
+    <view class="bill-form-popup">
+      <view class="popup-handle">
+        <view class="handle-bar"></view>
+      </view>
+      <view class="popup-title">{{editingId ? '编辑账单' : '记一笔'}}</view>
+
+      <view class="form-scroll">
+        <view class="form-item">
+          <view class="form-label">金额</view>
+          <view class="amount-input-wrap">
+            <text class="currency">¥</text>
+            <input
+              class="amount-input"
+              type="digit"
+              placeholder="0.00"
+              value="{{formAmount}}"
+              bindinput="onAmountInput"
+              focus="{{!editingId}}"
+            />
+          </view>
+        </view>
+
+        <view class="form-item">
+          <view class="form-label">分类</view>
+          <view class="category-grid">
+            <view
+              wx:for="{{categories}}"
+              wx:key="name"
+              class="category-item {{formCategory === item.name ? 'active' : ''}}"
+              data-name="{{item.name}}"
+              bindtap="onCategoryTap"
+            >
+              <text class="cat-emoji">{{item.icon}}</text>
+              <text class="cat-name">{{item.name}}</text>
+            </view>
+          </view>
+        </view>
+
+        <view class="form-item">
+          <view class="form-label">付款人</view>
+          <view class="payer-options">
+            <view
+              wx:for="{{payers}}"
+              wx:key="*this"
+              class="payer-item {{formPayer === item ? 'active' : ''}}"
+              data-name="{{item}}"
+              bindtap="onPayerTap"
+            >
+              <text>{{memberAliases[item] || item}}</text>
+            </view>
+          </view>
+        </view>
+
+        <view class="form-item">
+          <view class="form-label">参与分摊的人</view>
+          <view class="payer-options">
+            <view
+              wx:for="{{payers}}"
+              wx:key="*this"
+              class="payer-item {{participantMap[item] ? 'active' : ''}}"
+              data-name="{{item}}"
+              bindtap="onParticipantTap"
+            >
+              <text>{{memberAliases[item] || item}}</text>
+            </view>
+          </view>
+        </view>
+
+        <view class="form-item">
+          <view class="form-label">备注</view>
+          <input
+            class="form-input"
+            placeholder="添加备注（选填）"
+            value="{{formRemark}}"
+            bindinput="onRemarkInput"
+          />
+        </view>
+
+        <view wx:if="{{editingId}}" class="delete-section" bindtap="onDeleteBill">
+          <text class="delete-text">删除此账单</text>
+        </view>
+      </view>
+
+      <view class="popup-footer">
+        <view class="footer-btn cancel-btn" bindtap="onCancelForm">取消</view>
+        <view class="footer-btn confirm-btn" bindtap="onConfirmBill">{{editingId ? '保存' : '记账'}}</view>
+      </view>
+    </view>
+  </t-popup>
 </view>

@@ -17,7 +17,7 @@ App({
     wx.login({
       success: (res) => {
         if (res.code) {
-          api.login(res.code, '', '').then(data => {
+          api.login(res.code).then(data => {
             this.globalData.token = data.token || '';
             this.globalData.userInfo = data.user || null;
           }).catch(() => {});

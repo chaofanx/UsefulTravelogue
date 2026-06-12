@@ -8,6 +8,6 @@
     </view>
   </view>
   <view class="bill-right">
-    <text class="bill-amount">¥{{bill.amountText}}</text>
+    <text class="bill-amount">¥{{amountText}}</text>
   </view>
 </view>

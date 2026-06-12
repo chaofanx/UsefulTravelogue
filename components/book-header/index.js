@@ -2,16 +2,31 @@ const api = require('../../utils/api');
 
 const DEFAULT_COLORS = ['#4A90D9', '#FF6B6B', '#38C172', '#FFD93D', '#6C5CE7', '#FF8C42', '#45B7D1', '#96CEB4'];
 
-function getCapsulePadding() {
+function getCapsuleInfo() {
   try {
+    const windowInfo = wx.getWindowInfo();
     const menuButton = wx.getMenuButtonBoundingClientRect();
     const sysInfo = wx.getSystemInfoSync();
     const pxToRpx = 750 / sysInfo.windowWidth;
-    const capsuleRightInPx = sysInfo.windowWidth - menuButton.left;
-    const capsuleRightInRpx = Math.ceil(capsuleRightInPx * pxToRpx) + 16;
-    return capsuleRightInRpx;
+
+    return {
+      navBarHeight: windowInfo.statusBarHeight + 44,
+      statusBarHeight: windowInfo.statusBarHeight,
+      menuTop: Math.ceil(menuButton.top * pxToRpx),
+      menuRight: Math.ceil((sysInfo.windowWidth - menuButton.right) * pxToRpx),
+      menuHeight: Math.ceil(menuButton.height * pxToRpx),
+      // 胶囊左侧到屏幕右边距离 + 16rpx 间距，用于 content 右边距和 actions 定位
+      capsuleLeft: Math.ceil((sysInfo.windowWidth - menuButton.left) * pxToRpx) + 16,
+    };
   } catch (e) {
-    return 200;
+    return {
+      navBarHeight: 88,
+      statusBarHeight: 44,
+      menuTop: 40,
+      menuRight: 16,
+      menuHeight: 64,
+      capsuleLeft: 200,
+    };
   }
 }
 
@@ -30,19 +45,36 @@ Component({
     showAddMemberPopup: false,
     editName: '',
     newMemberName: '',
-    capsuleRight: 200
+    memberAliases: {},
+    navBarHeight: 88,
+    statusBarHeight: 44,
+    menuTop: 40,
+    menuRight: 16,
+    menuHeight: 64,
+    capsuleLeft: 200,
   },
 
   lifetimes: {
     attached() {
-      this.setData({ capsuleRight: getCapsulePadding() });
+      const info = getCapsuleInfo();
+      this.setData({
+        navBarHeight: info.navBarHeight,
+        statusBarHeight: info.statusBarHeight,
+        menuTop: info.menuTop,
+        menuRight: info.menuRight,
+        menuHeight: info.menuHeight,
+        capsuleLeft: info.capsuleLeft,
+      });
     }
   },
 
   observers: {
     'book'(book) {
       if (book && book.members) {
-        this.setData({ memberCount: book.members.length });
+        this.setData({
+          memberCount: book.members.length,
+          memberAliases: book.memberAliases || {},
+        });
       }
     }
   },
@@ -186,6 +218,42 @@ Component({
             });
           }
         }
+      });
+    },
+
+    onAliasInput(e) {
+      const name = e.currentTarget.dataset.name;
+      const value = e.detail.value;
+      const aliases = { ...this.data.memberAliases };
+      if (value) {
+        aliases[name] = value;
+      } else {
+        delete aliases[name];
+      }
+      this.setData({ memberAliases: aliases });
+    },
+
+    onResetAlias(e) {
+      const name = e.currentTarget.dataset.name;
+      const aliases = { ...this.data.memberAliases };
+      delete aliases[name];
+      this.setData({ memberAliases: aliases });
+    },
+
+    onSaveAliases() {
+      const bookId = this.data.book.id;
+      const aliases = this.data.memberAliases;
+      const payload = {};
+      Object.keys(aliases).forEach(k => {
+        if (aliases[k]) payload[k] = aliases[k];
+      });
+
+      api.updateBookAliases(bookId, payload).then(updatedBook => {
+        this.setData({ book: updatedBook || { ...this.data.book, memberAliases: aliases } });
+        this.triggerEvent('bookchange', { book: updatedBook || this.data.book });
+        wx.showToast({ title: '别名已保存', icon: 'success' });
+      }).catch(err => {
+        wx.showToast({ title: err.message || '保存失败', icon: 'none' });
       });
     },
 

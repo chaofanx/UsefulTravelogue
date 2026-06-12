@@ -11,7 +11,7 @@
       wx:for="{{group.bills}}"
       wx:key="id"
       bill="{{item}}"
-      bind:tap="onBillTap"
+      bind:itemtap="onBillTap"
     />
   </view>
 </view>

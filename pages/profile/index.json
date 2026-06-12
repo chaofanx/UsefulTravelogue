@@ -3,5 +3,6 @@
     "t-navbar": "tdesign-miniprogram/navbar/navbar"
   },
   "navigationBarTitleText": "个人中心",
-  "navigationStyle": "custom"
+  "navigationStyle": "custom",
+  "disableScroll": true
 }

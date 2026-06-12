@@ -8,6 +8,21 @@
         <text class="stat-card-total">总 ¥{{totalAmount}}</text>
       </view>
 
+      <view class="my-stats-row" wx:if="{{currentUserStats}}">
+        <view class="my-stat-item">
+          <text class="my-stat-label">我付了</text>
+          <text class="my-stat-val paid">¥{{currentUserStats.paidText}}</text>
+        </view>
+        <view class="my-stat-item">
+          <text class="my-stat-label">我应付</text>
+          <text class="my-stat-val owe">¥{{currentUserStats.shouldPayText}}</text>
+        </view>
+        <view class="my-stat-item">
+          <text class="my-stat-label">{{currentUserStats.netLabel}}</text>
+          <text class="my-stat-val {{currentUserStats.net >= 0 ? 'paid' : 'owe'}}">¥{{currentUserStats.netText}}</text>
+        </view>
+      </view>
+
       <view class="chart-section">
         <ring-chart
           data="{{chartData}}"
@@ -71,15 +86,6 @@
     </view>
 
     <view class="action-cards">
-      <view class="action-card" bindtap="onCreatePersonal">
-        <view class="action-card-inner">
-          <text class="action-card-text">想生活记账？试试新建个人账本</text>
-          <view class="action-card-btn">
-            <text>试一试</text>
-          </view>
-        </view>
-      </view>
-
       <view class="action-card" bindtap="onShareSettlement">
         <view class="action-card-inner">
           <text class="action-card-text">转发分账方案</text>

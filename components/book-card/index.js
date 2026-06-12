@@ -8,7 +8,7 @@ Component({
 
   methods: {
     onTap() {
-      this.triggerEvent('tap', { book: this.data.book });
+      this.triggerEvent('cardtap', { book: this.data.book });
     }
   }
 });

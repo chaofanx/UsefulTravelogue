@@ -9,6 +9,10 @@ Component({
     maxShow: {
       type: Number,
       value: 3
+    },
+    aliases: {
+      type: Object,
+      value: {}
     }
   },
 
@@ -23,9 +27,10 @@ Component({
         this.setData({ displayMembers: [], extraCount: 0 });
         return;
       }
+      const aliases = this.data.aliases || {};
       const display = members.slice(0, this.data.maxShow).map(m => ({
         ...m,
-        firstChar: getAvatarText(m.name)
+        firstChar: getAvatarText(aliases[m.name] || m.name)
       }));
       const extra = Math.max(0, members.length - this.data.maxShow);
       this.setData({
