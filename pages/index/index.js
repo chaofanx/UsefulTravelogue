@@ -1,4 +1,5 @@
 const api = require('../../utils/api');
+const cache = require('../../utils/cache');
 const { getCapsuleInfo } = require('../../utils/capsule');
 
 const DEFAULT_COLORS = ['#4A90D9', '#FF6B6B', '#38C172', '#FFD93D', '#6C5CE7', '#FF8C42', '#45B7D1', '#96CEB4'];
@@ -48,8 +49,15 @@ Page({
   },
 
   loadBooks() {
-    this.setData({ loading: true });
-    api.getBooks().then(books => {
+    const key = cache.keys.books();
+    const cached = cache.get(key);
+    if (cached !== undefined) {
+      // 先渲染缓存，后台请求回来后再更新
+      this.setData({ books: cached, loading: false });
+    } else {
+      this.setData({ loading: true });
+    }
+    cache.fetchAndCache(key, () => api.getBooks()).then(books => {
       this.setData({ books: Array.isArray(books) ? books : [], loading: false });
     }).catch(err => {
       this.setData({ loading: false });
@@ -59,7 +67,10 @@ Page({
         this.init();
         return;
       }
-      wx.showToast({ title: err.message || '加载失败', icon: 'none' });
+      wx.showToast({
+        title: cached !== undefined ? '数据更新失败，当前为缓存数据' : (err.message || '加载失败'),
+        icon: 'none'
+      });
     });
   },
 

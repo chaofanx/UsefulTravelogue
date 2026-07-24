@@ -1,4 +1,5 @@
 const api = require('../../utils/api');
+const cache = require('../../utils/cache');
 const { getAvatarText } = require('../../utils/util');
 
 Page({
@@ -17,21 +18,34 @@ Page({
       return;
     }
     this.setData({ bookId });
-    api.getBook(bookId).then(book => {
-      const aliases = (book && book.memberAliases) ? book.memberAliases : {};
-      const members = ((book && book.members) ? book.members : []).map(m => ({
-        ...m,
-        displayName: aliases[m.name] || m.name,
-        firstChar: getAvatarText(aliases[m.name] || m.name)
-      }));
-      this.setData({
-        bookTitle: (book && book.title) || '',
-        members,
-        loading: false
-      });
+    const key = cache.keys.book(bookId);
+    const cached = cache.get(key);
+    if (cached !== undefined) {
+      // 先渲染缓存，后台请求回来后再更新
+      this.applyBook(cached);
+    }
+    cache.fetchAndCache(key, () => api.getBook(bookId)).then(book => {
+      this.applyBook(book);
     }).catch(err => {
       this.setData({ loading: false });
-      wx.showToast({ title: err.message || '加载失败', icon: 'none' });
+      wx.showToast({
+        title: cached !== undefined ? '数据更新失败，当前为缓存数据' : (err.message || '加载失败'),
+        icon: 'none'
+      });
+    });
+  },
+
+  applyBook(book) {
+    const aliases = (book && book.memberAliases) ? book.memberAliases : {};
+    const members = ((book && book.members) ? book.members : []).map(m => ({
+      ...m,
+      displayName: aliases[m.name] || m.name,
+      firstChar: getAvatarText(aliases[m.name] || m.name)
+    }));
+    this.setData({
+      bookTitle: (book && book.title) || '',
+      members,
+      loading: false
     });
   },
 

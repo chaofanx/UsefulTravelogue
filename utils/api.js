@@ -1,4 +1,20 @@
 const { BASE_URL } = require('./env');
+const cache = require('./cache');
+
+// ===== 缓存失效（写操作后集中处理，页面无需关心）=====
+
+// 账单增删改会影响：账单列表、统计、各模式结算方案
+function invalidateBillRelated(bookId) {
+  cache.remove(cache.keys.bills(bookId));
+  cache.remove(cache.keys.statistics(bookId));
+  cache.removeByPrefix(cache.keys.book(bookId) + ':settlements');
+}
+
+// 账本信息/成员变动会影响：账本列表、该账本详情
+function invalidateBookRelated(bookId) {
+  cache.remove(cache.keys.books());
+  cache.remove(cache.keys.book(bookId));
+}
 
 function getToken() {
   try {
@@ -159,6 +175,8 @@ const api = {
     return post('/user/login', payload).then(data => {
       if (data && data.token) {
         setToken(data.token);
+        // 登录态变化（含换账号/401 后重登），清空会话缓存防止串数据
+        cache.clear();
       }
       return data;
     });
@@ -169,7 +187,11 @@ const api = {
   },
 
   updateUserProfile(data) {
-    return put('/user/profile', data);
+    return put('/user/profile', data).then(profile => {
+      // 响应即最新资料，直接更新缓存
+      cache.set(cache.keys.profile(), profile);
+      return profile;
+    });
   },
 
 
@@ -187,7 +209,11 @@ const api = {
       cover: book.cover,
       coverColor: book.coverColor,
       date: book.date
-    }).then(data => normalizeBook(data));
+    }).then(data => {
+      const normalized = normalizeBook(data);
+      cache.remove(cache.keys.books());
+      return normalized;
+    });
   },
 
   getBook(bookId) {
@@ -199,11 +225,21 @@ const api = {
       title: updates.title,
       cover: updates.cover,
       coverColor: updates.coverColor
-    }).then(data => normalizeBook(data));
+    }).then(data => {
+      const normalized = normalizeBook(data);
+      cache.remove(cache.keys.books());
+      // 响应即最新账本详情，直接更新缓存
+      cache.set(cache.keys.book(bookId), normalized);
+      return normalized;
+    });
   },
 
   deleteBook(bookId) {
-    return del(`/books/${bookId}`);
+    return del(`/books/${bookId}`).then(data => {
+      cache.remove(cache.keys.books());
+      cache.removeByPrefix(cache.keys.book(bookId));
+      return data;
+    });
   },
 
   getBills(bookId, params) {
@@ -211,15 +247,24 @@ const api = {
   },
 
   createBill(bookId, bill) {
-    return post(`/books/${bookId}/bills`, bill);
+    return post(`/books/${bookId}/bills`, bill).then(data => {
+      invalidateBillRelated(bookId);
+      return data;
+    });
   },
 
   updateBill(bookId, billId, bill) {
-    return put(`/books/${bookId}/bills/${billId}`, bill);
+    return put(`/books/${bookId}/bills/${billId}`, bill).then(data => {
+      invalidateBillRelated(bookId);
+      return data;
+    });
   },
 
   deleteBill(bookId, billId) {
-    return del(`/books/${bookId}/bills/${billId}`);
+    return del(`/books/${bookId}/bills/${billId}`).then(data => {
+      invalidateBillRelated(bookId);
+      return data;
+    });
   },
 
   getSchedules(bookId) {
@@ -227,28 +272,49 @@ const api = {
   },
 
   createSchedule(bookId, schedule) {
-    return post(`/books/${bookId}/schedules`, schedule);
+    return post(`/books/${bookId}/schedules`, schedule).then(data => {
+      cache.remove(cache.keys.schedules(bookId));
+      return data;
+    });
   },
 
   updateSchedule(bookId, scheduleId, schedule) {
-    return put(`/books/${bookId}/schedules/${scheduleId}`, schedule);
+    return put(`/books/${bookId}/schedules/${scheduleId}`, schedule).then(data => {
+      cache.remove(cache.keys.schedules(bookId));
+      return data;
+    });
   },
 
 
   addMember(bookId, member) {
-    return post(`/books/${bookId}/members`, member).then(data => normalizeMember(data));
+    return post(`/books/${bookId}/members`, member).then(data => {
+      invalidateBookRelated(bookId);
+      return normalizeMember(data);
+    });
   },
 
   joinBook(bookId) {
-    return post(`/books/${bookId}/join`);
+    return post(`/books/${bookId}/join`).then(data => {
+      invalidateBookRelated(bookId);
+      return data;
+    });
   },
 
   removeMember(bookId, memberId) {
-    return del(`/books/${bookId}/members/${memberId}`);
+    return del(`/books/${bookId}/members/${memberId}`).then(data => {
+      invalidateBookRelated(bookId);
+      return data;
+    });
   },
 
   updateBookAliases(bookId, memberAliases) {
-    return put(`/books/${bookId}/aliases`, { memberAliases: memberAliases }).then(data => normalizeBook(data));
+    return put(`/books/${bookId}/aliases`, { memberAliases: memberAliases }).then(data => {
+      const normalized = normalizeBook(data);
+      cache.remove(cache.keys.books());
+      // 响应即最新账本详情，直接更新缓存
+      cache.set(cache.keys.book(bookId), normalized);
+      return normalized;
+    });
   },
 
   getStatistics(bookId) {

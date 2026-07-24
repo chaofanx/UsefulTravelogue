@@ -1,4 +1,5 @@
 const api = require('../../utils/api');
+const cache = require('../../utils/cache');
 
 Page({
   data: { book: {}, loading: true, isInvited: false, isMember: true },
@@ -16,15 +17,26 @@ Page({
 
   loadBook(id) {
     const bookId = id || this.data.book.id;
-    this.setData({ loading: true });
-    api.getBook(bookId).then(book => {
-      const currentUserId = getApp().globalData.userInfo?.id;
-      const members = book?.members || [];
-      const isMember = members.some(m => m.userId === currentUserId);
-      this.setData({ book: book || {}, isMember, loading: false });
+    const key = cache.keys.book(bookId);
+    const cached = cache.get(key);
+    if (cached !== undefined) {
+      // 先渲染缓存，后台请求回来后再更新
+      this.applyBook(cached);
+    } else {
+      this.setData({ loading: true });
+    }
+    cache.fetchAndCache(key, () => api.getBook(bookId)).then(book => {
+      this.applyBook(book);
     }).catch(() => {
       this.setData({ loading: false });
     });
+  },
+
+  applyBook(book) {
+    const currentUserId = getApp().globalData.userInfo?.id;
+    const members = book?.members || [];
+    const isMember = members.some(m => m.userId === currentUserId);
+    this.setData({ book: book || {}, isMember, loading: false });
   },
 
   onBack() {

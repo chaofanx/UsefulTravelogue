@@ -1,4 +1,5 @@
 const api = require('../../../utils/api');
+const cache = require('../../../utils/cache');
 
 function dateToStr(d) {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
@@ -58,29 +59,59 @@ Page({
 
   // 获取会员状态（决定备注/不计分账控件显隐）和「其他」分类可选 emoji
   loadVipAndEmojis() {
-    api.getUserProfile().then(profile => {
+    const profileKey = cache.keys.profile();
+    const cachedProfile = cache.get(profileKey);
+    if (cachedProfile !== undefined) {
+      this.setData({ isVip: !!(cachedProfile && cachedProfile.vip) });
+    }
+    cache.fetchAndCache(profileKey, () => api.getUserProfile()).then(profile => {
       this.setData({ isVip: !!(profile && profile.vip) });
     }).catch(() => {});
-    api.getSystemEmojis().then(data => {
+
+    const emojisKey = cache.keys.emojis();
+    const cachedEmojis = cache.get(emojisKey);
+    if (cachedEmojis !== undefined) {
+      this.setData({ otherEmojis: (cachedEmojis && cachedEmojis.emojis) || [] });
+    }
+    cache.fetchAndCache(emojisKey, () => api.getSystemEmojis()).then(data => {
       this.setData({ otherEmojis: (data && data.emojis) || [] });
     }).catch(() => {});
   },
 
   loadData() {
-    this.setData({ loading: true });
+    const bookId = this.data.bookId;
+    const bookKey = cache.keys.book(bookId);
+    const billsKey = cache.keys.bills(bookId);
+    const cachedBook = cache.get(bookKey);
+    const cachedBills = cache.get(billsKey);
+    if (cachedBook !== undefined && cachedBills !== undefined) {
+      // 先渲染缓存，后台请求回来后再更新
+      this.applyData(cachedBook, cachedBills);
+    } else {
+      this.setData({ loading: true });
+    }
     Promise.all([
-      api.getBook(this.data.bookId),
-      api.getBills(this.data.bookId)
+      cache.fetchAndCache(bookKey, () => api.getBook(bookId)),
+      cache.fetchAndCache(billsKey, () => api.getBills(bookId))
     ]).then(([book, billsData]) => {
-      const members = (book && book.members) ? book.members : [];
-      const payers = members.map(m => m.name);
-      const memberAliases = (book && book.memberAliases) ? book.memberAliases : {};
-      const groupedBills = (billsData && billsData.groups) ? billsData.groups : [];
-      this.setData({ book: book || {}, groupedBills, payers, memberAliases, loading: false });
+      this.applyData(book, billsData);
     }).catch(err => {
       this.setData({ loading: false });
-      wx.showToast({ title: err.message || '加载失败', icon: 'none' });
+      wx.showToast({
+        title: (cachedBook !== undefined && cachedBills !== undefined)
+          ? '数据更新失败，当前为缓存数据'
+          : (err.message || '加载失败'),
+        icon: 'none'
+      });
     });
+  },
+
+  applyData(book, billsData) {
+    const members = (book && book.members) ? book.members : [];
+    const payers = members.map(m => m.name);
+    const memberAliases = (book && book.memberAliases) ? book.memberAliases : {};
+    const groupedBills = (billsData && billsData.groups) ? billsData.groups : [];
+    this.setData({ book: book || {}, groupedBills, payers, memberAliases, loading: false });
   },
 
   onBookChange(e) {

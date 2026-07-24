@@ -1,4 +1,5 @@
 const api = require('../../utils/api');
+const cache = require('../../utils/cache');
 
 Page({
   data: {
@@ -17,8 +18,15 @@ Page({
   },
 
   loadProfile() {
-    this.setData({ loading: true });
-    api.getUserProfile().then(user => {
+    const key = cache.keys.profile();
+    const cached = cache.get(key);
+    if (cached !== undefined) {
+      // 先渲染缓存，后台请求回来后再更新
+      this.setData({ userInfo: cached, loading: false });
+    } else {
+      this.setData({ loading: true });
+    }
+    cache.fetchAndCache(key, () => api.getUserProfile()).then(user => {
       this.setData({ userInfo: user, loading: false });
     }).catch(() => {
       this.setData({ loading: false });

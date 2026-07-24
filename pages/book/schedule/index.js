@@ -1,4 +1,5 @@
 const api = require('../../../utils/api');
+const cache = require('../../../utils/cache');
 const { formatDateShort } = require('../../../utils/util');
 
 function getTodayStr() {
@@ -38,23 +39,42 @@ Page({
   },
 
   loadData() {
-    this.setData({ loading: true });
+    const bookId = this.data.bookId;
+    const bookKey = cache.keys.book(bookId);
+    const schedulesKey = cache.keys.schedules(bookId);
+    const cachedBook = cache.get(bookKey);
+    const cachedSchedules = cache.get(schedulesKey);
+    if (cachedBook !== undefined && cachedSchedules !== undefined) {
+      // 先渲染缓存，后台请求回来后再更新
+      this.applyData(cachedBook, cachedSchedules);
+    } else {
+      this.setData({ loading: true });
+    }
     Promise.all([
-      api.getBook(this.data.bookId),
-      api.getSchedules(this.data.bookId)
+      cache.fetchAndCache(bookKey, () => api.getBook(bookId)),
+      cache.fetchAndCache(schedulesKey, () => api.getSchedules(bookId))
     ]).then(([book, schedulesData]) => {
-      const scheduleGroups = (schedulesData && schedulesData.groups)
-        ? schedulesData.groups
-        : [];
-      const groupedSchedules = scheduleGroups.map(group => ({
-        ...group,
-        monthDay: formatDateShort(group.date)
-      }));
-      this.setData({ book: book || {}, groupedSchedules, loading: false });
+      this.applyData(book, schedulesData);
     }).catch(err => {
       this.setData({ loading: false });
-      wx.showToast({ title: err.message || '加载失败', icon: 'none' });
+      wx.showToast({
+        title: (cachedBook !== undefined && cachedSchedules !== undefined)
+          ? '数据更新失败，当前为缓存数据'
+          : (err.message || '加载失败'),
+        icon: 'none'
+      });
     });
+  },
+
+  applyData(book, schedulesData) {
+    const scheduleGroups = (schedulesData && schedulesData.groups)
+      ? schedulesData.groups
+      : [];
+    const groupedSchedules = scheduleGroups.map(group => ({
+      ...group,
+      monthDay: formatDateShort(group.date)
+    }));
+    this.setData({ book: book || {}, groupedSchedules, loading: false });
   },
 
   onBookChange(e) {
