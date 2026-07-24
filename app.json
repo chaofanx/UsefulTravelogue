@@ -30,6 +30,14 @@
   },
   "sitemapLocation": "sitemap.json",
   "lazyCodeLoading": "requiredComponents",
+  "permission": {
+    "scope.userLocation": {
+      "desc": "你的位置信息将用于行程地点的选择与展示"
+    }
+  },
+  "requiredPrivateInfos": [
+    "chooseLocation"
+  ],
   "rendererOptions": {
     "skyline": {
       "disableABTest": true,
