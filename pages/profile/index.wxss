@@ -48,10 +48,6 @@
   line-height: 1;
 }
 
-.avatar-picker-btn::after {
-  border: none;
-}
-
 .avatar-img {
   width: 96rpx;
   height: 96rpx;

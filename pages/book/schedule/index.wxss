@@ -211,6 +211,12 @@
   gap: 16rpx;
 }
 
+/* picker 作为 flex 子项与快捷选项等宽 */
+.period-row picker {
+  flex: 1;
+  display: flex;
+}
+
 .period-item {
   flex: 1;
   height: 72rpx;
@@ -245,6 +251,16 @@
   color: var(--td-text-color-placeholder);
   margin-top: 8rpx;
   display: block;
+}
+
+.delete-section {
+  text-align: center;
+  padding: 16rpx 0 8rpx;
+}
+
+.delete-text {
+  font-size: 26rpx;
+  color: #FF6B6B;
 }
 
 .popup-footer {

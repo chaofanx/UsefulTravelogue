@@ -2,12 +2,8 @@ const api = require('../../../utils/api');
 const cache = require('../../../utils/cache');
 const { formatDateShort } = require('../../../utils/util');
 
-function getTodayStr() {
-  const d = new Date();
-  const y = d.getFullYear();
-  const m = String(d.getMonth() + 1).padStart(2, '0');
-  const day = String(d.getDate()).padStart(2, '0');
-  return `${y}-${m}-${day}`;
+function dateToStr(d) {
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 }
 
 Page({
@@ -24,6 +20,9 @@ Page({
     formLng: null,
     formPeriod: '全天',
     formNotes: '',
+    formDate: '',
+    todayStr: '',
+    tomorrowStr: '',
     periods: ['全天', '上午', '下午', '晚上']
   },
 
@@ -82,6 +81,9 @@ Page({
   },
 
   resetForm() {
+    const now = new Date();
+    const todayStr = dateToStr(now);
+    const tomorrowStr = dateToStr(new Date(now.getTime() + 86400000));
     this.setData({
       editingId: null,
       formLocation: '',
@@ -89,12 +91,18 @@ Page({
       formLat: null,
       formLng: null,
       formPeriod: '全天',
-      formNotes: ''
+      formNotes: '',
+      formDate: todayStr,
+      todayStr,
+      tomorrowStr
     });
   },
 
   onScheduleEdit(e) {
     const item = e.detail.item;
+    const now = new Date();
+    const todayStr = dateToStr(now);
+    const tomorrowStr = dateToStr(new Date(now.getTime() + 86400000));
     this.setData({
       showFormPopup: true,
       editingId: item.id,
@@ -103,7 +111,10 @@ Page({
       formLat: item.latitude || null,
       formLng: item.longitude || null,
       formPeriod: item.period || '全天',
-      formNotes: item.notes || ''
+      formNotes: item.notes || '',
+      formDate: item.date || todayStr,
+      todayStr,
+      tomorrowStr
     });
   },
 
@@ -147,12 +158,42 @@ Page({
     this.setData({ formPeriod: e.currentTarget.dataset.period });
   },
 
+  onDateQuick(e) {
+    this.setData({ formDate: e.currentTarget.dataset.date });
+  },
+
+  onDatePick(e) {
+    this.setData({ formDate: e.detail.value });
+  },
+
   onNotesInput(e) {
     this.setData({ formNotes: e.detail.value });
   },
 
   onCancelForm() {
     this.setData({ showFormPopup: false });
+  },
+
+  onDeleteSchedule() {
+    const { editingId, bookId } = this.data;
+    if (!editingId) return;
+
+    wx.showModal({
+      title: '删除行程',
+      content: '确定要删除这条行程吗？',
+      confirmColor: '#FF6B6B',
+      success: (res) => {
+        if (res.confirm) {
+          api.deleteSchedule(bookId, editingId).then(() => {
+            wx.showToast({ title: '已删除', icon: 'success' });
+            this.setData({ showFormPopup: false });
+            this.loadData();
+          }).catch(err => {
+            wx.showToast({ title: err.message || '删除失败', icon: 'none' });
+          });
+        }
+      }
+    });
   },
 
   onConfirmSchedule() {
@@ -169,7 +210,7 @@ Page({
       longitude: this.data.formLng,
       period: this.data.formPeriod,
       notes: this.data.formNotes,
-      date: getTodayStr()
+      date: this.data.formDate
     };
 
     const promise = editingId

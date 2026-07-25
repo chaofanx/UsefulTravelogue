@@ -1,5 +1,6 @@
 <view class="book-card" bindtap="onTap">
   <view class="card-cover" style="background-color: {{book.coverColor || '#4A90D9'}}">
+    <image wx:if="{{book.cover}}" class="cover-img" src="{{book.cover}}" mode="aspectFill" />
     <view wx:if="{{book.vip}}" class="vip-badge">
       <text class="vip-icon">💎</text>
     </view>

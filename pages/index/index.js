@@ -1,6 +1,7 @@
 const api = require('../../utils/api');
 const cache = require('../../utils/cache');
 const { getCapsuleInfo } = require('../../utils/capsule');
+const { generateAppShareImage } = require('../../utils/shareImage');
 
 const DEFAULT_COLORS = ['#4A90D9', '#FF6B6B', '#38C172', '#FFD93D', '#6C5CE7', '#FF8C42', '#45B7D1', '#96CEB4'];
 
@@ -18,6 +19,25 @@ Page({
 
   onLoad() {
     this.setData({ statusBarHeight: getCapsuleInfo().statusBarHeight });
+  },
+
+  onReady() {
+    // 页面渲染完成后 canvas 节点才可用，此时预生成分享封面图
+    this.refreshShareImage();
+  },
+
+  // 预生成「推荐给朋友」的分享封面图（品牌图，内容固定只生成一次）
+  refreshShareImage() {
+    if (this._shareImgReady) return;
+    this._shareImgReady = generateAppShareImage(this).then(path => {
+      this.shareImageUrl = path;
+      return path;
+    }).catch(() => {
+      // 生成失败不阻塞分享，下次进入页面自动重试
+      this._shareImgReady = null;
+      this.shareImageUrl = '';
+      return '';
+    });
   },
 
   onShow() {
@@ -166,5 +186,24 @@ Page({
 
   onFeedback() {
     wx.navigateTo({ url: '/pages/feedback/index' });
+  },
+
+  // 「推荐给朋友」按钮（open-type="share"）触发
+  onShareAppMessage() {
+    const share = {
+      title: '好用旅记——简单好用的多人记账、自动分账工具',
+      path: '/pages/index/index'
+    };
+    if (this.shareImageUrl) {
+      return { ...share, imageUrl: this.shareImageUrl };
+    }
+    // 分享图尚未生成完时，通过 promise 异步返回（基础库 2.10+ 支持）
+    if (this._shareImgReady) {
+      return {
+        ...share,
+        promise: this._shareImgReady.then(imageUrl => (imageUrl ? { ...share, imageUrl } : share))
+      };
+    }
+    return share;
   }
 });

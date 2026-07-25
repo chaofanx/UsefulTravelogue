@@ -129,4 +129,67 @@ function generateShareImage(pageCtx, book, canvasId = 'shareCanvas') {
   });
 }
 
-module.exports = { generateShareImage };
+// ===== 小程序品牌推广分享图（首页「推荐给朋友」）=====
+// 品牌绿渐变底 + 装饰圆 + ✈️ + 小程序名称与介绍，无需任何外部图片资源。
+
+function drawDecorCircle(ctx, x, y, r, alpha) {
+  ctx.beginPath();
+  ctx.arc(x, y, r, 0, Math.PI * 2);
+  ctx.fillStyle = `rgba(255, 255, 255, ${alpha})`;
+  ctx.fill();
+}
+
+function drawAppBrand(ctx) {
+  // 品牌绿 → 旅青 对角渐变
+  const gradient = ctx.createLinearGradient(0, 0, WIDTH, HEIGHT);
+  gradient.addColorStop(0, '#38C172');
+  gradient.addColorStop(1, '#45B7D1');
+  ctx.fillStyle = gradient;
+  ctx.fillRect(0, 0, WIDTH, HEIGHT);
+
+  // 半透明装饰圆，增加层次感
+  drawDecorCircle(ctx, 60, 60, 90, 0.10);
+  drawDecorCircle(ctx, WIDTH - 40, 120, 60, 0.12);
+  drawDecorCircle(ctx, WIDTH - 90, HEIGHT - 50, 110, 0.10);
+  drawDecorCircle(ctx, 90, HEIGHT - 80, 50, 0.12);
+
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillStyle = '#ffffff';
+
+  // 图标
+  ctx.font = '64px sans-serif';
+  ctx.fillText('✈️', WIDTH / 2, 118);
+
+  // 小程序名称
+  ctx.font = 'bold 46px sans-serif';
+  ctx.fillText('好用旅记', WIDTH / 2, 196);
+
+  // 一句话介绍
+  ctx.font = '24px sans-serif';
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.92)';
+  ctx.fillText('简单好用的多人记账、自动分账工具', WIDTH / 2, 252);
+
+  // 功能点
+  ctx.font = '20px sans-serif';
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+  ctx.fillText('旅行记账 · 自动分账 · 行程规划', WIDTH / 2, 306);
+}
+
+/**
+ * @param pageCtx  页面实例（用于 selectorQuery.in）
+ * @param canvasId 隐藏画布 id，默认 shareCanvas
+ */
+function generateAppShareImage(pageCtx, canvasId = 'shareCanvas') {
+  let canvas;
+  return getCanvasNode(pageCtx, canvasId).then(node => {
+    canvas = node;
+    canvas.width = WIDTH;
+    canvas.height = HEIGHT;
+    const ctx = canvas.getContext('2d');
+    drawAppBrand(ctx);
+    return canvasToTempFilePath(canvas);
+  });
+}
+
+module.exports = { generateShareImage, generateAppShareImage };

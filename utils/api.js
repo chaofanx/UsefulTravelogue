@@ -127,7 +127,7 @@ function del(path) {
 }
 
 // ===== 文件上传 =====
-// chooseAvatar / wx.chooseMedia 返回的 wxfile://（或 http://tmp/）是
+// wx.chooseMedia 返回的 wxfile://（或 http://tmp/）是
 // 手机本地临时路径，重启即失效，必须先上传到服务器换取持久 URL 再存库。
 
 // 判断是否为本地临时文件路径
@@ -330,6 +330,13 @@ const api = {
 
   updateSchedule(bookId, scheduleId, schedule) {
     return put(`/books/${bookId}/schedules/${scheduleId}`, schedule).then(data => {
+      cache.remove(cache.keys.schedules(bookId));
+      return data;
+    });
+  },
+
+  deleteSchedule(bookId, scheduleId) {
+    return del(`/books/${bookId}/schedules/${scheduleId}`).then(data => {
       cache.remove(cache.keys.schedules(bookId));
       return data;
     });

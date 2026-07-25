@@ -6,6 +6,18 @@
   box-sizing: border-box;
 }
 
+/* 分享封面图画布：固定在视口内但不可见（Skyline 要求 canvas 在渲染树中） */
+.share-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 500px;
+  height: 400px;
+  opacity: 0;
+  pointer-events: none;
+  z-index: -1;
+}
+
 /* .top-section 的 padding-top 由 wxml 内联样式按设备状态栏高度设置 */
 
 .brand-area {
@@ -160,6 +172,20 @@
 .link-item {
   font-size: 26rpx;
   color: var(--td-text-color-placeholder);
+}
+
+/* open-type="share" 按钮还原为纯文本链接样式 */
+.share-link-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  line-height: 1.4;
+  font-weight: normal;
+}
+
+.share-link-btn::after {
+  border: none;
 }
 
 .link-divider {

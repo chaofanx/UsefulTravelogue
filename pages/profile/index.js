@@ -33,31 +33,38 @@ Page({
     });
   },
 
-  onChooseAvatar(e) {
-    const avatarUrl = e.detail.avatarUrl;
-    if (!avatarUrl) return;
+  onChooseAvatar() {
+    const that = this;
+    // Skyline 下 button open-type="chooseAvatar" 不可用，改用 wx.chooseMedia 选图
+    wx.chooseMedia({
+      count: 1,
+      mediaType: ['image'],
+      sourceType: ['album', 'camera'],
+      success(res) {
+        const tempFilePath = res.tempFiles[0].tempFilePath;
+        // tempFilePath 是本地临时路径，先用它预览，
+        // 同时上传服务器换取持久 URL 后再存库
+        const userInfo = { ...that.data.userInfo, avatar: tempFilePath };
+        that.setData({ userInfo });
 
-    // avatarUrl 是 wxfile:// 本地临时路径，先用它预览，
-    // 同时上传服务器换取持久 URL 后再存库
-    const userInfo = { ...this.data.userInfo, avatar: avatarUrl };
-    this.setData({ userInfo });
-
-    wx.showLoading({ title: '上传中...', mask: true });
-    api.uploadFile(avatarUrl)
-      .then(url => api.updateUserProfile({ avatar: url }))
-      .then(profile => {
-        wx.hideLoading();
-        this.setData({ userInfo: profile });
-        const app = getApp();
-        if (app.globalData) {
-          app.globalData.userInfo = profile;
-        }
-      })
-      .catch(() => {
-        wx.hideLoading();
-        wx.showToast({ title: '头像更新失败', icon: 'none' });
-        this.loadProfile();
-      });
+        wx.showLoading({ title: '上传中...', mask: true });
+        api.uploadFile(tempFilePath)
+          .then(url => api.updateUserProfile({ avatar: url }))
+          .then(profile => {
+            wx.hideLoading();
+            that.setData({ userInfo: profile });
+            const app = getApp();
+            if (app.globalData) {
+              app.globalData.userInfo = profile;
+            }
+          })
+          .catch(() => {
+            wx.hideLoading();
+            wx.showToast({ title: '头像更新失败', icon: 'none' });
+            that.loadProfile();
+          });
+      }
+    });
   },
 
   onNicknameSave(e) {

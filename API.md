@@ -1010,7 +1010,7 @@ Content-Type: multipart/form-data
 3. 将持久 URL 作为 `cover` 提交创建/修改账本接口，存入数据库
 4. 之后各端直接通过该 URL 展示封面
 
-用户头像（`avatar` 字段）流程相同：`button open-type="chooseAvatar"` 选择后先上传再保存。
+用户头像（`avatar` 字段）流程相同：`wx.chooseMedia` 选择后先上传再保存（Skyline 下不使用 `button open-type="chooseAvatar"`）。
 
 > ⚠️ 本地临时路径（`wxfile://tmp_...`）只在本次小程序运行期间存在于用户手机的微信沙盒中，重启/换设备即失效，且后端无法访问该路径，禁止直接存库。
 

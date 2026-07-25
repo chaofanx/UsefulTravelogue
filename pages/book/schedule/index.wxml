@@ -63,6 +63,31 @@
         </view>
 
         <view class="form-item">
+          <view class="form-label">日期</view>
+          <view class="period-row">
+            <view
+              class="period-item {{formDate === todayStr ? 'active' : ''}}"
+              data-date="{{todayStr}}"
+              bindtap="onDateQuick"
+            >
+              <text>今天</text>
+            </view>
+            <view
+              class="period-item {{formDate === tomorrowStr ? 'active' : ''}}"
+              data-date="{{tomorrowStr}}"
+              bindtap="onDateQuick"
+            >
+              <text>明天</text>
+            </view>
+            <picker mode="date" value="{{formDate}}" bindchange="onDatePick">
+              <view class="period-item {{formDate !== todayStr && formDate !== tomorrowStr ? 'active' : ''}}">
+                <text>{{formDate !== todayStr && formDate !== tomorrowStr ? formDate : '选择日期'}}</text>
+              </view>
+            </picker>
+          </view>
+        </view>
+
+        <view class="form-item">
           <view class="form-label">时段</view>
           <view class="period-row">
             <view
@@ -88,6 +113,10 @@
             auto-height
           />
           <text class="char-count">{{formNotes.length}}/300</text>
+        </view>
+
+        <view wx:if="{{editingId}}" class="delete-section" bindtap="onDeleteSchedule">
+          <text class="delete-text">删除此行程</text>
         </view>
       </view>
 

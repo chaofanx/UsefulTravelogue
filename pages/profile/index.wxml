@@ -3,12 +3,12 @@
 
   <view class="profile-card">
     <view class="avatar-section">
-      <button class="avatar-picker-btn" open-type="chooseAvatar" bindchooseavatar="onChooseAvatar">
+      <view class="avatar-picker-btn" bindtap="onChooseAvatar">
         <image wx:if="{{userInfo.avatar}}" class="avatar-img" src="{{userInfo.avatar}}" mode="aspectFill" />
         <view wx:else class="avatar-circle" style="background-color: #38C172">
           <text class="avatar-char">{{userInfo.nickname ? userInfo.nickname.charAt(0) : ''}}</text>
         </view>
-      </button>
+      </view>
       <view class="user-info">
         <input
           class="nickname-input"

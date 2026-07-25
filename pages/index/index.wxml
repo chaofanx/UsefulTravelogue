@@ -1,4 +1,7 @@
 <view class="page-index">
+  <!-- 隐藏画布：用于绘制分享封面图（Skyline 下 canvas 不能移出渲染树，用透明隐藏） -->
+  <canvas type="2d" id="shareCanvas" class="share-canvas" />
+
   <view class="top-section" style="padding-top: calc({{statusBarHeight}}px + 24rpx);">
     <view class="brand-area">
       <view class="brand-logo">
@@ -40,6 +43,8 @@
 
   <view class="bottom-section">
     <view class="bottom-links">
+      <button class="link-item share-link-btn" open-type="share">推荐给朋友</button>
+      <text class="link-divider">|</text>
       <text class="link-item" bindtap="onFeedback">建议反馈</text>
     </view>
   </view>
