@@ -1,20 +1,20 @@
 <view class="book-header">
+  <!-- 固定顶部导航栏：返回键 + 操作按钮，不随封面滚动 -->
+  <nav-bar leftArrow frosted background="transparent" color="#fff" placeholder="{{false}}">
+    <view slot="right" class="header-actions">
+      <view class="action-btn" bindtap="onVip">
+        <text class="action-icon">💎</text>
+      </view>
+      <view class="action-btn" bindtap="onOpenSetting">
+        <text class="action-icon">⚙️</text>
+      </view>
+    </view>
+  </nav-bar>
+
   <view class="header-cover" style="background-color: {{book.coverColor || '#4A90D9'}}">
     <image wx:if="{{book.cover}}" class="cover-bg-img" src="{{book.cover}}" mode="aspectFill" />
     <view class="cover-overlay" style="padding-right: {{capsuleLeft}}rpx;">
-      <view class="header-top-bar" style="padding-top: {{statusBarHeight}}px; height: {{navBarHeight}}px;">
-        <view class="back-btn" style="height: {{menuHeight}}rpx; width: {{menuHeight}}rpx;" bindtap="onBack">
-          <text class="back-icon">←</text>
-        </view>
-      </view>
-      <view class="header-actions" style="top: {{menuTop}}rpx; right: {{capsuleLeft}}rpx; height: {{menuHeight}}rpx;">
-        <view class="action-btn" bindtap="onVip">
-          <text class="action-icon">💎</text>
-        </view>
-        <view class="action-btn" bindtap="onOpenSetting">
-          <text class="action-icon">⚙️</text>
-        </view>
-      </view>
+      <view class="header-top-bar" style="padding-top: {{statusBarHeight}}px; height: {{navBarHeight}}px;"></view>
 
       <view class="header-info">
         <view class="header-title">{{book.title}}</view>

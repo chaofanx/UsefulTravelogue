@@ -1,5 +1,6 @@
 const api = require('../../../utils/api');
 const cache = require('../../../utils/cache');
+const { generateShareImage } = require('../../../utils/shareImage');
 
 function dateToStr(d) {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
@@ -112,10 +113,33 @@ Page({
     const memberAliases = (book && book.memberAliases) ? book.memberAliases : {};
     const groupedBills = (billsData && billsData.groups) ? billsData.groups : [];
     this.setData({ book: book || {}, groupedBills, payers, memberAliases, loading: false });
+    this.refreshShareImage();
   },
 
   onBookChange(e) {
     this.setData({ book: e.detail.book });
+    this.refreshShareImage();
+  },
+
+  // 生成分享封面图（账本封面 + 左下角账本名），供 onShareAppMessage 使用
+  refreshShareImage() {
+    const book = this.data.book;
+    if (!book || !book.id) return;
+    // 标题/封面/底色都没变时不重复生成；失败不记 key，下次自动重试
+    const key = [book.id, book.title, book.cover, book.coverColor].join('|');
+    if (key === this._shareImgKey || key === this._shareImgPendingKey) return;
+    this._shareImgPendingKey = key;
+
+    this._shareImgReady = generateShareImage(this, book).then(path => {
+      this._shareImgPendingKey = '';
+      this.shareImageUrl = path;
+      this._shareImgKey = key;
+      return path;
+    }).catch(() => {
+      this._shareImgPendingKey = '';
+      this.shareImageUrl = '';
+      return '';
+    });
   },
 
   // ========== 表单弹层 ==========
@@ -330,9 +354,21 @@ Page({
   },
 
   onShareAppMessage() {
-    return {
-      title: `${this.data.book.title} - 旅行账单`,
-      path: `/pages/book/bill/index?id=${this.data.bookId}`
+    const share = {
+      title: '你的好友邀请你加入账单',
+      // 指向邀请落地页，好友打开后可直接加入账本
+      path: `/pages/bookDetail/index?id=${this.data.bookId}&invite=1`
     };
+    if (this.shareImageUrl) {
+      return { ...share, imageUrl: this.shareImageUrl };
+    }
+    // 分享图尚未生成完时，通过 promise 异步返回（基础库 2.10+ 支持）
+    if (this._shareImgReady) {
+      return {
+        ...share,
+        promise: this._shareImgReady.then(imageUrl => (imageUrl ? { ...share, imageUrl } : share))
+      };
+    }
+    return share;
   }
 });

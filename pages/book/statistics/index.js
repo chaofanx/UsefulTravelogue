@@ -191,12 +191,5 @@ Page({
       statistics: '/pages/book/statistics/index'
     };
     wx.redirectTo({ url: `${routes[key]}?id=${this.data.bookId}` });
-  },
-
-  onShareAppMessage() {
-    return {
-      title: `${this.data.book.title} - 分账统计`,
-      path: `/pages/book/statistics/index?id=${this.data.bookId}`
-    };
   }
 });

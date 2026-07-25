@@ -2,6 +2,7 @@
   "component": true,
   "usingComponents": {
     "member-avatars": "/components/member-avatars/index",
+    "nav-bar": "/components/nav-bar/index",
     "t-popup": "tdesign-miniprogram/popup/popup"
   }
 }

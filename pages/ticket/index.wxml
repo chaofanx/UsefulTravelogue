@@ -1,5 +1,5 @@
 <view class="page-ticket">
-  <nav-bar title="行程票根" leftArrow bind:back="onBack" />
+  <nav-bar title="行程票根" leftArrow />
 
   <view class="ticket-content">
     <view wx:if="{{ticket}}" class="ticket-preview">
@@ -32,12 +32,6 @@
 
     <view wx:else class="ticket-empty">
       <text>暂无行程记录</text>
-    </view>
-
-    <view class="share-section">
-      <button class="share-btn" open-type="share">
-        <text>📤 分享票根给朋友</text>
-      </button>
     </view>
   </view>
 </view>

@@ -17,6 +17,8 @@
 7. [统计模块](#统计模块)
 8. [分账模块](#分账模块)
 9. [导出模块](#导出模块)
+10. [系统模块](#系统模块)
+11. [上传模块](#上传模块)
 
 ---
 
@@ -948,6 +950,42 @@ GET /system/emojis
 
 ---
 
+## 上传模块
+
+### 25. 上传图片
+
+> 🟡 调用时机：选择头像 / 账本封面后，提交保存之前（需登录）
+
+```
+POST /upload
+Content-Type: multipart/form-data
+```
+
+`chooseAvatar` / `wx.chooseMedia` 返回的 `wxfile://`（或 `http://tmp/`）是手机本地临时路径，重启即失效，**不能直接存库**，必须先调用本接口换取持久 URL。
+
+**请求参数（multipart 表单）：**
+
+| 字段 | 类型 | 必填 | 说明 |
+|------|------|------|------|
+| file | file | 是 | 图片文件，支持 jpg/jpeg/png/gif/webp，不超过 10MB |
+
+**响应：**
+
+```json
+{
+  "code": 0,
+  "data": {
+    "url": "/uploads/9dc52ab6ada7df60e209bb31a25de1b5.jpeg"
+  }
+}
+```
+
+`url` 为相对路径，前端用 `BASE_URL` 去掉末尾 `/api/v1` 后的源拼接成完整 URL（如 `https://api.example.com/uploads/xxx.jpeg`），可直接用于 `<image>` 展示并存入 `avatar` / `cover` 字段。`utils/api.js` 的 `uploadFile` 已封装上传与拼接逻辑。
+
+> 注意：生产环境需将 API 域名配置到小程序后台的 **uploadFile 合法域名**，图片访问域名配置到 **downloadFile 合法域名**。
+
+---
+
 ## 会员限制说明
 
 | 功能 | 普通用户 | 高级会员 |
@@ -965,12 +1003,16 @@ GET /system/emojis
 
 ### 封面上传
 
-创建/修改账本时，`cover` 字段传输的是 `wx.chooseMedia` 返回的临时文件路径。后端流程：
+创建/修改账本时，`cover` 字段存储的是图片的**持久 URL**。前端流程：
 
-1. 接收 `cover` (wxfile:// 临时路径)
-2. 上传至 OSS/CDN
-3. 将持久化 URL 存入数据库
-4. 返回 URL 给前端
+1. `wx.chooseMedia` 选择图片，得到本地临时路径（`wxfile://` / `http://tmp/`），仅用于选择后的即时预览
+2. 调 `POST /upload` 上传临时文件，换取持久 URL（见「上传模块」）
+3. 将持久 URL 作为 `cover` 提交创建/修改账本接口，存入数据库
+4. 之后各端直接通过该 URL 展示封面
+
+用户头像（`avatar` 字段）流程相同：`button open-type="chooseAvatar"` 选择后先上传再保存。
+
+> ⚠️ 本地临时路径（`wxfile://tmp_...`）只在本次小程序运行期间存在于用户手机的微信沙盒中，重启/换设备即失效，且后端无法访问该路径，禁止直接存库。
 
 ### 分类与图标映射
 

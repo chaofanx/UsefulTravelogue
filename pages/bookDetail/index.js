@@ -12,7 +12,17 @@ Page({
       return;
     }
     this.setData({ isInvited: !!options.invite });
-    this.loadBook(id);
+    // 被邀请的好友可能首次打开、登录尚未完成：先确保登录态就绪再加载账本
+    if (api.hasToken()) {
+      this.loadBook(id);
+    } else {
+      getApp().login().then(() => {
+        this.loadBook(id);
+      }).catch(() => {
+        this.setData({ loading: false });
+        wx.showToast({ title: '登录失败，请重新打开', icon: 'none' });
+      });
+    }
   },
 
   loadBook(id) {
@@ -37,10 +47,6 @@ Page({
     const members = book?.members || [];
     const isMember = members.some(m => m.userId === currentUserId);
     this.setData({ book: book || {}, isMember, loading: false });
-  },
-
-  onBack() {
-    wx.navigateBack();
   },
 
   onJoinBook() {

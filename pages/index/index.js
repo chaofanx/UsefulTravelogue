@@ -21,6 +21,8 @@ Page({
   },
 
   onShow() {
+    // 首页禁止分享，隐藏胶囊菜单中的分享项
+    wx.hideShareMenu({ menus: ['shareAppMessage', 'shareTimeline'] });
     this.init();
   },
 
@@ -118,14 +120,22 @@ Page({
       return;
     }
 
-    const bookData = {
-      title: newBookName.trim(),
-      cover: newBookCover,
-      coverColor: newBookColor,
-      date: this.getCurrentMonth()
-    };
+    wx.showLoading({ title: '创建中...', mask: true });
 
-    api.createBook(bookData).then(book => {
+    // 封面是本地临时路径时，先上传服务器换取持久 URL
+    const coverPromise = api.isTempFilePath(newBookCover)
+      ? api.uploadFile(newBookCover)
+      : Promise.resolve(newBookCover);
+
+    coverPromise.then(cover => {
+      return api.createBook({
+        title: newBookName.trim(),
+        cover: cover,
+        coverColor: newBookColor,
+        date: this.getCurrentMonth()
+      });
+    }).then(book => {
+      wx.hideLoading();
       this.setData({
         showCreatePopup: false,
         newBookName: '',
@@ -135,6 +145,7 @@ Page({
       wx.showToast({ title: '创建成功！', icon: 'success' });
       this.loadBooks();
     }).catch(err => {
+      wx.hideLoading();
       wx.showToast({ title: err.message || '创建失败', icon: 'none' });
     });
   },
@@ -153,17 +164,7 @@ Page({
     wx.navigateTo({ url: `/pages/book/bill/index?id=${book.id}` });
   },
 
-  onShare() {
-  },
-
   onFeedback() {
     wx.navigateTo({ url: '/pages/feedback/index' });
-  },
-
-  onShareAppMessage() {
-    return {
-      title: '好用旅记 - 简单好用的多人记账工具',
-      path: '/pages/index/index'
-    };
   }
 });

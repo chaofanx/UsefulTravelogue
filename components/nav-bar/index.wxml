@@ -1,10 +1,33 @@
-<view class="nav-bar" style="padding-top: {{statusBarHeight}}px;">
-  <view class="nav-bar-content">
-    <view wx:if="{{leftArrow}}" class="nav-back" bindtap="onBack">
-      <text class="nav-back-icon">←</text>
-    </view>
-    <view class="nav-title" style="padding: 0 {{capsuleLeft}}rpx;">
-      <text class="nav-title-text">{{title}}</text>
-    </view>
+<view
+  class="nav-bar {{border ? 'nav-bar--border' : ''}}"
+  style="height: {{navHeight}}px;{{background ? ' background: ' + background + ';' : ''}}{{color ? ' color: ' + color + ';' : ''}}"
+>
+  <!-- 返回按钮：与右上角原生胶囊垂直对齐 -->
+  <view
+    wx:if="{{leftArrow}}"
+    class="nav-back {{frosted ? 'nav-back--frosted' : ''}}"
+    style="top: {{menuTop}}px; left: {{menuRight}}px; width: {{menuHeight}}px; height: {{menuHeight}}px;"
+    bindtap="onBack"
+    hover-class="nav-back--hover"
+  >
+    <view class="nav-back-icon"></view>
+  </view>
+
+  <!-- 左侧扩展位（返回按钮右侧，可放设置、搜索等其他按钮） -->
+  <view class="nav-left-extra" style="top: {{menuTop}}px; height: {{menuHeight}}px; left: {{menuRight + menuHeight + 8}}px;">
+    <slot name="left" />
+  </view>
+
+  <!-- 标题：相对屏幕居中，两侧内边距避开返回按钮与胶囊 -->
+  <view class="nav-title" style="top: {{statusBarHeight}}px; padding: 0 {{capsuleLeft}}rpx;">
+    <text class="nav-title-text">{{title}}</text>
+  </view>
+
+  <!-- 右侧扩展位（胶囊左侧） -->
+  <view class="nav-right" style="top: {{menuTop}}px; height: {{menuHeight}}px; right: {{capsuleLeft}}rpx;">
+    <slot name="right" />
   </view>
 </view>
+
+<!-- 占位：撑起文档流高度，保证页面内容不被固定导航栏遮挡 -->
+<view wx:if="{{placeholder}}" class="nav-placeholder" style="height: {{navHeight}}px;" />

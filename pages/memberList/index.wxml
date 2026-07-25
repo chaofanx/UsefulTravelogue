@@ -1,5 +1,5 @@
 <view class="page-members">
-  <nav-bar title="成员列表 ({{members.length}}人)" leftArrow bind:back="onBack" />
+  <nav-bar title="成员列表 ({{members.length}}人)" leftArrow />
 
   <view class="member-card">
     <view class="member-item" wx:for="{{members}}" wx:key="id">
@@ -10,11 +10,5 @@
       <text class="member-name">{{item.displayName}}</text>
       <text class="member-tag" wx:if="{{index === 0}}">创建者</text>
     </view>
-  </view>
-
-  <view class="action-section">
-    <button class="invite-btn" open-type="share">
-      + 邀请新成员
-    </button>
   </view>
 </view>

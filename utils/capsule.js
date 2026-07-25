@@ -15,6 +15,12 @@ function getCapsuleInfo() {
       menuHeight: Math.ceil(menuButton.height * pxToRpx),
       // 胶囊左侧到屏幕右边距离 + 16rpx 间距，用于 content 右边距和 actions 定位
       capsuleLeft: Math.ceil((sysInfo.windowWidth - menuButton.left) * pxToRpx) + 16,
+      // px 单位：固定导航栏（nav-bar 组件）定位用
+      // 导航栏总高度 = 状态栏高度 + 胶囊与状态栏间距 + 胶囊高度
+      navHeightPx: windowInfo.statusBarHeight + (menuButton.top - windowInfo.statusBarHeight) + menuButton.height,
+      menuTopPx: menuButton.top,
+      menuHeightPx: menuButton.height,
+      menuRightPx: sysInfo.windowWidth - menuButton.right,
     };
   } catch (e) {
     return {
@@ -24,6 +30,10 @@ function getCapsuleInfo() {
       menuRight: 16,
       menuHeight: 64,
       capsuleLeft: 200,
+      navHeightPx: 80,
+      menuTopPx: 48,
+      menuHeightPx: 32,
+      menuRightPx: 8,
     };
   }
 }

@@ -33,24 +33,20 @@ Page({
     });
   },
 
-  onBack() {
-    const pages = getCurrentPages();
-    if (pages.length > 1) {
-      wx.navigateBack({ delta: 1 });
-    } else {
-      wx.reLaunch({ url: '/pages/index/index' });
-    }
-  },
-
   onChooseAvatar(e) {
     const avatarUrl = e.detail.avatarUrl;
     if (!avatarUrl) return;
 
+    // avatarUrl 是 wxfile:// 本地临时路径，先用它预览，
+    // 同时上传服务器换取持久 URL 后再存库
     const userInfo = { ...this.data.userInfo, avatar: avatarUrl };
     this.setData({ userInfo });
 
-    api.updateUserProfile({ avatar: avatarUrl })
+    wx.showLoading({ title: '上传中...', mask: true });
+    api.uploadFile(avatarUrl)
+      .then(url => api.updateUserProfile({ avatar: url }))
       .then(profile => {
+        wx.hideLoading();
         this.setData({ userInfo: profile });
         const app = getApp();
         if (app.globalData) {
@@ -58,6 +54,7 @@ Page({
         }
       })
       .catch(() => {
+        wx.hideLoading();
         wx.showToast({ title: '头像更新失败', icon: 'none' });
         this.loadProfile();
       });

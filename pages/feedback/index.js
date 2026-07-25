@@ -8,10 +8,6 @@ Page({
     submitting: false
   },
 
-  onBack() {
-    wx.navigateBack();
-  },
-
   onTypeTap(e) {
     this.setData({ selectedType: e.currentTarget.dataset.type });
   },

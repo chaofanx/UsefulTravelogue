@@ -40,8 +40,6 @@
 
   <view class="bottom-section">
     <view class="bottom-links">
-      <text class="link-item" bindtap="onShare">推荐给朋友</text>
-      <text class="link-divider">|</text>
       <text class="link-item" bindtap="onFeedback">建议反馈</text>
     </view>
   </view>

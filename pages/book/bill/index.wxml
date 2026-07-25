@@ -1,4 +1,7 @@
 <view class="page-bill">
+  <!-- 隐藏画布：用于绘制分享封面图（Skyline 下 canvas 不能移出渲染树，用透明隐藏） -->
+  <canvas type="2d" id="shareCanvas" class="share-canvas" />
+
   <book-header book="{{book}}" bind:bookchange="onBookChange" />
 
   <view class="bill-content">

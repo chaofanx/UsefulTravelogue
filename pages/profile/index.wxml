@@ -1,5 +1,5 @@
 <view class="page-profile">
-  <nav-bar title="个人中心" leftArrow bind:back="onBack" />
+  <nav-bar title="个人中心" leftArrow />
 
   <view class="profile-card">
     <view class="avatar-section">

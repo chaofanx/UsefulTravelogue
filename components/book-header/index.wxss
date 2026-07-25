@@ -38,23 +38,8 @@
   padding-bottom: 8rpx;
 }
 
-.back-btn {
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.2);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  backdrop-filter: blur(10rpx);
-}
-
-.back-icon {
-  font-size: 36rpx;
-  color: #fff;
-  font-weight: 600;
-}
-
+/* 固定导航栏右侧操作区（nav-bar 组件 right 插槽内容） */
 .header-actions {
-  position: absolute;
   display: flex;
   align-items: center;
   gap: 16rpx;

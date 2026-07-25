@@ -91,16 +91,5 @@ Page({
         loading: false
       });
     }
-  },
-
-  onBack() {
-    wx.navigateBack();
-  },
-
-  onShareAppMessage() {
-    return {
-      title: '我的行程票根 - 好用旅记',
-      path: `/pages/ticket/index?bookId=${this.data.bookId}&scheduleId=${this.data.scheduleId}`
-    };
   }
 });

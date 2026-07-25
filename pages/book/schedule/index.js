@@ -193,12 +193,5 @@ Page({
       statistics: '/pages/book/statistics/index'
     };
     wx.redirectTo({ url: `${routes[key]}?id=${this.data.bookId}` });
-  },
-
-  onShareAppMessage() {
-    return {
-      title: `${this.data.book.title} - 旅行行程`,
-      path: `/pages/book/schedule/index?id=${this.data.bookId}`
-    };
   }
 });

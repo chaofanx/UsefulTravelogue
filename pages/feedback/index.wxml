@@ -1,5 +1,5 @@
 <view class="page-feedback">
-  <nav-bar title="建议反馈" leftArrow bind:back="onBack" />
+  <nav-bar title="建议反馈" leftArrow />
 
   <view class="form-card">
     <view class="form-item">

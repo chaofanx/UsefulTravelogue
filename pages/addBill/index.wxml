@@ -1,5 +1,5 @@
 <view class="page-add-bill">
-  <nav-bar title="{{isEdit ? '编辑账单' : '记一笔'}}" leftArrow bind:back="onBack" />
+  <nav-bar title="{{isEdit ? '编辑账单' : '记一笔'}}" leftArrow />
 
   <view class="form-card">
     <view class="form-item">

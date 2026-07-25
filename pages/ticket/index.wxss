@@ -103,15 +103,3 @@
   color: var(--td-text-color-placeholder);
   text-align: center;
 }
-
-.share-section {
-  padding: 0;
-}
-
-.share-btn {
-  background: var(--travel-brand, #38C172);
-  color: #fff;
-  font-size: 30rpx;
-  border-radius: 48rpx;
-  padding: 24rpx;
-}

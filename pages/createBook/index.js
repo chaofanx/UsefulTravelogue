@@ -17,10 +17,6 @@ Page({
     }
   },
 
-  onBack() {
-    wx.navigateBack();
-  },
-
   onNameInput(e) {
     this.setData({ name: e.detail.value });
   },

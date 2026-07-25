@@ -63,10 +63,6 @@ Component({
       });
     },
 
-    onBack() {
-      wx.navigateBack();
-    },
-
     onVip() {
       wx.navigateTo({ url: '/pages/profile/index' });
     },
@@ -88,11 +84,19 @@ Component({
         sourceType: ['album', 'camera'],
         success(res) {
           const tempFilePath = res.tempFiles[0].tempFilePath;
-          api.updateBook(that.data.book.id, { cover: tempFilePath }).then(updatedBook => {
-            that.setData({ book: updatedBook || { ...that.data.book, cover: tempFilePath } });
+          // tempFilePath 是本地临时路径，先上传换取持久 URL 再保存
+          wx.showLoading({ title: '上传中...', mask: true });
+          let coverUrl = tempFilePath;
+          api.uploadFile(tempFilePath).then(url => {
+            coverUrl = url;
+            return api.updateBook(that.data.book.id, { cover: url });
+          }).then(updatedBook => {
+            wx.hideLoading();
+            that.setData({ book: updatedBook || { ...that.data.book, cover: coverUrl } });
             that.triggerEvent('bookchange', { book: updatedBook || that.data.book });
             wx.showToast({ title: '封面已更新', icon: 'success' });
           }).catch(err => {
+            wx.hideLoading();
             wx.showToast({ title: err.message || '更新失败', icon: 'none' });
           });
         }

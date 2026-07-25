@@ -78,10 +78,6 @@ Page({
     return map;
   },
 
-  onBack() {
-    wx.navigateBack();
-  },
-
   onAmountInput(e) {
     this.setData({ amount: e.detail.value });
   },

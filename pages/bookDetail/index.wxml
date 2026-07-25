@@ -1,5 +1,5 @@
 <view class="page-detail">
-  <nav-bar title="{{book.title}}" leftArrow bind:back="onBack" />
+  <nav-bar title="{{book.title}}" leftArrow />
 
   <view class="detail-cover" style="background-color: {{book.coverColor || '#4A90D9'}}">
     <text class="cover-title">{{book.title}}</text>

@@ -37,6 +37,18 @@
   margin-bottom: 16rpx;
 }
 
+/* 分享封面图画布：固定在视口内但不可见（Skyline 要求 canvas 在渲染树中） */
+.share-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 500px;
+  height: 400px;
+  opacity: 0;
+  pointer-events: none;
+  z-index: -1;
+}
+
 .float-btn {
   position: fixed;
   right: 32rpx;

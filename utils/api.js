@@ -126,6 +126,53 @@ function del(path) {
   return request('DELETE', path);
 }
 
+// ===== 文件上传 =====
+// chooseAvatar / wx.chooseMedia 返回的 wxfile://（或 http://tmp/）是
+// 手机本地临时路径，重启即失效，必须先上传到服务器换取持久 URL 再存库。
+
+// 判断是否为本地临时文件路径
+function isTempFilePath(p) {
+  return typeof p === 'string' && /^(wxfile:\/\/|https?:\/\/tmp\/)/.test(p);
+}
+
+// 文件服务根地址：BASE_URL 去掉末尾的 /api/v1
+function fileBaseUrl() {
+  return BASE_URL.replace(/\/api\/v1\/?$/, '');
+}
+
+// 上传本地临时文件，resolve 持久化的完整 URL（https://.../uploads/xxx.jpg）
+function uploadFile(filePath) {
+  const token = getToken();
+  return new Promise((resolve, reject) => {
+    wx.uploadFile({
+      url: BASE_URL + '/upload',
+      filePath: filePath,
+      name: 'file',
+      header: {
+        'Authorization': token ? `Bearer ${token}` : ''
+      },
+      success(res) {
+        let body = null;
+        try {
+          body = JSON.parse(res.data);
+        } catch (e) {}
+        if (res.statusCode === 200 && body && body.code === 0 && body.data && body.data.url) {
+          const url = body.data.url;
+          resolve(/^https?:\/\//.test(url) ? url : fileBaseUrl() + url);
+        } else if (res.statusCode === 401) {
+          clearToken();
+          reject({ code: 401, message: '未登录或登录已过期' });
+        } else {
+          reject({ code: body ? body.code : res.statusCode, message: (body && body.message) || '上传失败' });
+        }
+      },
+      fail(err) {
+        reject({ code: -1, message: err.errMsg || '上传失败' });
+      }
+    });
+  });
+}
+
 // 响应已是 camelCase。成员对象补一个语义别名 name（= nickname），
 // 供模板统一以 member.name 使用。
 function normalizeMember(m) {
@@ -167,6 +214,9 @@ const api = {
   },
 
   getToken,
+
+  uploadFile,
+  isTempFilePath,
 
   login(code, nickname, avatar) {
     const payload = { code };
