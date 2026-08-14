@@ -4,6 +4,6 @@
   "description": "好用旅记 - 多人旅行记账小程序",
   "main": "app.js",
   "dependencies": {
-    "tdesign-miniprogram": "^1.5.0"
+    "tdesign-miniprogram": "^1.16.0"
   }
 }
