@@ -48,4 +48,11 @@ Page({
       loading: false
     });
   }
+  ,
+  onShareAppMessage() {
+    return {
+      title: `邀请你加入「${this.data.bookTitle || '旅行'}」账本`,
+      path: `/pages/bookDetail/index?id=${this.data.bookId}&invite=1`
+    };
+  }
 });

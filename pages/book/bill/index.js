@@ -355,7 +355,7 @@ Page({
 
   onShareAppMessage() {
     const share = {
-      title: '你的好友邀请你加入账单',
+      title: `邀请你加入「${this.data.book.title || '旅行'}」账本`,
       // 指向邀请落地页，好友打开后可直接加入账本
       path: `/pages/bookDetail/index?id=${this.data.bookId}&invite=1`
     };

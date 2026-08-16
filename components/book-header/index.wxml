@@ -104,6 +104,7 @@
         </view>
         <view class="add-btn" bindtap="onConfirmAddMember">添加</view>
       </view>
+      <button class="invite-btn" open-type="share">邀请微信好友</button>
       <view class="current-members" wx:if="{{book.members.length > 0}}">
         <text class="members-tip">当前成员（点击"×"移除，下方设置别名）：</text>
         <view class="member-alias-list">

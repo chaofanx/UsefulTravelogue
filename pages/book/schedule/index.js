@@ -235,4 +235,8 @@ Page({
     };
     wx.redirectTo({ url: `${routes[key]}?id=${this.data.bookId}` });
   }
+  ,
+  onShareAppMessage() {
+    return { title: `邀请你加入「${this.data.book.title || '旅行'}」账本`, path: `/pages/bookDetail/index?id=${this.data.bookId}&invite=1` };
+  }
 });

@@ -249,6 +249,16 @@
   justify-content: center;
 }
 
+.invite-btn {
+  height: 80rpx;
+  line-height: 80rpx;
+  border-radius: 16rpx;
+  background: #4A90D9;
+  color: #fff;
+  font-size: 28rpx;
+  margin: 0 0 24rpx;
+}
+
 .current-members {
   padding-top: 8rpx;
 }

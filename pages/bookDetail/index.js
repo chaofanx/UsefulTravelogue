@@ -56,8 +56,9 @@ Page({
     wx.showLoading({ title: '加入中...' });
     api.joinBook(bookId).then(() => {
       wx.hideLoading();
+      cache.removeByPrefix(cache.keys.book(bookId));
       wx.showToast({ title: '加入成功', icon: 'success' });
-      this.loadBook(bookId);
+      setTimeout(() => wx.redirectTo({ url: `/pages/bookDetail/index?id=${bookId}` }), 500);
     }).catch(err => {
       wx.hideLoading();
       wx.showToast({ title: err.message || '加入失败', icon: 'none' });

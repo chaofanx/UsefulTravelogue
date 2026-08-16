@@ -56,3 +56,13 @@
   padding: 4rpx 16rpx;
   border-radius: 8rpx;
 }
+
+.invite-btn {
+  margin: 32rpx;
+  height: 88rpx;
+  line-height: 88rpx;
+  border-radius: 16rpx;
+  background: #4A90D9;
+  color: #fff;
+  font-size: 30rpx;
+}

@@ -11,4 +11,5 @@
       <text class="member-tag" wx:if="{{index === 0}}">创建者</text>
     </view>
   </view>
+  <button class="invite-btn" open-type="share">邀请微信好友加入</button>
 </view>
