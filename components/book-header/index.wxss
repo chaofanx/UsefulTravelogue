@@ -7,6 +7,7 @@
   height: 420rpx;
   position: relative;
   overflow: hidden;
+  border-radius: 0 0 32rpx 32rpx;
 }
 
 /* 账本封面图作为顶部模糊背景 */
@@ -27,7 +28,7 @@
   height: 100%;
   display: flex;
   flex-direction: column;
-  background: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.4));
+  background: linear-gradient(to bottom, rgba(0,0,0,0.08), rgba(0,0,0,0.2) 45%, rgba(0,0,0,0.5));
   padding: 0 32rpx;
   box-sizing: border-box;
 }
@@ -46,10 +47,10 @@
 }
 
 .action-btn {
-  width: 64rpx;
-  height: 64rpx;
+  width: 68rpx;
+  height: 68rpx;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.22);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -69,10 +70,11 @@
 }
 
 .header-title {
-  font-size: 40rpx;
-  font-weight: 700;
+  font-size: 46rpx;
+  font-weight: 800;
   color: #fff;
   margin-bottom: 8rpx;
+  letter-spacing: 1rpx;
 }
 
 .header-subtitle {
@@ -116,13 +118,13 @@
 
 .footer-btn {
   flex: 1;
-  height: 80rpx;
-  border-radius: 16rpx;
+  height: 92rpx;
+  border-radius: 28rpx;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 30rpx;
-  font-weight: 500;
+  font-weight: 600;
 }
 
 .cancel-btn {
@@ -139,9 +141,9 @@
   display: flex;
   align-items: center;
   background: var(--td-bg-color-secondarycontainer);
-  border-radius: 16rpx;
-  padding: 0 24rpx;
-  height: 88rpx;
+  border-radius: 24rpx;
+  padding: 0 28rpx;
+  height: 96rpx;
 }
 
 .name-input {
@@ -160,7 +162,7 @@
 /* Setting popup */
 .setting-popup {
   background: var(--td-bg-color-container);
-  border-radius: 32rpx 32rpx 0 0;
+  border-radius: 40rpx 40rpx 0 0;
   padding: 0 0 32rpx;
   padding-bottom: calc(32rpx + constant(safe-area-inset-bottom));
   padding-bottom: calc(32rpx + env(safe-area-inset-bottom));
@@ -209,7 +211,7 @@
 /* Rename popup */
 .rename-popup {
   background: var(--td-bg-color-container);
-  border-radius: 32rpx 32rpx 0 0;
+  border-radius: 40rpx 40rpx 0 0;
   padding: 0 32rpx 32rpx;
   padding-bottom: calc(32rpx + constant(safe-area-inset-bottom));
   padding-bottom: calc(32rpx + env(safe-area-inset-bottom));
@@ -218,7 +220,7 @@
 /* Add member popup */
 .add-member-popup {
   background: var(--td-bg-color-container);
-  border-radius: 32rpx 32rpx 0 0;
+  border-radius: 40rpx 40rpx 0 0;
   padding: 0 32rpx 32rpx;
   padding-bottom: calc(32rpx + constant(safe-area-inset-bottom));
   padding-bottom: calc(32rpx + env(safe-area-inset-bottom));
@@ -237,9 +239,9 @@
 
 .add-btn {
   flex-shrink: 0;
-  padding: 0 32rpx;
-  height: 88rpx;
-  border-radius: 16rpx;
+  padding: 0 36rpx;
+  height: 96rpx;
+  border-radius: 24rpx;
   background: var(--travel-brand, #38C172);
   color: #fff;
   font-size: 28rpx;
@@ -250,9 +252,9 @@
 }
 
 .invite-btn {
-  height: 80rpx;
-  line-height: 80rpx;
-  border-radius: 16rpx;
+  height: 92rpx;
+  line-height: 92rpx;
+  border-radius: 28rpx;
   background: #4A90D9;
   color: #fff;
   font-size: 28rpx;
@@ -277,8 +279,8 @@
 
 .member-tag {
   background: var(--td-bg-color-secondarycontainer);
-  padding: 10rpx 20rpx;
-  border-radius: 10rpx;
+  padding: 10rpx 24rpx;
+  border-radius: 999px;
   font-size: 26rpx;
   color: var(--td-text-color-primary);
   display: flex;
@@ -315,8 +317,8 @@
   flex: 1;
   height: 60rpx;
   background: var(--td-bg-color-secondarycontainer);
-  border-radius: 8rpx;
-  padding: 0 16rpx;
+  border-radius: 16rpx;
+  padding: 0 20rpx;
   font-size: 24rpx;
   box-sizing: border-box;
 }
@@ -333,7 +335,7 @@
   text-align: center;
   padding: 16rpx;
   background: var(--travel-brand, #38C172);
-  border-radius: 12rpx;
+  border-radius: 24rpx;
   color: #fff;
   font-size: 28rpx;
   font-weight: 500;
