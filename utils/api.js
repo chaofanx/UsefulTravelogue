@@ -107,8 +107,13 @@ function request(method, path, data) {
           reject({ code: 401, message: '未登录或登录已过期' });
         } else {
           // 后端 4xx 也返回 {code, message}（如 403「仅账本创建者可执行此操作」）
+          // 带上 data：409 昵称重名时 data.suggestedNickname 是建议昵称
           const body = res.data;
-          reject({ code: res.statusCode, message: (body && body.message) || '请求失败' });
+          reject({
+            code: res.statusCode,
+            message: (body && body.message) || '请求失败',
+            data: body && body.data ? toCamel(body.data) : null
+          });
         }
       },
       fail(err) {
@@ -358,8 +363,9 @@ const api = {
     });
   },
 
-  joinBook(bookId) {
-    return post(`/books/${bookId}/join`).then(data => {
+  // nickname 可选：账本内昵称重名（409）时，带用户改过的昵称重试
+  joinBook(bookId, nickname) {
+    return post(`/books/${bookId}/join`, nickname ? { nickname } : undefined).then(data => {
       invalidateBookRelated(bookId);
       return data;
     });
