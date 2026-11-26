@@ -1,0 +1,4 @@
+.app-icon {
+  display: block;
+  flex-shrink: 0;
+}

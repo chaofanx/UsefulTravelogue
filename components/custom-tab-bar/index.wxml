@@ -6,7 +6,7 @@
     data-key="{{item.key}}"
     bindtap="onTabTap"
   >
-    <text class="tab-icon">{{item.icon}}</text>
+    <app-icon name="{{item.icon}}" size="{{44}}" color="{{current === item.key ? '#38C172' : '#8b8b8b'}}" active="{{current === item.key}}" />
     <text class="tab-label">{{item.label}}</text>
   </view>
 </view>
