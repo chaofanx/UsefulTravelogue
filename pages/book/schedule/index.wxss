@@ -143,8 +143,7 @@
 }
 
 .form-scroll {
-  flex: 1;
-  overflow-y: auto;
+  max-height: calc(80vh - 360rpx);
 }
 
 .location-picker {

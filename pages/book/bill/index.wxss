@@ -104,6 +104,7 @@
 
 .currency {
   font-size: 48rpx;
+  line-height: 80rpx;
   font-weight: 700;
   color: var(--td-text-color-primary);
   margin-right: 16rpx;
@@ -112,6 +113,7 @@
 .currency-picker {
   display: flex;
   align-items: center;
+  height: 80rpx;
   margin-right: 16rpx;
 }
 
@@ -132,6 +134,9 @@
 
 .amount-input {
   flex: 1;
+  height: 80rpx;
+  min-height: 80rpx;
+  line-height: 80rpx;
   font-size: 48rpx;
   font-weight: 700;
   color: var(--td-text-color-primary);
