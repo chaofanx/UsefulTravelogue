@@ -1,10 +1,7 @@
 const api = require('../../../utils/api');
 const cache = require('../../../utils/cache');
-const { formatDateShort } = require('../../../utils/util');
-
-function dateToStr(d) {
-  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
-}
+const { formatDateShort, dateToStr } = require('../../../utils/util');
+const { parseBookId, switchBookTab, inviteShare } = require('../../../utils/bookPage');
 
 Page({
   data: {
@@ -27,42 +24,18 @@ Page({
   },
 
   onLoad(options) {
-    const bookId = Number(options.id);
-    if (!bookId) {
-      wx.showToast({ title: '参数错误', icon: 'none' });
-      wx.navigateBack();
-      return;
-    }
+    const bookId = parseBookId(options.id);
+    if (!bookId) return;
     this.data.bookId = bookId;
     this.loadData();
   },
 
   loadData() {
     const bookId = this.data.bookId;
-    const bookKey = cache.keys.book(bookId);
-    const schedulesKey = cache.keys.schedules(bookId);
-    const cachedBook = cache.get(bookKey);
-    const cachedSchedules = cache.get(schedulesKey);
-    if (cachedBook !== undefined && cachedSchedules !== undefined) {
-      // 先渲染缓存，后台请求回来后再更新
-      this.applyData(cachedBook, cachedSchedules);
-    } else {
-      this.setData({ loading: true });
-    }
-    Promise.all([
-      cache.fetchAndCache(bookKey, () => api.getBook(bookId)),
-      cache.fetchAndCache(schedulesKey, () => api.getSchedules(bookId))
-    ]).then(([book, schedulesData]) => {
-      this.applyData(book, schedulesData);
-    }).catch(err => {
-      this.setData({ loading: false });
-      wx.showToast({
-        title: (cachedBook !== undefined && cachedSchedules !== undefined)
-          ? '数据更新失败，当前为缓存数据'
-          : (err.message || '加载失败'),
-        icon: 'none'
-      });
-    });
+    cache.load(this, [
+      { key: cache.keys.book(bookId), fetch: () => api.getBook(bookId) },
+      { key: cache.keys.schedules(bookId), fetch: () => api.getSchedules(bookId) }
+    ], (book, schedulesData) => this.applyData(book, schedulesData));
   },
 
   applyData(book, schedulesData) {
@@ -227,16 +200,10 @@ Page({
   },
 
   onTabChange(e) {
-    const { key } = e.detail;
-    const routes = {
-      bill: '/pages/book/bill/index',
-      schedule: '/pages/book/schedule/index',
-      statistics: '/pages/book/statistics/index'
-    };
-    wx.redirectTo({ url: `${routes[key]}?id=${this.data.bookId}` });
-  }
-  ,
+    switchBookTab(this.data.bookId, e.detail.key);
+  },
+
   onShareAppMessage() {
-    return { title: `邀请你加入「${this.data.book.title || '旅行'}」账本`, path: `/pages/bookDetail/index?id=${this.data.bookId}&invite=1` };
+    return inviteShare(this.data.book, this.data.bookId);
   }
 });

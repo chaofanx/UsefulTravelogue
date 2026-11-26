@@ -52,7 +52,7 @@
           <text class="setting-arrow">›</text>
         </view>
 
-        <view class="setting-item setting-danger" bindtap="onDisbandBook">
+        <view class="setting-item setting-danger" wx:if="{{isCreator}}" bindtap="onDisbandBook">
           <text class="setting-label danger-text">解散账本</text>
           <text class="setting-arrow danger-text">›</text>
         </view>
@@ -106,7 +106,7 @@
       </view>
       <button class="invite-btn" open-type="share">邀请微信好友</button>
       <view class="current-members" wx:if="{{book.members.length > 0}}">
-        <text class="members-tip">当前成员（点击"×"移除，下方设置别名）：</text>
+        <text class="members-tip">当前成员（点击"×"移除，{{isCreator ? '下方设置别名' : '仅创建者可设置别名'}}）：</text>
         <view class="member-alias-list">
           <view class="alias-row" wx:for="{{book.members}}" wx:key="id">
             <view class="member-tag">
@@ -114,6 +114,7 @@
               <text class="tag-remove" wx:if="{{index > 0}}" data-id="{{item.id}}" bindtap="onRemoveMember">×</text>
             </view>
             <input
+              wx:if="{{isCreator}}"
               class="alias-input-inline"
               placeholder="别名"
               value="{{memberAliases[item.name] || ''}}"
@@ -121,14 +122,14 @@
               bindinput="onAliasInput"
             />
             <text
-              wx:if="{{memberAliases[item.name]}}"
+              wx:if="{{isCreator && memberAliases[item.name]}}"
               class="alias-reset-inline"
               data-name="{{item.name}}"
               bindtap="onResetAlias"
             >恢复</text>
           </view>
         </view>
-        <view class="save-aliases-btn" bindtap="onSaveAliases">
+        <view class="save-aliases-btn" wx:if="{{isCreator}}" bindtap="onSaveAliases">
           <text>保存别名</text>
         </view>
       </view>

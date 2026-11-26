@@ -363,3 +363,42 @@ page {
   flex: 1;
   height: 0;
 }
+
+/* ===== 底部表单弹层公共样式（bill / schedule / index 共用；差异项在各页面内覆盖）===== */
+.popup-handle {
+  display: flex;
+  justify-content: center;
+  padding: 20rpx 0 12rpx;
+}
+
+.handle-bar {
+  width: 64rpx;
+  height: 8rpx;
+  border-radius: 4rpx;
+  background: var(--td-component-stroke);
+}
+
+.popup-title {
+  font-size: 34rpx;
+  font-weight: 700;
+  color: var(--td-text-color-primary);
+  text-align: center;
+  margin-bottom: 28rpx;
+}
+
+.form-item {
+  margin-bottom: 32rpx;
+}
+
+.form-label {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: var(--td-text-color-primary);
+  margin-bottom: 16rpx;
+}
+
+.popup-footer {
+  display: flex;
+  gap: 20rpx;
+  padding-top: 24rpx;
+}

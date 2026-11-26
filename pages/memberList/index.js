@@ -1,6 +1,7 @@
 const api = require('../../utils/api');
 const cache = require('../../utils/cache');
 const { getAvatarText } = require('../../utils/util');
+const { parseBookId, inviteShare } = require('../../utils/bookPage');
 
 Page({
   data: {
@@ -11,12 +12,8 @@ Page({
   },
 
   onLoad(options) {
-    const bookId = Number(options.bookId);
-    if (!bookId) {
-      wx.showToast({ title: '参数错误', icon: 'none' });
-      wx.navigateBack();
-      return;
-    }
+    const bookId = parseBookId(options.bookId);
+    if (!bookId) return;
     this.setData({ bookId });
     const key = cache.keys.book(bookId);
     const cached = cache.get(key);
@@ -50,9 +47,6 @@ Page({
   }
   ,
   onShareAppMessage() {
-    return {
-      title: `邀请你加入「${this.data.bookTitle || '旅行'}」账本`,
-      path: `/pages/bookDetail/index?id=${this.data.bookId}&invite=1`
-    };
+    return inviteShare({ title: this.data.bookTitle }, this.data.bookId);
   }
 });

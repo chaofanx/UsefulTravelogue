@@ -140,41 +140,9 @@
   flex-direction: column;
 }
 
-.popup-handle {
-  display: flex;
-  justify-content: center;
-  padding: 20rpx 0 12rpx;
-}
-
-.handle-bar {
-  width: 64rpx;
-  height: 8rpx;
-  border-radius: 4rpx;
-  background: var(--td-component-stroke);
-}
-
-.popup-title {
-  font-size: 34rpx;
-  font-weight: 700;
-  color: var(--td-text-color-primary);
-  text-align: center;
-  margin-bottom: 28rpx;
-}
-
 .form-scroll {
   flex: 1;
   overflow-y: auto;
-}
-
-.form-item {
-  margin-bottom: 32rpx;
-}
-
-.form-label {
-  font-size: 28rpx;
-  font-weight: 600;
-  color: var(--td-text-color-primary);
-  margin-bottom: 16rpx;
 }
 
 .location-picker {
@@ -261,12 +229,6 @@
 .delete-text {
   font-size: 26rpx;
   color: #FF6B6B;
-}
-
-.popup-footer {
-  display: flex;
-  gap: 20rpx;
-  padding-top: 24rpx;
 }
 
 .footer-btn {

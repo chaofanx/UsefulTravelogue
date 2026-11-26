@@ -16,7 +16,8 @@ const keys = {
   statistics: (id) => `book:${id}:statistics`,
   settlements: (id, mode) => `book:${id}:settlements:${mode || 'smart'}`,
   profile: () => 'user:profile',
-  emojis: () => 'system:emojis'
+  emojis: () => 'system:emojis',
+  categories: () => 'system:categories'
 };
 
 function get(key) {
@@ -68,4 +69,30 @@ function fetchAndCache(key, fetcher) {
   return p;
 }
 
-module.exports = { keys, get, set, remove, removeByPrefix, clear, fetchAndCache };
+// 页面数据加载的统一三段式（stale-while-revalidate）：
+// 1. 所有数据源都命中缓存 → 立即 apply(...缓存)，无 loading 态；否则 page.setData({ loading: true })
+// 2. 并发请求（同 key 去重），成功后 apply(...最新数据)
+// 3. 失败：有缓存提示「当前为缓存数据」，无缓存提示错误信息
+// sources: [{ key, fetch }]，apply 的参数顺序与 sources 一致。
+function load(page, sources, apply) {
+  const cached = sources.map(s => get(s.key));
+  const hasCache = cached.every(c => c !== undefined);
+  if (hasCache) {
+    apply(...cached);
+  } else {
+    page.setData({ loading: true });
+  }
+  return Promise.all(sources.map(s => fetchAndCache(s.key, s.fetch)))
+    .then(results => {
+      apply(...results);
+    })
+    .catch(err => {
+      page.setData({ loading: false });
+      wx.showToast({
+        title: hasCache ? '数据更新失败，当前为缓存数据' : ((err && err.message) || '加载失败'),
+        icon: 'none'
+      });
+    });
+}
+
+module.exports = { keys, get, set, remove, removeByPrefix, clear, fetchAndCache, load };

@@ -1,6 +1,7 @@
 const api = require('../../../utils/api');
 const cache = require('../../../utils/cache');
 const { formatAmount } = require('../../../utils/util');
+const { parseBookId, switchBookTab, inviteShare } = require('../../../utils/bookPage');
 
 Page({
   data: {
@@ -22,12 +23,8 @@ Page({
   },
 
   onLoad(options) {
-    const bookId = Number(options.id);
-    if (!bookId) {
-      wx.showToast({ title: '参数错误', icon: 'none' });
-      wx.navigateBack();
-      return;
-    }
+    const bookId = parseBookId(options.id);
+    if (!bookId) return;
     this.data.bookId = bookId;
 
     // 会员状态决定是否显示导出按钮
@@ -40,32 +37,11 @@ Page({
       this.setData({ isVip: !!(profile && profile.vip) });
     }).catch(() => {});
 
-    const bookKey = cache.keys.book(bookId);
-    const statsKey = cache.keys.statistics(bookId);
-    const settlementsKey = cache.keys.settlements(bookId, 'smart');
-    const cachedBook = cache.get(bookKey);
-    const cachedStats = cache.get(statsKey);
-    const cachedSettlements = cache.get(settlementsKey);
-    const hasCache = cachedBook !== undefined && cachedStats !== undefined && cachedSettlements !== undefined;
-    if (hasCache) {
-      // 先渲染缓存，后台请求回来后再更新
-      this.applyData(cachedBook, cachedStats, cachedSettlements);
-    } else {
-      this.setData({ loading: true });
-    }
-    Promise.all([
-      cache.fetchAndCache(bookKey, () => api.getBook(bookId)),
-      cache.fetchAndCache(statsKey, () => api.getStatistics(bookId)),
-      cache.fetchAndCache(settlementsKey, () => api.getSettlements(bookId, 'smart'))
-    ]).then(([book, statsData, settlementData]) => {
-      this.applyData(book, statsData, settlementData);
-    }).catch(err => {
-      this.setData({ loading: false });
-      wx.showToast({
-        title: hasCache ? '数据更新失败，当前为缓存数据' : (err.message || '加载失败'),
-        icon: 'none'
-      });
-    });
+    cache.load(this, [
+      { key: cache.keys.book(bookId), fetch: () => api.getBook(bookId) },
+      { key: cache.keys.statistics(bookId), fetch: () => api.getStatistics(bookId) },
+      { key: cache.keys.settlements(bookId, 'smart'), fetch: () => api.getSettlements(bookId, 'smart') }
+    ], (book, statsData, settlementData) => this.applyData(book, statsData, settlementData));
   },
 
   applyData(book, statsData, settlementData) {
@@ -184,16 +160,10 @@ Page({
   },
 
   onTabChange(e) {
-    const { key } = e.detail;
-    const routes = {
-      bill: '/pages/book/bill/index',
-      schedule: '/pages/book/schedule/index',
-      statistics: '/pages/book/statistics/index'
-    };
-    wx.redirectTo({ url: `${routes[key]}?id=${this.data.bookId}` });
-  }
-  ,
+    switchBookTab(this.data.bookId, e.detail.key);
+  },
+
   onShareAppMessage() {
-    return { title: `邀请你加入「${this.data.book.title || '旅行'}」账本`, path: `/pages/bookDetail/index?id=${this.data.bookId}&invite=1` };
+    return inviteShare(this.data.book, this.data.bookId);
   }
 });

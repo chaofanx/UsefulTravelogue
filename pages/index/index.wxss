@@ -202,19 +202,6 @@
   padding-bottom: calc(32rpx + env(safe-area-inset-bottom));
 }
 
-.popup-handle {
-  display: flex;
-  justify-content: center;
-  padding: 20rpx 0 12rpx;
-}
-
-.handle-bar {
-  width: 64rpx;
-  height: 8rpx;
-  border-radius: 4rpx;
-  background: var(--td-component-stroke);
-}
-
 .popup-title {
   font-size: 34rpx;
   font-weight: 700;
@@ -229,13 +216,6 @@
 
 .form-item {
   margin-bottom: 36rpx;
-}
-
-.form-label {
-  font-size: 28rpx;
-  font-weight: 600;
-  color: var(--td-text-color-primary);
-  margin-bottom: 16rpx;
 }
 
 .name-input-wrap {

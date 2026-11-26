@@ -19,6 +19,7 @@ Component({
     editName: '',
     newMemberName: '',
     memberAliases: {},
+    isCreator: false,
     navBarHeight: 88,
     statusBarHeight: 44,
     menuTop: 40,
@@ -44,9 +45,12 @@ Component({
   observers: {
     'book'(book) {
       if (book && book.members) {
+        // 解散账本、修改别名仅创建者可操作（后端同样校验，这里只负责隐藏入口）
+        const me = getApp().globalData.userInfo;
         this.setData({
           memberCount: book.members.length,
           memberAliases: book.memberAliases || {},
+          isCreator: !!(me && book.creatorId && me.id === book.creatorId),
         });
       }
     }

@@ -100,7 +100,9 @@ function request(method, path, data) {
           clearToken();
           reject({ code: 401, message: '未登录或登录已过期' });
         } else {
-          reject({ code: res.statusCode, message: '请求失败' });
+          // 后端 4xx 也返回 {code, message}（如 403「仅账本创建者可执行此操作」）
+          const body = res.data;
+          reject({ code: res.statusCode, message: (body && body.message) || '请求失败' });
         }
       },
       fail(err) {
@@ -396,6 +398,10 @@ const api = {
 
   getSystemEmojis() {
     return get('/system/emojis');
+  },
+
+  getSystemCategories() {
+    return get('/system/categories');
   }
 };
 

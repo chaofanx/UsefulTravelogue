@@ -1,10 +1,8 @@
 const api = require('../../../utils/api');
 const cache = require('../../../utils/cache');
 const { generateShareImage } = require('../../../utils/shareImage');
-
-function dateToStr(d) {
-  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
-}
+const { dateToStr } = require('../../../utils/util');
+const { parseBookId, switchBookTab, inviteShare } = require('../../../utils/bookPage');
 
 Page({
   data: {
@@ -31,6 +29,7 @@ Page({
     todayStr: '',
     yesterdayStr: '',
     payers: [],
+    // 兜底默认值，与后端 CATEGORY_EMOJI_MAP 保持一致；运行时以 /system/categories 为准
     categories: [
       { name: '餐饮', icon: '🍽️' },
       { name: '交通', icon: '🚗' },
@@ -43,12 +42,8 @@ Page({
   },
 
   onLoad(options) {
-    const bookId = Number(options.id);
-    if (!bookId) {
-      wx.showToast({ title: '参数错误', icon: 'none' });
-      wx.navigateBack();
-      return;
-    }
+    const bookId = parseBookId(options.id);
+    if (!bookId) return;
     this.data.bookId = bookId;
     this.loadData();
     this.loadVipAndEmojis();
@@ -77,34 +72,26 @@ Page({
     cache.fetchAndCache(emojisKey, () => api.getSystemEmojis()).then(data => {
       this.setData({ otherEmojis: (data && data.emojis) || [] });
     }).catch(() => {});
+
+    // 分类以后端为准；data.categories 里的默认值仅用于首次请求返回前/请求失败时兜底
+    const catKey = cache.keys.categories();
+    const cachedCats = cache.get(catKey);
+    if (cachedCats !== undefined && cachedCats.categories) {
+      this.setData({ categories: cachedCats.categories });
+    }
+    cache.fetchAndCache(catKey, () => api.getSystemCategories()).then(data => {
+      if (data && data.categories && data.categories.length) {
+        this.setData({ categories: data.categories });
+      }
+    }).catch(() => {});
   },
 
   loadData() {
     const bookId = this.data.bookId;
-    const bookKey = cache.keys.book(bookId);
-    const billsKey = cache.keys.bills(bookId);
-    const cachedBook = cache.get(bookKey);
-    const cachedBills = cache.get(billsKey);
-    if (cachedBook !== undefined && cachedBills !== undefined) {
-      // 先渲染缓存，后台请求回来后再更新
-      this.applyData(cachedBook, cachedBills);
-    } else {
-      this.setData({ loading: true });
-    }
-    Promise.all([
-      cache.fetchAndCache(bookKey, () => api.getBook(bookId)),
-      cache.fetchAndCache(billsKey, () => api.getBills(bookId))
-    ]).then(([book, billsData]) => {
-      this.applyData(book, billsData);
-    }).catch(err => {
-      this.setData({ loading: false });
-      wx.showToast({
-        title: (cachedBook !== undefined && cachedBills !== undefined)
-          ? '数据更新失败，当前为缓存数据'
-          : (err.message || '加载失败'),
-        icon: 'none'
-      });
-    });
+    cache.load(this, [
+      { key: cache.keys.book(bookId), fetch: () => api.getBook(bookId) },
+      { key: cache.keys.bills(bookId), fetch: () => api.getBills(bookId) }
+    ], (book, billsData) => this.applyData(book, billsData));
   },
 
   applyData(book, billsData) {
@@ -344,21 +331,12 @@ Page({
   // ========== 其他 ==========
 
   onTabChange(e) {
-    const { key } = e.detail;
-    const routes = {
-      bill: '/pages/book/bill/index',
-      schedule: '/pages/book/schedule/index',
-      statistics: '/pages/book/statistics/index'
-    };
-    wx.redirectTo({ url: `${routes[key]}?id=${this.data.bookId}` });
+    switchBookTab(this.data.bookId, e.detail.key);
   },
 
   onShareAppMessage() {
-    const share = {
-      title: `邀请你加入「${this.data.book.title || '旅行'}」账本`,
-      // 指向邀请落地页，好友打开后可直接加入账本
-      path: `/pages/bookDetail/index?id=${this.data.bookId}&invite=1`
-    };
+    // 指向邀请落地页，好友打开后可直接加入账本
+    const share = inviteShare(this.data.book, this.data.bookId);
     if (this.shareImageUrl) {
       return { ...share, imageUrl: this.shareImageUrl };
     }

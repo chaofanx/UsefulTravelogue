@@ -35,7 +35,12 @@ function formatDateShort(dateStr) {
   return `${Number(m)}/${Number(d)}`;
 }
 
+function dateToStr(d) {
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+}
+
 module.exports = {
+  dateToStr,
   formatDate,
   formatMonth,
   formatAmount,

@@ -1,6 +1,7 @@
 const api = require('../../utils/api');
 const cache = require('../../utils/cache');
 const { formatDate } = require('../../utils/util');
+const { parseBookId } = require('../../utils/bookPage');
 
 Page({
   data: {
@@ -12,13 +13,9 @@ Page({
   },
 
   onLoad(options) {
-    const bookId = Number(options.bookId);
+    const bookId = parseBookId(options.bookId);
+    if (!bookId) return;
     const scheduleId = Number(options.scheduleId) || 0;
-    if (!bookId) {
-      wx.showToast({ title: '参数错误', icon: 'none' });
-      wx.navigateBack();
-      return;
-    }
     this.data.bookId = bookId;
     this.data.scheduleId = scheduleId;
     this.loadData();
@@ -26,30 +23,10 @@ Page({
 
   loadData() {
     const bookId = this.data.bookId;
-    const bookKey = cache.keys.book(bookId);
-    const schedulesKey = cache.keys.schedules(bookId);
-    const cachedBook = cache.get(bookKey);
-    const cachedSchedules = cache.get(schedulesKey);
-    if (cachedBook !== undefined && cachedSchedules !== undefined) {
-      // 先渲染缓存，后台请求回来后再更新
-      this.applyData(cachedBook, cachedSchedules);
-    } else {
-      this.setData({ loading: true });
-    }
-    Promise.all([
-      cache.fetchAndCache(bookKey, () => api.getBook(bookId)),
-      cache.fetchAndCache(schedulesKey, () => api.getSchedules(bookId))
-    ]).then(([book, schedulesData]) => {
-      this.applyData(book, schedulesData);
-    }).catch(err => {
-      this.setData({ loading: false });
-      wx.showToast({
-        title: (cachedBook !== undefined && cachedSchedules !== undefined)
-          ? '数据更新失败，当前为缓存数据'
-          : (err.message || '加载失败'),
-        icon: 'none'
-      });
-    });
+    cache.load(this, [
+      { key: cache.keys.book(bookId), fetch: () => api.getBook(bookId) },
+      { key: cache.keys.schedules(bookId), fetch: () => api.getSchedules(bookId) }
+    ], (book, schedulesData) => this.applyData(book, schedulesData));
   },
 
   applyData(book, schedulesData) {

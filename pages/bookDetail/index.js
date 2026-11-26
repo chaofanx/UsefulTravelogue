@@ -1,16 +1,13 @@
 const api = require('../../utils/api');
 const cache = require('../../utils/cache');
+const { parseBookId } = require('../../utils/bookPage');
 
 Page({
   data: { book: {}, loading: true, isInvited: false, isMember: true },
 
   onLoad(options) {
-    const id = Number(options.id);
-    if (!id) {
-      wx.showToast({ title: '参数错误', icon: 'none' });
-      wx.navigateBack();
-      return;
-    }
+    const id = parseBookId(options.id);
+    if (!id) return;
     this.setData({ isInvited: !!options.invite });
     // 被邀请的好友可能首次打开、登录尚未完成：先确保登录态就绪再加载账本
     if (api.hasToken()) {

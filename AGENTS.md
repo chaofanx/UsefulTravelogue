@@ -9,30 +9,24 @@ stale-while-revalidate 模式：**进页先同步读缓存渲染（零白屏）�
 
 ### 页面接入模式（统一三段式）
 
+三段式已封装为 `cache.load(page, sources, apply)`，页面不要再手写：
+
 ```js
 loadData() {
-  const key = cache.keys.xxx(id);
-  const cached = cache.get(key);
-  if (cached !== undefined) {
-    this.applyData(cached);            // 1. 有缓存立即渲染，无 loading 态
-  } else {
-    this.setData({ loading: true });   //    仅无缓存时显示加载态
-  }
-  cache.fetchAndCache(key, () => api.getXxx(id)).then(data => {
-    this.applyData(data);              // 2. 后台刷新：写缓存 + 更新页面（完全无感）
-  }).catch(err => {
-    this.setData({ loading: false });  // 3. 失败处理
-    wx.showToast({
-      title: cached !== undefined ? '数据更新失败，当前为缓存数据' : (err.message || '加载失败'),
-      icon: 'none'
-    });
-  });
+  const id = this.data.bookId;
+  cache.load(this, [
+    { key: cache.keys.book(id), fetch: () => api.getBook(id) },
+    { key: cache.keys.bills(id), fetch: () => api.getBills(id) }
+  ], (book, bills) => this.applyData(book, bills));   // apply 参数顺序与 sources 一致
 }
 ```
 
-- 原 `.then` 里的数据处理/setData 逻辑原样提取为 `applyData()`，缓存渲染与后台更新复用同一方法。
-- 多接口页面（如账单页 book + bills）需**全部命中缓存**才走缓存渲染，否则显示 loading。
-- 后台刷新失败：有缓存 → 保留缓存数据 + toast「数据更新失败，当前为缓存数据」；无缓存 → 原有失败逻辑。
+`load` 内部行为：
+1. **所有** sources 都命中缓存才同步 `apply(...缓存)`（无 loading 态）；否则 `setData({ loading: true })`。
+2. 并发请求（同 key 自动去重），成功后写缓存并 `apply(...最新数据)`。
+3. 失败：`setData({ loading: false })` + toast；有缓存提示「数据更新失败，当前为缓存数据」，无缓存提示错误信息。
+
+- 数据处理/setData 逻辑放在 `applyData()`，缓存渲染与后台更新复用同一方法。
 - 后台刷新**不加任何加载提示**（不用 wx.showNavigationBarLoading 等），保持完全无感。
 - 原有静默失败的次要请求（如会员状态、emoji 列表）保持静默，仅读缓存 + 后台更新，不加 toast。
 
@@ -50,6 +44,7 @@ loadData() {
 | `book:{id}:settlements:{mode}` | 结算方案（按模式分 key） |
 | `user:profile` | 用户资料 |
 | `system:emojis` | 「其他」分类 emoji |
+| `system:categories` | 记账分类列表（后端为准，页面内保留兜底默认值） |
 
 账本相关 key 均以 `book:{id}` 开头，`removeByPrefix(cache.keys.book(id))` 可清掉该账本全部缓存
 （已做边界处理，`book:1` 不会误删 `book:12`）。
@@ -75,3 +70,17 @@ loadData() {
 
 - `cache.set` 会忽略 `null` / `undefined`，缓存判断一律用 `cache.get(key) !== undefined`（空数组/空对象是有效缓存）。
 - 新增数据页（含新增缓存 key 类型）时，同步更新本文件的 key 表与失效规则。
+
+## 账本页面公共工具（utils/bookPage.js）
+
+账本子页面（bill / schedule / statistics / ticket / memberList / bookDetail）统一使用：
+`parseBookId`（参数校验+回退）、`switchBookTab`（底部 tab 跳转）、`inviteShare`（邀请分享内容）。
+新增账本子页面时直接复用，不要再复制 `onLoad` 校验、`routes` 映射和分享文案；日期格式化用 `util.dateToStr`。
+
+## 样式
+
+底部表单弹层的公共样式（`.popup-handle` / `.handle-bar` / `.popup-title` / `.form-item` / `.form-label` / `.popup-footer`）在 `app.wxss`，页面只写与默认值不同的覆盖项。
+
+## 接口文档
+
+不再维护手写的 API.md，接口以后端 `/docs`（FastAPI 自动生成的 OpenAPI）为准。
