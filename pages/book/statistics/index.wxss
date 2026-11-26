@@ -17,9 +17,10 @@
 
 .stat-card {
   background: var(--td-bg-color-container);
-  border-radius: 24rpx;
-  padding: 28rpx;
-  margin-bottom: 20rpx;
+  border-radius: 32rpx;
+  padding: 32rpx;
+  margin-bottom: 24rpx;
+  box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.06);
 }
 
 .stat-card-header {
@@ -30,8 +31,8 @@
 }
 
 .stat-card-title {
-  font-size: 30rpx;
-  font-weight: 600;
+  font-size: 32rpx;
+  font-weight: 700;
   color: var(--td-text-color-primary);
 }
 
@@ -62,8 +63,8 @@
 }
 
 .my-stat-val {
-  font-size: 34rpx;
-  font-weight: 700;
+  font-size: 38rpx;
+  font-weight: 800;
 }
 
 .my-stat-val.paid {
@@ -87,26 +88,27 @@
 
 .settlement-card {
   background: var(--td-bg-color-container);
-  border-radius: 24rpx;
-  padding: 28rpx;
-  margin-bottom: 20rpx;
+  border-radius: 32rpx;
+  padding: 32rpx;
+  margin-bottom: 24rpx;
+  box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.06);
 }
 
 .settlement-tabs {
   display: flex;
   margin-bottom: 28rpx;
-  border-radius: 12rpx;
+  border-radius: 999px;
   background: var(--td-bg-color-secondarycontainer);
-  padding: 6rpx;
+  padding: 8rpx;
 }
 
 .settlement-tab {
   flex: 1;
   text-align: center;
-  padding: 14rpx 0;
+  padding: 16rpx 0;
   font-size: 26rpx;
   color: var(--td-text-color-placeholder);
-  border-radius: 10rpx;
+  border-radius: 999px;
   transition: all 0.2s;
 }
 
@@ -158,16 +160,16 @@
 }
 
 .settlement-amount-val {
-  font-size: 32rpx;
-  font-weight: 700;
+  font-size: 34rpx;
+  font-weight: 800;
   color: var(--travel-brand, #38C172);
 }
 
 .settlement-paid-btn {
   flex-shrink: 0;
   margin-left: 20rpx;
-  padding: 8rpx 20rpx;
-  border-radius: 24rpx;
+  padding: 10rpx 24rpx;
+  border-radius: 999px;
   font-size: 24rpx;
   color: var(--travel-brand, #38C172);
   border: 1rpx solid var(--travel-brand, #38C172);
@@ -219,17 +221,18 @@
 }
 
 .action-cards {
-  margin-bottom: 20rpx;
+  margin-bottom: 24rpx;
 }
 
 .action-card {
   background: var(--td-bg-color-container);
-  border-radius: 24rpx;
-  margin-bottom: 16rpx;
+  border-radius: 32rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.06);
 }
 
 .action-card-inner {
-  padding: 28rpx;
+  padding: 32rpx;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -244,9 +247,10 @@
 .action-card-btn {
   background: var(--travel-brand, #38C172);
   color: #fff;
-  padding: 12rpx 28rpx;
-  border-radius: 20rpx;
+  padding: 14rpx 32rpx;
+  border-radius: 999px;
   font-size: 24rpx;
+  font-weight: 600;
   flex-shrink: 0;
 }
 

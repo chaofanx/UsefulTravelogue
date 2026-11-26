@@ -27,15 +27,15 @@
 }
 
 .stat-bar {
-  height: 8rpx;
-  background-color: var(--td-component-stroke);
-  border-radius: 4rpx;
+  height: 12rpx;
+  background-color: var(--td-bg-color-secondarycontainer);
+  border-radius: 6rpx;
   overflow: hidden;
 }
 
 .stat-bar-fill {
   height: 100%;
-  border-radius: 4rpx;
+  border-radius: 6rpx;
   transition: width 0.5s ease;
 }
 
@@ -47,6 +47,6 @@
 
 .stat-amount {
   font-size: 28rpx;
-  font-weight: 600;
+  font-weight: 700;
   color: var(--td-text-color-primary);
 }
