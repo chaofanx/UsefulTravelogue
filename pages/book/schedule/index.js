@@ -1,6 +1,6 @@
 const api = require('../../../utils/api');
 const cache = require('../../../utils/cache');
-const { formatDateShort, dateToStr } = require('../../../utils/util');
+const { formatDateShort, dateToStr, clampDate } = require('../../../utils/util');
 const { parseBookId, switchBookTab, inviteShare } = require('../../../utils/bookPage');
 
 Page({
@@ -18,6 +18,8 @@ Page({
     formPeriod: '全天',
     formNotes: '',
     formDate: '',
+    minDateStr: '',
+    maxDateStr: '',
     todayStr: '',
     tomorrowStr: '',
     periods: ['全天', '上午', '下午', '晚上']
@@ -57,6 +59,7 @@ Page({
     const now = new Date();
     const todayStr = dateToStr(now);
     const tomorrowStr = dateToStr(new Date(now.getTime() + 86400000));
+    const { startDate: minDateStr = '', endDate: maxDateStr = '' } = this.data.book || {};
     this.setData({
       editingId: null,
       formLocation: '',
@@ -65,9 +68,11 @@ Page({
       formLng: null,
       formPeriod: '全天',
       formNotes: '',
-      formDate: todayStr,
+      formDate: clampDate(todayStr, minDateStr, maxDateStr),
       todayStr,
-      tomorrowStr
+      tomorrowStr,
+      minDateStr,
+      maxDateStr
     });
   },
 
@@ -76,6 +81,7 @@ Page({
     const now = new Date();
     const todayStr = dateToStr(now);
     const tomorrowStr = dateToStr(new Date(now.getTime() + 86400000));
+    const { startDate: minDateStr = '', endDate: maxDateStr = '' } = this.data.book || {};
     this.setData({
       showFormPopup: true,
       editingId: item.id,
@@ -87,7 +93,9 @@ Page({
       formNotes: item.notes || '',
       formDate: item.date || todayStr,
       todayStr,
-      tomorrowStr
+      tomorrowStr,
+      minDateStr,
+      maxDateStr
     });
   },
 

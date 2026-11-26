@@ -252,3 +252,7 @@
   background: var(--travel-brand, #38C172);
   color: #fff;
 }
+
+.date-picker {
+  flex: 1.6;
+}

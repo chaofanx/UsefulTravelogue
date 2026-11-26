@@ -271,7 +271,9 @@ const api = {
       title: book.title,
       cover: book.cover,
       coverColor: book.coverColor,
-      date: book.date
+      date: book.date,
+      startDate: book.startDate,
+      endDate: book.endDate
     }).then(data => {
       const normalized = normalizeBook(data);
       cache.remove(cache.keys.books());
@@ -287,7 +289,9 @@ const api = {
     return put(`/books/${bookId}`, {
       title: updates.title,
       cover: updates.cover,
-      coverColor: updates.coverColor
+      coverColor: updates.coverColor,
+      startDate: updates.startDate,
+      endDate: updates.endDate
     }).then(data => {
       const normalized = normalizeBook(data);
       cache.remove(cache.keys.books());

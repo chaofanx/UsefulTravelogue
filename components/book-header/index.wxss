@@ -340,3 +340,33 @@
   font-size: 28rpx;
   font-weight: 500;
 }
+
+.ended-tag {
+  margin-left: 12rpx;
+  padding: 2rpx 14rpx;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.3);
+  color: #fff;
+  font-size: 22rpx;
+}
+
+.range-picker {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 88rpx;
+  margin-bottom: 20rpx;
+  padding: 0 28rpx;
+  border-radius: 24rpx;
+  background: var(--td-bg-color-secondarycontainer);
+  font-size: 28rpx;
+  color: var(--td-text-color-primary);
+}
+
+.range-label {
+  color: var(--td-text-color-secondary);
+}
+
+.range-placeholder {
+  color: var(--td-text-color-placeholder);
+}

@@ -18,7 +18,12 @@
 
       <view class="header-info">
         <view class="header-title">{{book.title}}</view>
-        <view class="header-subtitle">{{book.date}} · 与{{memberCount}}位朋友一起</view>
+        <view class="header-subtitle">
+          <text wx:if="{{book.startDate}}">{{book.startDate}} 至 {{book.endDate}}</text>
+          <text wx:else>{{book.date}}</text>
+          <text> · 与{{memberCount}}位朋友一起</text>
+          <text wx:if="{{book.ended}}" class="ended-tag">已结束</text>
+        </view>
         <view class="header-members" bindtap="onMemberTap">
           <member-avatars members="{{book.members}}" maxShow="{{4}}" aliases="{{memberAliases}}" />
         </view>
@@ -43,6 +48,14 @@
           <text class="setting-label">更换账本名称</text>
           <view class="setting-value-row">
             <text class="setting-value">{{book.title}}</text>
+            <app-icon class="setting-arrow" name="chevron-right" size="{{32}}" color="#a6a6a6" />
+          </view>
+        </view>
+
+        <view class="setting-item" bindtap="onChangeRange">
+          <text class="setting-label">旅行范围</text>
+          <view class="setting-value-row">
+            <text class="setting-value">{{book.startDate ? book.startDate + ' 至 ' + book.endDate : '未设置，请补填'}}</text>
             <app-icon class="setting-arrow" name="chevron-right" size="{{32}}" color="#a6a6a6" />
           </view>
         </view>
@@ -80,6 +93,31 @@
       <view class="popup-footer">
         <view class="footer-btn cancel-btn" bindtap="onCancelRename">取消</view>
         <view class="footer-btn confirm-btn" bindtap="onConfirmRename">确定</view>
+      </view>
+    </view>
+  </t-popup>
+
+  <t-popup visible="{{showRangePopup}}" placement="bottom" bind:visible-change="onRangePopupVisible">
+    <view class="rename-popup">
+      <view class="popup-handle">
+        <view class="handle-bar"></view>
+      </view>
+      <view class="popup-title">旅行范围</view>
+      <picker mode="date" value="{{editStart}}" bindchange="onEditStartChange">
+        <view class="range-picker">
+          <text class="range-label">开始日期</text>
+          <text class="{{editStart ? '' : 'range-placeholder'}}">{{editStart || '请选择'}}</text>
+        </view>
+      </picker>
+      <picker mode="date" value="{{editEnd}}" start="{{editStart}}" bindchange="onEditEndChange">
+        <view class="range-picker">
+          <text class="range-label">结束日期</text>
+          <text class="{{editEnd ? '' : 'range-placeholder'}}">{{editEnd || '请选择'}}</text>
+        </view>
+      </picker>
+      <view class="popup-footer">
+        <view class="footer-btn cancel-btn" bindtap="onCancelRange">取消</view>
+        <view class="footer-btn confirm-btn" bindtap="onConfirmRange">确定</view>
       </view>
     </view>
   </t-popup>

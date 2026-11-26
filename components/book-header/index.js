@@ -16,6 +16,9 @@ Component({
     showSettingPopup: false,
     showRenamePopup: false,
     showAddMemberPopup: false,
+    showRangePopup: false,
+    editStart: '',
+    editEnd: '',
     editName: '',
     newMemberName: '',
     memberAliases: {},
@@ -79,7 +82,58 @@ Component({
       this.setData({ showSettingPopup: e.detail.visible });
     },
 
+    // 历史账本未设置旅行范围时，后端拒绝其他修改，先引导补填
+    needRange() {
+      if (this.data.book.startDate) return false;
+      wx.showToast({ title: '请先设置旅行范围', icon: 'none' });
+      this.onChangeRange();
+      return true;
+    },
+
+    onChangeRange() {
+      const { startDate, endDate } = this.data.book;
+      this.setData({
+        showSettingPopup: false,
+        showRangePopup: true,
+        editStart: startDate || '',
+        editEnd: endDate || ''
+      });
+    },
+
+    onRangePopupVisible(e) {
+      this.setData({ showRangePopup: e.detail.visible });
+    },
+
+    onEditStartChange(e) {
+      const editStart = e.detail.value;
+      this.setData({ editStart, editEnd: this.data.editEnd < editStart ? '' : this.data.editEnd });
+    },
+
+    onEditEndChange(e) {
+      this.setData({ editEnd: e.detail.value });
+    },
+
+    onCancelRange() {
+      this.setData({ showRangePopup: false });
+    },
+
+    onConfirmRange() {
+      const { editStart, editEnd } = this.data;
+      if (!editStart || !editEnd) {
+        wx.showToast({ title: '请选择开始和结束日期', icon: 'none' });
+        return;
+      }
+      api.updateBook(this.data.book.id, { startDate: editStart, endDate: editEnd }).then(updatedBook => {
+        this.setData({ showRangePopup: false, book: updatedBook });
+        this.triggerEvent('bookchange', { book: updatedBook });
+        wx.showToast({ title: '已更新', icon: 'success' });
+      }).catch(err => {
+        wx.showToast({ title: err.message || '更新失败', icon: 'none' });
+      });
+    },
+
     onChangeCover() {
+      if (this.needRange()) return;
       const that = this;
       this.setData({ showSettingPopup: false });
       wx.chooseMedia({
@@ -108,6 +162,7 @@ Component({
     },
 
     onChangeName() {
+      if (this.needRange()) return;
       this.setData({
         showSettingPopup: false,
         showRenamePopup: true,

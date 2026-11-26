@@ -10,6 +10,6 @@
   </view>
   <view class="card-info">
     <view class="card-title">{{book.title}}</view>
-    <view class="card-date">{{book.date}}</view>
+    <view class="card-date">{{book.startDate ? book.startDate + ' 至 ' + book.endDate : book.date}}<text wx:if="{{book.ended}}" class="ended-tag">已结束</text></view>
   </view>
 </view>

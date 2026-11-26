@@ -39,8 +39,16 @@ function dateToStr(d) {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 }
 
+// 将日期限制在 [min, max] 内（min/max 为空表示不限制）
+function clampDate(d, min, max) {
+  if (min && d < min) return min;
+  if (max && d > max) return max;
+  return d;
+}
+
 module.exports = {
   dateToStr,
+  clampDate,
   formatDate,
   formatMonth,
   formatAmount,

@@ -3,7 +3,8 @@ const api = require('../../utils/api');
 Page({
   data: {
     name: '',
-    date: '',
+    startDate: '',
+    endDate: '',
     coverColor: '#4A90D9',
     memberInput: '',
     members: [],
@@ -21,8 +22,15 @@ Page({
     this.setData({ name: e.detail.value });
   },
 
-  onDateChange(e) {
-    this.setData({ date: e.detail.value });
+  onStartDateChange(e) {
+    const startDate = e.detail.value;
+    // 结束日期早于新的开始日期时清空，避免范围倒置
+    const endDate = this.data.endDate && this.data.endDate < startDate ? '' : this.data.endDate;
+    this.setData({ startDate, endDate });
+  },
+
+  onEndDateChange(e) {
+    this.setData({ endDate: e.detail.value });
   },
 
   onColorTap(e) {
@@ -53,25 +61,25 @@ Page({
   },
 
   onSubmit() {
-    const { name, date, coverColor, members } = this.data;
+    const { name, startDate, endDate, coverColor } = this.data;
     if (!name) {
       wx.showToast({ title: '请输入账本名称', icon: 'none' });
+      return;
+    }
+    if (!startDate || !endDate) {
+      wx.showToast({ title: '请选择旅行开始和结束日期', icon: 'none' });
       return;
     }
     api.createBook({
       title: name.trim(),
       coverColor: coverColor,
-      date: date || this.getCurrentMonth()
+      startDate,
+      endDate
     }).then(() => {
       wx.showToast({ title: '创建成功！', icon: 'success' });
       setTimeout(() => wx.navigateBack(), 1500);
     }).catch(err => {
       wx.showToast({ title: err.message || '创建失败', icon: 'none' });
     });
-  },
-
-  getCurrentMonth() {
-    const now = new Date();
-    return `${now.getFullYear()}年${now.getMonth() + 1}月`;
   }
 });

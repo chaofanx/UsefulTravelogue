@@ -144,8 +144,11 @@
 
 .category-grid {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  white-space: nowrap;
   gap: 16rpx;
+  width: 100%;
 }
 
 .category-item {
@@ -156,6 +159,7 @@
   border-radius: 24rpx;
   background: var(--td-bg-color-secondarycontainer);
   min-width: 120rpx;
+  flex-shrink: 0;
 }
 
 .category-item.active {
@@ -288,4 +292,10 @@
 .exclude-hint {
   font-size: 22rpx;
   color: var(--td-text-color-placeholder, #999);
+}
+
+.date-lock-tip {
+  font-size: 22rpx;
+  color: var(--td-text-color-placeholder);
+  margin-left: 8rpx;
 }

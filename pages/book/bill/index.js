@@ -1,7 +1,7 @@
 const api = require('../../../utils/api');
 const cache = require('../../../utils/cache');
 const { generateShareImage } = require('../../../utils/shareImage');
-const { dateToStr } = require('../../../utils/util');
+const { dateToStr, clampDate } = require('../../../utils/util');
 const { parseBookId, switchBookTab, inviteShare } = require('../../../utils/bookPage');
 
 Page({
@@ -35,6 +35,8 @@ Page({
     formIcon: '',
     formExclude: false,
     todayStr: '',
+    minDateStr: '',
+    maxDateStr: '',
     yesterdayStr: '',
     members: [],
     // 兜底默认值，与后端 CATEGORY_EMOJI_MAP 保持一致；运行时以 /system/categories 为准
@@ -201,6 +203,7 @@ Page({
     const now = new Date();
     const todayStr = dateToStr(now);
     const yesterdayStr = dateToStr(new Date(now.getTime() - 86400000));
+    const { startDate: minDateStr = '', endDate: maxDateStr = '' } = this.data.book || {};
     this.setData({
       editingId: null,
       formAmount: '',
@@ -213,11 +216,13 @@ Page({
       formParticipants: participants,
       participantMap: this.buildParticipantMap(participants),
       formRemark: '',
-      formDate: todayStr,
+      formDate: clampDate(todayStr, minDateStr, maxDateStr),
       formIcon: '',
       formExclude: false,
       todayStr,
-      yesterdayStr
+      yesterdayStr,
+      minDateStr,
+      maxDateStr
     });
     this.refreshConvert();
   },
@@ -239,6 +244,7 @@ Page({
     const now = new Date();
     const todayStr = dateToStr(now);
     const yesterdayStr = dateToStr(new Date(now.getTime() - 86400000));
+    const { startDate: minDateStr = '', endDate: maxDateStr = '' } = this.data.book || {};
     // 「其他」分类的自定义 emoji 直接存在 icon 字段（区别于 'other' 等内置图标名）
     const customIcon = (bill.category === '其他' && bill.icon && bill.icon !== 'other') ? bill.icon : '';
     this.setData({
@@ -259,7 +265,9 @@ Page({
       formIcon: customIcon,
       formExclude: !!bill.excludeFromSplit,
       todayStr,
-      yesterdayStr
+      yesterdayStr,
+      minDateStr,
+      maxDateStr
     });
     this.refreshConvert();
   },

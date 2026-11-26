@@ -13,10 +13,20 @@
     </view>
 
     <view class="form-item">
-      <view class="form-label">出行日期</view>
-      <picker mode="date" value="{{date}}" bindchange="onDateChange">
+      <view class="form-label">旅行开始日期</view>
+      <picker mode="date" value="{{startDate}}" bindchange="onStartDateChange">
         <view class="form-picker">
-          <text class="{{date ? '' : 'placeholder'}}">{{date || '选择出行日期'}}</text>
+          <text class="{{startDate ? '' : 'placeholder'}}">{{startDate || '选择开始日期'}}</text>
+          <app-icon class="picker-arrow" name="chevron-right" size="{{32}}" color="#a6a6a6" />
+        </view>
+      </picker>
+    </view>
+
+    <view class="form-item">
+      <view class="form-label">旅行结束日期</view>
+      <picker mode="date" value="{{endDate}}" start="{{startDate}}" bindchange="onEndDateChange">
+        <view class="form-picker">
+          <text class="{{endDate ? '' : 'placeholder'}}">{{endDate || '选择结束日期'}}</text>
           <app-icon class="picker-arrow" name="chevron-right" size="{{32}}" color="#a6a6a6" />
         </view>
       </picker>
@@ -66,7 +76,7 @@
       theme="primary"
       size="large"
       block
-      disabled="{{!name}}"
+      disabled="{{!name || !startDate || !endDate}}"
       bind:tap="onSubmit"
       style="background-color: var(--travel-brand, #38C172); border-color: var(--travel-brand, #38C172);"
     >

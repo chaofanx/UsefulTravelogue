@@ -61,9 +61,10 @@
         </view>
 
         <view class="form-item">
-          <view class="form-label">日期</view>
+          <view class="form-label">日期<text wx:if="{{minDateStr}}" class="date-lock-tip">（{{minDateStr}} 至 {{maxDateStr}}）</text></view>
           <view class="payer-options">
             <view
+              wx:if="{{(!minDateStr || todayStr >= minDateStr) && (!maxDateStr || todayStr <= maxDateStr)}}"
               class="payer-item {{formDate === todayStr ? 'active' : ''}}"
               data-date="{{todayStr}}"
               bindtap="onDateQuick"
@@ -71,13 +72,14 @@
               <text>今天</text>
             </view>
             <view
+              wx:if="{{(!minDateStr || yesterdayStr >= minDateStr) && (!maxDateStr || yesterdayStr <= maxDateStr)}}"
               class="payer-item {{formDate === yesterdayStr ? 'active' : ''}}"
               data-date="{{yesterdayStr}}"
               bindtap="onDateQuick"
             >
               <text>昨天</text>
             </view>
-            <picker mode="date" value="{{formDate}}" bindchange="onDatePick">
+            <picker mode="date" value="{{formDate}}" start="{{minDateStr}}" end="{{maxDateStr}}" bindchange="onDatePick">
               <view class="payer-item {{formDate !== todayStr && formDate !== yesterdayStr ? 'active' : ''}}">
                 <text>{{formDate !== todayStr && formDate !== yesterdayStr ? formDate : '选其他日期'}}</text>
               </view>
@@ -87,7 +89,7 @@
 
         <view class="form-item">
           <view class="form-label">分类</view>
-          <view class="category-grid">
+          <scroll-view class="category-grid" scroll-x enable-flex show-scrollbar="{{false}}">
             <view
               wx:for="{{categories}}"
               wx:key="name"
@@ -99,7 +101,7 @@
               <text wx:else class="cat-emoji">{{formIcon}}</text>
               <text class="cat-name">{{item.name}}</text>
             </view>
-          </view>
+          </scroll-view>
         </view>
 
         <view wx:if="{{formCategory === '其他' && otherEmojis.length > 0}}" class="form-item">

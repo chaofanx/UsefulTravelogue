@@ -66,6 +66,7 @@
           <view class="form-label">日期</view>
           <view class="period-row">
             <view
+              wx:if="{{(!minDateStr || todayStr >= minDateStr) && (!maxDateStr || todayStr <= maxDateStr)}}"
               class="period-item {{formDate === todayStr ? 'active' : ''}}"
               data-date="{{todayStr}}"
               bindtap="onDateQuick"
@@ -73,13 +74,14 @@
               <text>今天</text>
             </view>
             <view
+              wx:if="{{(!minDateStr || tomorrowStr >= minDateStr) && (!maxDateStr || tomorrowStr <= maxDateStr)}}"
               class="period-item {{formDate === tomorrowStr ? 'active' : ''}}"
               data-date="{{tomorrowStr}}"
               bindtap="onDateQuick"
             >
               <text>明天</text>
             </view>
-            <picker mode="date" value="{{formDate}}" bindchange="onDatePick">
+            <picker class="date-picker" mode="date" value="{{formDate}}" start="{{minDateStr}}" end="{{maxDateStr}}" bindchange="onDatePick">
               <view class="period-item {{formDate !== todayStr && formDate !== tomorrowStr ? 'active' : ''}}">
                 <text>{{formDate !== todayStr && formDate !== tomorrowStr ? formDate : '选择日期'}}</text>
               </view>
