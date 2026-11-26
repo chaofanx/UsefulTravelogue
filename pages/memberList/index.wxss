@@ -6,8 +6,9 @@
 .member-card {
   margin: 24rpx 32rpx;
   background: var(--td-bg-color-container);
-  border-radius: 24rpx;
+  border-radius: 32rpx;
   padding: 16rpx 0;
+  box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.06);
 }
 
 .member-item {
@@ -44,7 +45,7 @@
 
 .member-name {
   flex: 1;
-  font-size: 28rpx;
+  font-size: 30rpx;
   color: var(--td-text-color-primary);
   margin-left: 24rpx;
 }
@@ -53,15 +54,15 @@
   font-size: 22rpx;
   color: var(--td-text-color-placeholder);
   background: var(--td-bg-color-secondarycontainer);
-  padding: 4rpx 16rpx;
-  border-radius: 8rpx;
+  padding: 4rpx 20rpx;
+  border-radius: 999px;
 }
 
 .invite-btn {
   margin: 32rpx;
-  height: 88rpx;
-  line-height: 88rpx;
-  border-radius: 16rpx;
+  height: 96rpx;
+  line-height: 96rpx;
+  border-radius: 28rpx;
   background: #4A90D9;
   color: #fff;
   font-size: 30rpx;

@@ -6,8 +6,9 @@
 .form-card {
   margin: 24rpx 32rpx;
   background: var(--td-bg-color-container);
-  border-radius: 24rpx;
-  padding: 32rpx 32rpx;
+  border-radius: 32rpx;
+  padding: 32rpx;
+  box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.06);
 }
 
 .form-item {
@@ -15,7 +16,7 @@
 }
 
 .form-label {
-  font-size: 28rpx;
+  font-size: 30rpx;
   font-weight: 600;
   color: var(--td-text-color-primary);
   margin-bottom: 16rpx;
@@ -23,20 +24,20 @@
 
 .form-input {
   width: 100%;
-  height: 80rpx;
+  height: 88rpx;
   background: var(--td-bg-color-secondarycontainer);
-  border-radius: 12rpx;
-  padding: 0 24rpx;
+  border-radius: 24rpx;
+  padding: 0 28rpx;
   font-size: 28rpx;
   box-sizing: border-box;
 }
 
 .form-picker {
   width: 100%;
-  height: 80rpx;
+  height: 88rpx;
   background: var(--td-bg-color-secondarycontainer);
-  border-radius: 12rpx;
-  padding: 0 24rpx;
+  border-radius: 24rpx;
+  padding: 0 28rpx;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -95,7 +96,7 @@
   margin-left: 16rpx;
   font-size: 26rpx;
   color: var(--travel-brand, #38C172);
-  font-weight: 500;
+  font-weight: 600;
 }
 
 .member-list {
@@ -108,8 +109,8 @@
 .member-tag {
   background: var(--travel-brand, #38C172);
   color: #fff;
-  padding: 8rpx 20rpx;
-  border-radius: 20rpx;
+  padding: 8rpx 24rpx;
+  border-radius: 999px;
   font-size: 24rpx;
   display: flex;
   align-items: center;

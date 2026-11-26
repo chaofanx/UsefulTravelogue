@@ -13,9 +13,9 @@
 
 .ticket-card-stub {
   background: var(--td-bg-color-container);
-  border-radius: 24rpx;
+  border-radius: 32rpx;
   overflow: hidden;
-  box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.08);
+  box-shadow: 0 12rpx 40rpx rgba(0, 0, 0, 0.08);
 }
 
 .ticket-top {

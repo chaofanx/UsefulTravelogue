@@ -10,8 +10,9 @@
 .profile-card {
   margin: 24rpx 32rpx;
   background: var(--td-bg-color-container);
-  border-radius: 24rpx;
+  border-radius: 32rpx;
   padding: 32rpx;
+  box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.06);
 }
 
 .avatar-section {
@@ -84,16 +85,17 @@
 }
 
 .menu-card {
-  margin: 0 32rpx 16rpx;
+  margin: 0 32rpx 24rpx;
   background: var(--td-bg-color-container);
-  border-radius: 24rpx;
+  border-radius: 32rpx;
   overflow: hidden;
+  box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.06);
 }
 
 .menu-item {
   display: flex;
   align-items: center;
-  padding: 28rpx 32rpx;
+  padding: 32rpx;
 }
 
 .menu-item + .menu-item {
@@ -107,7 +109,7 @@
 
 .menu-text {
   flex: 1;
-  font-size: 28rpx;
+  font-size: 30rpx;
   color: var(--td-text-color-primary);
 }
 
