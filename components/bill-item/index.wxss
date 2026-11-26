@@ -2,7 +2,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 24rpx 0;
+  padding: 28rpx 0;
 }
 
 .bill-item + .bill-item {
@@ -23,8 +23,8 @@
 }
 
 .bill-category {
-  font-size: 28rpx;
-  font-weight: 500;
+  font-size: 30rpx;
+  font-weight: 600;
   color: var(--td-text-color-primary);
 }
 
@@ -49,9 +49,10 @@
 }
 
 .bill-amount {
-  font-size: 30rpx;
-  font-weight: 600;
+  font-size: 32rpx;
+  font-weight: 700;
   color: var(--td-text-color-primary);
+  font-variant-numeric: tabular-nums;
 }
 
 .bill-exclude-tag {

@@ -1,7 +1,7 @@
 .book-card {
   background: var(--td-bg-color-container);
-  border-radius: 24rpx;
-  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.05);
+  border-radius: 32rpx;
+  box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.06);
   overflow: hidden;
 }
 
@@ -57,11 +57,11 @@
 }
 
 .card-info {
-  padding: 20rpx 24rpx;
+  padding: 24rpx 28rpx;
 }
 
 .card-title {
-  font-size: 28rpx;
+  font-size: 30rpx;
   font-weight: 600;
   color: var(--td-text-color-primary);
   overflow: hidden;
