@@ -1,3 +1,4 @@
+<wxs module="cat" src="/utils/category.wxs" />
 <view class="page-bill">
   <!-- 隐藏画布：用于绘制分享封面图（Skyline 下 canvas 不能移出渲染树，用透明隐藏） -->
   <canvas type="2d" id="shareCanvas" class="share-canvas" />
@@ -13,14 +14,14 @@
         bind:billtap="onBillTap"
       />
       <view wx:if="{{groupedBills.length === 0}}" class="empty-bill">
-        <text class="empty-icon-text">📝</text>
+        <app-icon class="empty-icon-text" name="notebook" size="{{88}}" color="#c5c5c5" />
         <text>暂无账单记录</text>
       </view>
     </view>
   </view>
 
   <view class="float-btn" bindtap="onAddBill">
-    <text class="float-icon">✏️</text>
+    <app-icon class="float-icon" name="edit" size="{{36}}" color="#ffffff" />
     <text class="float-text">记一笔</text>
   </view>
 
@@ -45,7 +46,7 @@
               bindchange="onCurrencyChange"
             >
               <text class="currency">{{currencySymbol}}</text>
-              <text wx:if="{{currencyLabels.length > 1}}" class="currency-arrow">▾</text>
+              <app-icon wx:if="{{currencyLabels.length > 1}}" class="currency-arrow" name="chevron-down" size="{{28}}" color="#a6a6a6" />
             </picker>
             <input
               class="amount-input"
@@ -94,7 +95,8 @@
               data-name="{{item.name}}"
               bindtap="onCategoryTap"
             >
-              <text class="cat-emoji">{{item.name === '其他' && formIcon ? formIcon : item.icon}}</text>
+              <app-icon wx:if="{{!(item.name === '其他' && formIcon)}}" class="cat-icon" name="{{cat.key(item.name)}}" size="{{40}}" color="{{formCategory === item.name ? '#ffffff' : cat.color(item.name)}}" />
+              <text wx:else class="cat-emoji">{{formIcon}}</text>
               <text class="cat-name">{{item.name}}</text>
             </view>
           </view>

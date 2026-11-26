@@ -13,19 +13,19 @@
 
   <view class="detail-menu">
     <view class="menu-item" bindtap="onGoBill">
-      <text class="menu-icon">💰</text>
+      <app-icon class="menu-icon" name="bill" size="{{44}}" color="#38C172" />
       <text class="menu-text">账单</text>
-      <text class="menu-arrow">›</text>
+      <app-icon class="menu-arrow" name="chevron-right" size="{{32}}" color="#a6a6a6" />
     </view>
     <view class="menu-item" bindtap="onGoSchedule">
-      <text class="menu-icon">📋</text>
+      <app-icon class="menu-icon" name="schedule" size="{{44}}" color="#38C172" />
       <text class="menu-text">行程</text>
-      <text class="menu-arrow">›</text>
+      <app-icon class="menu-arrow" name="chevron-right" size="{{32}}" color="#a6a6a6" />
     </view>
     <view class="menu-item" bindtap="onGoStatistics">
-      <text class="menu-icon">📈</text>
+      <app-icon class="menu-icon" name="statistics" size="{{44}}" color="#38C172" />
       <text class="menu-text">分账统计</text>
-      <text class="menu-arrow">›</text>
+      <app-icon class="menu-arrow" name="chevron-right" size="{{32}}" color="#a6a6a6" />
     </view>
   </view>
 </view>

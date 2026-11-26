@@ -17,7 +17,7 @@
       <picker mode="date" value="{{date}}" bindchange="onDateChange">
         <view class="form-picker">
           <text class="{{date ? '' : 'placeholder'}}">{{date || '选择出行日期'}}</text>
-          <text class="picker-arrow">›</text>
+          <app-icon class="picker-arrow" name="chevron-right" size="{{32}}" color="#a6a6a6" />
         </view>
       </picker>
     </view>
@@ -33,7 +33,7 @@
           data-color="{{item}}"
           bindtap="onColorTap"
         >
-          <text wx:if="{{coverColor === item}}" class="check-icon">✓</text>
+          <app-icon wx:if="{{coverColor === item}}" class="check-icon" name="check" size="{{28}}" color="#ffffff" />
         </view>
       </view>
     </view>
@@ -55,7 +55,7 @@
       <view class="member-list" wx:if="{{members.length > 0}}">
         <view class="member-tag" wx:for="{{members}}" wx:key="*this">
           <text>{{item}}</text>
-          <text class="member-remove" data-index="{{index}}" bindtap="onRemoveMember">×</text>
+          <app-icon class="member-remove" data-index="{{index}}" bindtap="onRemoveMember" name="close" size="{{24}}" color="#ffffff" />
         </view>
       </view>
     </view>

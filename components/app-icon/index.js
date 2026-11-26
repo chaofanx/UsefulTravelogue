@@ -10,8 +10,9 @@ function toBase64(str) {
 function buildSvg(name, color, active) {
   const def = icons[name];
   if (!def) return '';
+  const fill = def.fill || [];
   const body = def.paths.map((d, i) => {
-    const filled = active && def.fill.indexOf(i) !== -1;
+    const filled = active && fill.indexOf(i) !== -1;
     return `<path d="${d}"${filled ? ` fill="${color}" fill-opacity="0.18"` : ''}/>`;
   }).join('');
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="${color}" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">${body}</svg>`;
@@ -27,10 +28,24 @@ Component({
 
   data: { src: '' },
 
+  lifetimes: {
+    attached() {
+      this.render();
+    }
+  },
+
   observers: {
-    'name, color, active'(name, color, active) {
+    'name, color, active'() {
+      this.render();
+    }
+  },
+
+  methods: {
+    render() {
+      const { name, color, active } = this.data;
       const svg = buildSvg(name, color, active);
-      this.setData({ src: svg ? 'data:image/svg+xml;base64,' + toBase64(svg) : '' });
+      const src = svg ? 'data:image/svg+xml;base64,' + toBase64(svg) : '';
+      if (src !== this.data.src) this.setData({ src });
     }
   }
 });

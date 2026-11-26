@@ -25,33 +25,33 @@
 
   <view class="menu-card">
     <view class="menu-item" bindtap="onMenuItem" data-type="vip">
-      <text class="menu-icon">💎</text>
+      <app-icon class="menu-icon" name="vip" size="{{40}}" color="#38C172" />
       <text class="menu-text">会员中心</text>
       <text class="menu-badge">{{userInfo.vip ? 'VIP用户' : '免费用户'}}</text>
-      <text class="menu-arrow">›</text>
+      <app-icon class="menu-arrow" name="chevron-right" size="{{32}}" color="#a6a6a6" />
     </view>
     <view class="menu-item" bindtap="onMenuItem" data-type="stats">
-      <text class="menu-icon">📊</text>
+      <app-icon class="menu-icon" name="chart" size="{{40}}" color="#38C172" />
       <text class="menu-text">我的统计</text>
-      <text class="menu-arrow">›</text>
+      <app-icon class="menu-arrow" name="chevron-right" size="{{32}}" color="#a6a6a6" />
     </view>
     <view class="menu-item" bindtap="onMenuItem" data-type="setting">
-      <text class="menu-icon">⚙️</text>
+      <app-icon class="menu-icon" name="settings" size="{{40}}" color="#38C172" />
       <text class="menu-text">设置</text>
-      <text class="menu-arrow">›</text>
+      <app-icon class="menu-arrow" name="chevron-right" size="{{32}}" color="#a6a6a6" />
     </view>
   </view>
 
   <view class="menu-card">
     <view class="menu-item" bindtap="onMenuItem" data-type="about">
-      <text class="menu-icon">ℹ️</text>
+      <app-icon class="menu-icon" name="info" size="{{40}}" color="#38C172" />
       <text class="menu-text">关于好用旅记</text>
-      <text class="menu-arrow">›</text>
+      <app-icon class="menu-arrow" name="chevron-right" size="{{32}}" color="#a6a6a6" />
     </view>
     <view class="menu-item" bindtap="onMenuItem" data-type="feedback">
-      <text class="menu-icon">💬</text>
+      <app-icon class="menu-icon" name="chat" size="{{40}}" color="#38C172" />
       <text class="menu-text">帮助与反馈</text>
-      <text class="menu-arrow">›</text>
+      <app-icon class="menu-arrow" name="chevron-right" size="{{32}}" color="#a6a6a6" />
     </view>
   </view>
 

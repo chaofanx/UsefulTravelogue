@@ -8,8 +8,8 @@
         <text class="ticket-desc">分享你的旅程印记</text>
       </view>
       <view class="ticket-right">
-        <text class="ticket-icon">🎟️</text>
-        <text class="ticket-arrow">›</text>
+        <app-icon class="ticket-icon" name="ticket" size="{{52}}" color="#38C172" />
+        <app-icon class="ticket-arrow" name="chevron-right" size="{{32}}" color="#a6a6a6" />
       </view>
     </view>
 
@@ -39,7 +39,7 @@
   </view>
 
   <view class="float-btn" bindtap="onAddSchedule">
-    <text class="float-icon">✏️</text>
+    <app-icon class="float-icon" name="edit" size="{{36}}" color="#ffffff" />
     <text class="float-text">记一项</text>
   </view>
 
@@ -56,9 +56,9 @@
         <view class="form-item">
           <view class="form-label">目的地</view>
           <view class="location-picker" bindtap="onChooseLocation">
-            <text class="location-icon">📍</text>
+            <app-icon class="location-icon" name="pin" size="{{36}}" color="#38C172" />
             <text class="location-text {{formLocation ? '' : 'placeholder'}}">{{formLocation || '点击选择地点'}}</text>
-            <text class="location-arrow">›</text>
+            <app-icon class="location-arrow" name="chevron-right" size="{{32}}" color="#a6a6a6" />
           </view>
         </view>
 

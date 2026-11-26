@@ -1,3 +1,4 @@
 <view class="travel-icon" style="background-color: {{bgColor}}; width: {{size}}rpx; height: {{size}}rpx; border-radius: {{round ? '50%' : '16rpx'}};">
-  <text class="icon-emoji">{{iconText}}</text>
+  <app-icon wx:if="{{svgName}}" name="{{svgName}}" size="{{iconSize}}" color="{{svgColor}}" />
+  <text wx:else class="icon-emoji">{{iconText}}</text>
 </view>

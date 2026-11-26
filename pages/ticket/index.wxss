@@ -27,6 +27,9 @@
 }
 
 .ticket-type {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
   font-size: 32rpx;
   color: #fff;
   font-weight: 600;

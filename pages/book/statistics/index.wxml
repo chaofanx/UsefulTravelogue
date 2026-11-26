@@ -103,21 +103,21 @@
       <view class="action-card" bindtap="onShareSettlement">
         <view class="action-card-inner">
           <text class="action-card-text">转发分账方案</text>
-          <text class="action-card-arrow">›</text>
+          <app-icon class="action-card-arrow" name="chevron-right" size="{{32}}" color="#a6a6a6" />
         </view>
       </view>
 
       <view class="action-card" bindtap="onMoreStats">
         <view class="action-card-inner">
           <text class="action-card-text">更多团队支出统计</text>
-          <text class="action-card-arrow">›</text>
+          <app-icon class="action-card-arrow" name="chevron-right" size="{{32}}" color="#a6a6a6" />
         </view>
       </view>
 
       <view wx:if="{{isVip}}" class="action-card" bindtap="onExportExcel">
         <view class="action-card-inner">
           <text class="action-card-text">导出为 Excel 表格</text>
-          <text class="action-card-arrow">›</text>
+          <app-icon class="action-card-arrow" name="chevron-right" size="{{32}}" color="#a6a6a6" />
         </view>
       </view>
     </view>

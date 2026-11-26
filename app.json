@@ -18,7 +18,8 @@
     "t-icon": "tdesign-miniprogram/icon/icon",
     "t-navbar": "tdesign-miniprogram/navbar/navbar",
     "t-popup": "tdesign-miniprogram/popup/popup",
-    "nav-bar": "/components/nav-bar/index"
+    "nav-bar": "/components/nav-bar/index",
+    "app-icon": "/components/app-icon/index"
   },
   "window": {
     "navigationBarTitleText": "好用旅记",

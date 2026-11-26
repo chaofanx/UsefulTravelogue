@@ -3,10 +3,10 @@
   <nav-bar leftArrow frosted background="transparent" color="#fff" placeholder="{{false}}">
     <view slot="right" class="header-actions">
       <view class="action-btn" bindtap="onVip">
-        <text class="action-icon">💎</text>
+        <app-icon class="action-icon" name="vip" size="{{34}}" color="#ffffff" />
       </view>
       <view class="action-btn" bindtap="onOpenSetting">
-        <text class="action-icon">⚙️</text>
+        <app-icon class="action-icon" name="settings" size="{{34}}" color="#ffffff" />
       </view>
     </view>
   </nav-bar>
@@ -36,25 +36,25 @@
       <view class="setting-list">
         <view class="setting-item" bindtap="onChangeCover">
           <text class="setting-label">更换账本封面</text>
-          <text class="setting-arrow">›</text>
+          <app-icon class="setting-arrow" name="chevron-right" size="{{32}}" color="#a6a6a6" />
         </view>
 
         <view class="setting-item" bindtap="onChangeName">
           <text class="setting-label">更换账本名称</text>
           <view class="setting-value-row">
             <text class="setting-value">{{book.title}}</text>
-            <text class="setting-arrow">›</text>
+            <app-icon class="setting-arrow" name="chevron-right" size="{{32}}" color="#a6a6a6" />
           </view>
         </view>
 
         <view class="setting-item" bindtap="onAddMember">
           <text class="setting-label">增加成员</text>
-          <text class="setting-arrow">›</text>
+          <app-icon class="setting-arrow" name="chevron-right" size="{{32}}" color="#a6a6a6" />
         </view>
 
         <view class="setting-item setting-danger" wx:if="{{isCreator}}" bindtap="onDisbandBook">
           <text class="setting-label danger-text">解散账本</text>
-          <text class="setting-arrow danger-text">›</text>
+          <app-icon class="setting-arrow" name="chevron-right" size="{{32}}" color="#FF6B6B" />
         </view>
       </view>
     </view>
@@ -111,7 +111,7 @@
           <view class="alias-row" wx:for="{{book.members}}" wx:key="id">
             <view class="member-tag">
               <text>{{item.name}}</text>
-              <text class="tag-remove" wx:if="{{index > 0}}" data-id="{{item.id}}" bindtap="onRemoveMember">×</text>
+              <app-icon class="tag-remove" wx:if="{{index > 0}}" data-id="{{item.id}}" bindtap="onRemoveMember" name="close" size="{{26}}" color="#a6a6a6" />
             </view>
             <input
               wx:if="{{isCreator}}"

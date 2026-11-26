@@ -1,0 +1,29 @@
+// 记账分类 名称 → 图标名 / 图标颜色（与后端 CATEGORY_COLOR_MAP 对应，娱乐色加深以保证线性图标可读）
+var KEYS = {
+  '餐饮': 'food',
+  '交通': 'transport',
+  '住宿': 'hotel',
+  '娱乐': 'entertainment',
+  '门票': 'ticket',
+  '购物': 'shopping',
+  '其他': 'other'
+};
+
+var COLORS = {
+  '餐饮': '#FF6B6B',
+  '交通': '#38C172',
+  '住宿': '#4A90D9',
+  '娱乐': '#D99A00',
+  '门票': '#6C5CE7',
+  '购物': '#FF9F43',
+  '其他': '#8b8b8b'
+};
+
+module.exports = {
+  key: function (name) {
+    return KEYS[name] || 'other';
+  },
+  color: function (name) {
+    return COLORS[name] || '#8b8b8b';
+  }
+};

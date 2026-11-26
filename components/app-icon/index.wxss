@@ -1,3 +1,8 @@
+:host {
+  display: inline-flex;
+  line-height: 0;
+}
+
 .app-icon {
   display: block;
   flex-shrink: 0;

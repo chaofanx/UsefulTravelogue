@@ -5,7 +5,7 @@
   <view class="top-section" style="padding-top: calc({{statusBarHeight}}px + 24rpx);">
     <view class="brand-area">
       <view class="brand-logo">
-        <text class="logo-icon">✈️</text>
+        <app-icon class="logo-icon" name="plane" size="{{56}}" color="#ffffff" />
       </view>
       <view class="brand-text">
         <view class="brand-name">好用旅记</view>
@@ -16,11 +16,11 @@
 
   <view class="action-section">
     <view class="create-btn" bindtap="onCreateBook">
-      <text class="create-icon">+</text>
+      <app-icon class="create-icon" name="plus" size="{{40}}" color="#ffffff" />
       <text class="create-text">新建账本</text>
     </view>
     <view class="profile-btn" bindtap="onProfile">
-      <text class="profile-icon">👤</text>
+      <app-icon class="profile-icon" name="user" size="{{44}}" color="#38C172" />
     </view>
   </view>
 
@@ -37,7 +37,7 @@
   </view>
 
   <view class="empty-state" wx:else>
-    <text class="empty-icon">📒</text>
+    <app-icon class="empty-icon" name="notebook" size="{{96}}" color="#c5c5c5" />
     <text class="empty-text">还没有账本，点击上方新建吧</text>
   </view>
 
@@ -83,7 +83,7 @@
               </view>
             </block>
             <block wx:else>
-              <text class="upload-icon">📷</text>
+              <app-icon class="upload-icon" name="camera" size="{{56}}" color="#a6a6a6" />
               <text class="upload-text">点击上传封面</text>
             </block>
           </view>
@@ -98,7 +98,7 @@
                 data-color="{{item}}"
                 bindtap="onColorPick"
               >
-                <text wx:if="{{newBookColor === item}}" class="check-icon">✓</text>
+                <app-icon wx:if="{{newBookColor === item}}" class="check-icon" name="check" size="{{28}}" color="#ffffff" />
               </view>
             </view>
           </view>

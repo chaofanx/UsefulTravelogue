@@ -5,13 +5,16 @@
     <view wx:if="{{ticket}}" class="ticket-preview">
       <view class="ticket-card-stub">
         <view class="ticket-top">
-          <text class="ticket-type">🎟️ 行程票根</text>
+          <view class="ticket-type">
+            <app-icon name="ticket" size="{{36}}" color="#ffffff" />
+            <text>行程票根</text>
+          </view>
           <text class="ticket-code">NO. {{book.title || ''}} 第{{ticket.id}}号</text>
         </view>
         <view class="ticket-body">
           <view class="ticket-route">
             <text class="route-from">{{book.title || ''}}</text>
-            <text class="route-arrow">→</text>
+            <app-icon class="route-arrow" name="arrow-right" size="{{36}}" color="#a6a6a6" />
             <text class="route-to">{{ticket.location}}</text>
           </view>
           <view class="ticket-info-row">

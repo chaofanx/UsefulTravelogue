@@ -1,11 +1,11 @@
 const iconMap = {
-  food: { text: '🍽️', color: '#FF6B6B' },
-  transport: { text: '🚗', color: '#38C172' },
-  hotel: { text: '🏨', color: '#4A90D9' },
-  entertainment: { text: '🎮', color: '#FFD93D' },
-  ticket: { text: '🎫', color: '#6C5CE7' },
-  shopping: { text: '🛍️', color: '#FF8C42' },
-  other: { text: '📦', color: '#999' },
+  food: { text: '🍽️', color: '#FF6B6B', svg: 'food' },
+  transport: { text: '🚗', color: '#38C172', svg: 'transport' },
+  hotel: { text: '🏨', color: '#4A90D9', svg: 'hotel' },
+  entertainment: { text: '🎮', color: '#FFD93D', svg: 'entertainment', stroke: '#D99A00' },
+  ticket: { text: '🎫', color: '#6C5CE7', svg: 'ticket' },
+  shopping: { text: '🛍️', color: '#FF8C42', svg: 'shopping' },
+  other: { text: '📦', color: '#999999', svg: 'other' },
   diamond: { text: '💎', color: '#38C172' },
   setting: { text: '⚙️', color: '#666' },
   back: { text: '←', color: '#333' },
@@ -40,6 +40,9 @@ Component({
 
   data: {
     iconText: '',
+    svgName: '',
+    svgColor: '#999999',
+    iconSize: 36,
     bgColor: '#EEEEEE'
   },
 
@@ -50,7 +53,7 @@ Component({
   },
 
   observers: {
-    'icon'() {
+    'icon, size'() {
       this.updateIcon();
     }
   },
@@ -62,6 +65,9 @@ Component({
       if (info) {
         this.setData({
           iconText: info.text,
+          svgName: info.svg || '',
+          svgColor: info.stroke || info.color,
+          iconSize: Math.round(this.data.size * 0.56),
           bgColor: info.color + '20'
         });
         return;
@@ -70,6 +76,7 @@ Component({
       const fallback = iconMap['other'];
       this.setData({
         iconText: icon || fallback.text,
+        svgName: '',
         bgColor: fallback.color + '20'
       });
     }

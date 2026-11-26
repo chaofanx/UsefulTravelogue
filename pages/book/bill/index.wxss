@@ -171,6 +171,10 @@
   margin-bottom: 8rpx;
 }
 
+.cat-icon {
+  margin-bottom: 8rpx;
+}
+
 .cat-name {
   font-size: 22rpx;
   color: var(--td-text-color-secondary);

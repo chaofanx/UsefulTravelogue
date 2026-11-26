@@ -2,7 +2,7 @@
   <view class="card-cover" style="background-color: {{book.coverColor || '#4A90D9'}}">
     <image wx:if="{{book.cover}}" class="cover-img" src="{{book.cover}}" mode="aspectFill" />
     <view wx:if="{{book.vip}}" class="vip-badge">
-      <text class="vip-icon">💎</text>
+      <app-icon class="vip-icon" name="vip" size="{{26}}" color="#ffffff" />
     </view>
     <view class="cover-placeholder">
       <text class="cover-text">{{book.title}}</text>
