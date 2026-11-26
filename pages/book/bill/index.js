@@ -18,8 +18,16 @@ Page({
     showFormPopup: false,
     editingId: null,
     formAmount: '',
+    formCurrency: 'CNY',
+    currencySymbol: '¥',
+    currencyIndex: 0,
+    currencies: [{ code: 'CNY', name: '人民币', symbol: '¥', rate: 1 }],
+    currencyLabels: ['人民币 CNY'],
+    convertText: '',
+    editRate: 0,
+    editCurrency: '',
     formCategory: '',
-    formPayer: '',
+    formPayerId: '',
     formParticipants: [],
     participantMap: {},
     formRemark: '',
@@ -28,7 +36,7 @@ Page({
     formExclude: false,
     todayStr: '',
     yesterdayStr: '',
-    payers: [],
+    members: [],
     // 兜底默认值，与后端 CATEGORY_EMOJI_MAP 保持一致；运行时以 /system/categories 为准
     categories: [
       { name: '餐饮', icon: '🍽️' },
@@ -73,6 +81,14 @@ Page({
       this.setData({ otherEmojis: (data && data.emojis) || [] });
     }).catch(() => {});
 
+    // 币种与汇率：仅用于表单折算预览，入账汇率以后端为准；失败时只能记人民币
+    const ratesKey = cache.keys.exchangeRates();
+    const cachedRates = cache.get(ratesKey);
+    if (cachedRates !== undefined) this.applyCurrencies(cachedRates);
+    cache.fetchAndCache(ratesKey, () => api.getExchangeRates()).then(data => {
+      this.applyCurrencies(data);
+    }).catch(() => {});
+
     // 分类以后端为准；data.categories 里的默认值仅用于首次请求返回前/请求失败时兜底
     const catKey = cache.keys.categories();
     const cachedCats = cache.get(catKey);
@@ -96,10 +112,9 @@ Page({
 
   applyData(book, billsData) {
     const members = (book && book.members) ? book.members : [];
-    const payers = members.map(m => m.name);
     const memberAliases = (book && book.memberAliases) ? book.memberAliases : {};
     const groupedBills = (billsData && billsData.groups) ? billsData.groups : [];
-    this.setData({ book: book || {}, groupedBills, payers, memberAliases, loading: false });
+    this.setData({ book: book || {}, groupedBills, members, memberAliases, loading: false });
     this.refreshShareImage();
   },
 
@@ -131,22 +146,70 @@ Page({
 
   // ========== 表单弹层 ==========
 
+  applyCurrencies(data) {
+    const list = (data && data.currencies) ? data.currencies : [];
+    if (list.length === 0) return;
+    const index = Math.max(0, list.findIndex(c => c.code === this.data.formCurrency));
+    this.setData({
+      currencies: list,
+      currencyLabels: list.map(c => `${c.name} ${c.code}`),
+      currencyIndex: index
+    });
+    this.refreshConvert();
+  },
+
+  // 刷新币种符号和「≈ ¥xx」折算预览；编辑同币种账单时沿用记账时的汇率快照
+  refreshConvert() {
+    const { formCurrency, formAmount, currencies, editCurrency, editRate } = this.data;
+    const cur = currencies.find(c => c.code === formCurrency);
+    if (!cur || cur.code === 'CNY') {
+      this.setData({ currencySymbol: '¥', convertText: '' });
+      return;
+    }
+    const rate = (editCurrency === formCurrency && editRate) ? editRate : cur.rate;
+    const amount = parseFloat(formAmount);
+    const rateText = `1 ${cur.code} ≈ ¥${Number(rate.toPrecision(4))}`;
+    this.setData({
+      currencySymbol: cur.symbol,
+      convertText: amount > 0 ? `≈ ¥${(amount * rate).toFixed(2)}（${rateText}）` : rateText
+    });
+  },
+
+  onCurrencyChange(e) {
+    const index = Number(e.detail.value);
+    const cur = this.data.currencies[index];
+    if (!cur) return;
+    this.setData({ currencyIndex: index, formCurrency: cur.code });
+    this.refreshConvert();
+  },
+
   buildParticipantMap(list) {
     const map = {};
     (list || []).forEach(n => { map[n] = true; });
     return map;
   },
 
+  // 账单里的付款人/分摊人以成员 ID 标识；历史账单缺 ID 时按昵称回退匹配
+  namesToIds(names) {
+    const byName = {};
+    this.data.members.forEach(m => { byName[m.name] = m.id; });
+    return (names || []).map(n => byName[n]).filter(Boolean);
+  },
+
   resetForm() {
-    const participants = [...this.data.payers];
+    const participants = this.data.members.map(m => m.id);
     const now = new Date();
     const todayStr = dateToStr(now);
     const yesterdayStr = dateToStr(new Date(now.getTime() - 86400000));
     this.setData({
       editingId: null,
       formAmount: '',
+      formCurrency: 'CNY',
+      currencyIndex: 0,
+      editRate: 0,
+      editCurrency: '',
       formCategory: '',
-      formPayer: this.data.payers.length > 0 ? this.data.payers[0] : '',
+      formPayerId: this.data.members.length > 0 ? this.data.members[0].id : '',
       formParticipants: participants,
       participantMap: this.buildParticipantMap(participants),
       formRemark: '',
@@ -156,6 +219,7 @@ Page({
       todayStr,
       yesterdayStr
     });
+    this.refreshConvert();
   },
 
   onAddBill() {
@@ -165,7 +229,13 @@ Page({
 
   onBillTap(e) {
     const bill = e.detail.bill;
-    const participants = bill.splitParticipants || [...this.data.payers];
+    let participants = bill.splitMemberIds;
+    if (!participants || participants.length === 0) {
+      participants = (bill.splitParticipants && bill.splitParticipants.length > 0)
+        ? this.namesToIds(bill.splitParticipants)
+        : this.data.members.map(m => m.id);
+    }
+    const payerId = bill.payerMemberId || this.namesToIds([bill.payer])[0] || '';
     const now = new Date();
     const todayStr = dateToStr(now);
     const yesterdayStr = dateToStr(new Date(now.getTime() - 86400000));
@@ -174,9 +244,14 @@ Page({
     this.setData({
       showFormPopup: true,
       editingId: bill.id,
-      formAmount: String(bill.amount || ''),
+      // 非人民币账单回显原币种金额，保存时后端沿用记账时的汇率快照
+      formAmount: String((bill.currency && bill.currency !== 'CNY' && bill.originalAmount != null ? bill.originalAmount : bill.amount) || ''),
+      formCurrency: bill.currency || 'CNY',
+      currencyIndex: Math.max(0, this.data.currencies.findIndex(c => c.code === (bill.currency || 'CNY'))),
+      editCurrency: bill.currency || 'CNY',
+      editRate: bill.exchangeRate || 0,
       formCategory: bill.category || '',
-      formPayer: bill.payer || '',
+      formPayerId: payerId,
       formParticipants: participants,
       participantMap: this.buildParticipantMap(participants),
       formRemark: bill.remark || '',
@@ -186,6 +261,7 @@ Page({
       todayStr,
       yesterdayStr
     });
+    this.refreshConvert();
   },
 
   onFormPopupVisible(e) {
@@ -196,6 +272,7 @@ Page({
 
   onAmountInput(e) {
     this.setData({ formAmount: e.detail.value });
+    this.refreshConvert();
   },
 
   onCategoryTap(e) {
@@ -225,17 +302,17 @@ Page({
   },
 
   onPayerTap(e) {
-    this.setData({ formPayer: e.currentTarget.dataset.name });
+    this.setData({ formPayerId: e.currentTarget.dataset.id });
   },
 
   onParticipantTap(e) {
-    const name = e.currentTarget.dataset.name;
+    const id = e.currentTarget.dataset.id;
     let participants = [...this.data.formParticipants];
-    const idx = participants.indexOf(name);
+    const idx = participants.indexOf(id);
     if (idx >= 0) {
       participants.splice(idx, 1);
     } else {
-      participants.push(name);
+      participants.push(id);
     }
     this.setData({
       formParticipants: participants,
@@ -253,7 +330,7 @@ Page({
 
   onConfirmBill() {
     const {
-      formAmount, formCategory, formPayer, formParticipants, formRemark,
+      formAmount, formCurrency, formCategory, formPayerId, formParticipants, formRemark,
       formDate, formIcon, formExclude, isVip, editingId, bookId
     } = this.data;
     if (!formAmount || parseFloat(formAmount) <= 0) {
@@ -264,7 +341,7 @@ Page({
       wx.showToast({ title: '请选择分类', icon: 'none' });
       return;
     }
-    if (!formPayer) {
+    if (!formPayerId) {
       wx.showToast({ title: '请选择付款人', icon: 'none' });
       return;
     }
@@ -279,10 +356,11 @@ Page({
     const billData = {
       category: formCategory,
       amount: parseFloat(formAmount),
-      payer: formPayer,
+      currency: formCurrency,
+      payerMemberId: formPayerId,
       date: formDate || dateToStr(now),
       time: timeStr,
-      splitParticipants: formParticipants,
+      splitMemberIds: formParticipants,
     };
     if (formCategory === '其他' && formIcon) {
       billData.icon = formIcon;

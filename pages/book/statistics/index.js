@@ -12,6 +12,7 @@ Page({
     categoryStatsData: [],
     maxValue: 0,
     settlements: [],
+    settlementRecords: [],
     settlementMode: 'smart',
     currentUserStats: null,
     isVip: false,
@@ -40,11 +41,12 @@ Page({
     cache.load(this, [
       { key: cache.keys.book(bookId), fetch: () => api.getBook(bookId) },
       { key: cache.keys.statistics(bookId), fetch: () => api.getStatistics(bookId) },
-      { key: cache.keys.settlements(bookId, 'smart'), fetch: () => api.getSettlements(bookId, 'smart') }
-    ], (book, statsData, settlementData) => this.applyData(book, statsData, settlementData));
+      { key: cache.keys.settlements(bookId, 'smart'), fetch: () => api.getSettlements(bookId, 'smart') },
+      { key: cache.keys.settlementRecords(bookId), fetch: () => api.getSettlementRecords(bookId) }
+    ], (book, statsData, settlementData, recordsData) => this.applyData(book, statsData, settlementData, recordsData));
   },
 
-  applyData(book, statsData, settlementData) {
+  applyData(book, statsData, settlementData, recordsData) {
     const categoryStats = (statsData && statsData.categories) ? statsData.categories : [];
     const total = statsData ? (statsData.totalAmount || 0) : 0;
 
@@ -74,6 +76,7 @@ Page({
       categoryStatsData: statsDataFormatted,
       maxValue,
       settlements: this.formatSettlements(settlementData),
+      settlementRecords: this.formatRecords(recordsData),
       currentUserStats,
       loading: false
     });
@@ -85,7 +88,11 @@ Page({
       : [];
     return settlementList.map(s => {
       const fu = s.fromUser || {};
+      const tu = s.toUser || {};
       return {
+        key: `${fu.memberId}-${tu.memberId}`,
+        fromMemberId: fu.memberId,
+        toMemberId: tu.memberId,
         name: fu.nickname ? fu.nickname.charAt(0) : '',
         fullName: fu.nickname || '',
         avatar: fu.avatar || '',
@@ -94,6 +101,63 @@ Page({
         amount: s.amount || 0,
         amountText: formatAmount(s.amount || 0)
       };
+    });
+  },
+
+  formatRecords(recordsData) {
+    const list = (recordsData && recordsData.records) ? recordsData.records : [];
+    return list.map(r => ({
+      id: r.id,
+      fromName: r.fromNickname,
+      toName: r.toNickname,
+      amountText: formatAmount(r.amount)
+    }));
+  },
+
+  // 写操作后重新拉取当前模式的方案和记录列表（缓存已在 api.js 中失效）
+  reloadSettlements() {
+    const { bookId, settlementMode } = this.data;
+    return Promise.all([
+      cache.fetchAndCache(cache.keys.settlements(bookId, settlementMode), () => api.getSettlements(bookId, settlementMode)),
+      cache.fetchAndCache(cache.keys.settlementRecords(bookId), () => api.getSettlementRecords(bookId))
+    ]).then(([settlementData, recordsData]) => {
+      this.setData({
+        settlements: this.formatSettlements(settlementData),
+        settlementRecords: this.formatRecords(recordsData)
+      });
+    });
+  },
+
+  onMarkPaid(e) {
+    const item = this.data.settlements[e.currentTarget.dataset.index];
+    if (!item || !item.fromMemberId || !item.toMemberId) return;
+    wx.showModal({
+      title: '标记已还款',
+      content: `确认「${item.fullName}」已向对方转账 ¥${item.amountText}？`,
+      success: (res) => {
+        if (!res.confirm) return;
+        api.createSettlementRecord(this.data.bookId, {
+          fromMemberId: item.fromMemberId,
+          toMemberId: item.toMemberId,
+          amount: item.amount
+        }).then(() => this.reloadSettlements())
+          .then(() => wx.showToast({ title: '已标记', icon: 'success' }))
+          .catch(err => wx.showToast({ title: (err && err.message) || '操作失败', icon: 'none' }));
+      }
+    });
+  },
+
+  onUndoRecord(e) {
+    const { id } = e.currentTarget.dataset;
+    wx.showModal({
+      title: '撤销还款记录',
+      content: '撤销后这笔转账会重新出现在待还款列表中。',
+      success: (res) => {
+        if (!res.confirm) return;
+        api.deleteSettlementRecord(this.data.bookId, id)
+          .then(() => this.reloadSettlements())
+          .catch(err => wx.showToast({ title: (err && err.message) || '操作失败', icon: 'none' }));
+      }
     });
   },
 

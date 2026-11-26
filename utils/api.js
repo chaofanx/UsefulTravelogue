@@ -10,6 +10,12 @@ function invalidateBillRelated(bookId) {
   cache.removeByPrefix(cache.keys.book(bookId) + ':settlements');
 }
 
+// 结算记录增删会影响：各模式结算方案、记录列表
+function invalidateSettlementRelated(bookId) {
+  cache.removeByPrefix(cache.keys.book(bookId) + ':settlements');
+  cache.remove(cache.keys.settlementRecords(bookId));
+}
+
 // 账本信息/成员变动会影响：账本列表、该账本详情
 function invalidateBookRelated(bookId) {
   cache.remove(cache.keys.books());
@@ -384,6 +390,25 @@ const api = {
     return get(`/books/${bookId}/settlements`, { mode: mode || 'smart' });
   },
 
+  getSettlementRecords(bookId) {
+    return get(`/books/${bookId}/settlements/records`);
+  },
+
+  // 标记「from 已向 to 转账」。记录会改变各模式的分账方案，需一并失效
+  createSettlementRecord(bookId, record) {
+    return post(`/books/${bookId}/settlements/records`, record).then(data => {
+      invalidateSettlementRelated(bookId);
+      return data;
+    });
+  },
+
+  deleteSettlementRecord(bookId, recordId) {
+    return del(`/books/${bookId}/settlements/records/${recordId}`).then(data => {
+      invalidateSettlementRelated(bookId);
+      return data;
+    });
+  },
+
   getTeamSettlements(bookId) {
     return get(`/books/${bookId}/settlements/team`);
   },
@@ -398,6 +423,10 @@ const api = {
 
   getSystemEmojis() {
     return get('/system/emojis');
+  },
+
+  getExchangeRates() {
+    return get('/system/exchange-rates');
   },
 
   getSystemCategories() {

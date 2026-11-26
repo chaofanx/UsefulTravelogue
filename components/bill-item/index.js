@@ -9,14 +9,17 @@ Component({
   },
 
   data: {
-    amountText: ''
+    amountText: '',
+    originalText: ''
   },
 
   observers: {
     'bill'(bill) {
       if (bill) {
+        const foreign = bill.currency && bill.currency !== 'CNY' && bill.originalAmount != null;
         this.setData({
-          amountText: formatAmount(bill.amount)
+          amountText: formatAmount(bill.amount),
+          originalText: foreign ? `${formatAmount(bill.originalAmount)} ${bill.currency}` : ''
         });
       }
     }

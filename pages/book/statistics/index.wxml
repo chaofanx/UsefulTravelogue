@@ -63,16 +63,30 @@
       </view>
 
       <view class="settlement-list">
-        <view class="settlement-item" wx:for="{{settlements}}" wx:key="name">
+        <view class="settlement-item" wx:for="{{settlements}}" wx:key="key">
           <view class="settlement-avatar" style="background-color: {{item.avatarColor}}">
             <text class="settlement-avatar-text">{{item.name}}</text>
           </view>
           <view class="settlement-info">
-            <text class="settlement-desc">{{item.desc}}</text>
+            <text class="settlement-desc">{{item.fullName}}{{item.desc}}</text>
           </view>
           <view class="settlement-amount">
             <text class="settlement-amount-val">¥{{item.amountText}}</text>
           </view>
+          <view class="settlement-paid-btn" data-index="{{index}}" bindtap="onMarkPaid">
+            <text>已还</text>
+          </view>
+        </view>
+        <view wx:if="{{settlements.length === 0}}" class="settlement-tip">
+          <text>当前没有待还款项</text>
+        </view>
+      </view>
+
+      <view class="record-list" wx:if="{{settlementRecords.length > 0}}">
+        <view class="record-title"><text>已还款记录</text></view>
+        <view class="record-item" wx:for="{{settlementRecords}}" wx:key="id">
+          <text class="record-text">{{item.fromName}} → {{item.toName}}　¥{{item.amountText}}</text>
+          <text class="record-undo" data-id="{{item.id}}" bindtap="onUndoRecord">撤销</text>
         </view>
       </view>
 

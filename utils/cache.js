@@ -15,9 +15,11 @@ const keys = {
   schedules: (id) => `book:${id}:schedules`,
   statistics: (id) => `book:${id}:statistics`,
   settlements: (id, mode) => `book:${id}:settlements:${mode || 'smart'}`,
+  settlementRecords: (id) => `book:${id}:settlementRecords`,
   profile: () => 'user:profile',
   emojis: () => 'system:emojis',
-  categories: () => 'system:categories'
+  categories: () => 'system:categories',
+  exchangeRates: () => 'system:exchangeRates'
 };
 
 function get(key) {

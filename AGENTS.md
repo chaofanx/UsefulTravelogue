@@ -42,9 +42,11 @@ loadData() {
 | `book:{id}:schedules` | 行程分组 |
 | `book:{id}:statistics` | 统计数据 |
 | `book:{id}:settlements:{mode}` | 结算方案（按模式分 key） |
+| `book:{id}:settlementRecords` | 已还款（结算）记录 |
 | `user:profile` | 用户资料 |
 | `system:emojis` | 「其他」分类 emoji |
 | `system:categories` | 记账分类列表（后端为准，页面内保留兜底默认值） |
+| `system:exchangeRates` | 币种与折合人民币汇率（后端每天更新；仅用于记账表单折算预览，入账汇率以后端为准） |
 
 账本相关 key 均以 `book:{id}` 开头，`removeByPrefix(cache.keys.book(id))` 可清掉该账本全部缓存
 （已做边界处理，`book:1` 不会误删 `book:12`）。
@@ -62,6 +64,7 @@ loadData() {
   - 响应即最新完整资源（如 updateBook / updateBookAliases / updateUserProfile）→ `cache.set` 直接更新。
 - 现有规则：
   - 账单增删改 → 清 `bills` / `statistics` / `settlements:*`（`invalidateBillRelated`）
+  - 结算记录增删 → 清 `settlements:*` / `settlementRecords`（`invalidateSettlementRelated`）
   - 行程增删改 → 清 `schedules`
   - 账本/成员变动 → 清 `books` + `book:{id}`（`invalidateBookRelated`）；删账本用 `removeByPrefix` 清全部
   - 登录成功 → `cache.clear()`（防止 401 重登/换账号串数据）

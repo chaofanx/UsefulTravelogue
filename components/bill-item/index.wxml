@@ -9,5 +9,6 @@
   </view>
   <view class="bill-right">
     <text class="bill-amount">¥{{amountText}}</text>
+    <view wx:if="{{originalText}}" class="bill-original">{{originalText}}</view>
   </view>
 </view>

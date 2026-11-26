@@ -109,6 +109,27 @@
   margin-right: 16rpx;
 }
 
+.currency-picker {
+  display: flex;
+  align-items: center;
+  margin-right: 16rpx;
+}
+
+.currency-picker .currency {
+  margin-right: 4rpx;
+}
+
+.currency-arrow {
+  font-size: 28rpx;
+  color: var(--td-text-color-placeholder);
+}
+
+.convert-text {
+  margin-top: 12rpx;
+  font-size: 24rpx;
+  color: var(--td-text-color-placeholder);
+}
+
 .amount-input {
   flex: 1;
   font-size: 48rpx;

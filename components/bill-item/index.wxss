@@ -62,3 +62,10 @@
   padding: 2rpx 10rpx;
   margin-left: 12rpx;
 }
+
+.bill-original {
+  font-size: 22rpx;
+  color: var(--td-text-color-placeholder);
+  text-align: right;
+  margin-top: 4rpx;
+}

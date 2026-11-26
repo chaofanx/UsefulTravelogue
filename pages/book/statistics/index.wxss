@@ -163,6 +163,46 @@
   color: var(--travel-brand, #38C172);
 }
 
+.settlement-paid-btn {
+  flex-shrink: 0;
+  margin-left: 20rpx;
+  padding: 8rpx 20rpx;
+  border-radius: 24rpx;
+  font-size: 24rpx;
+  color: var(--travel-brand, #38C172);
+  border: 1rpx solid var(--travel-brand, #38C172);
+}
+
+.record-list {
+  margin-top: 12rpx;
+  padding-top: 16rpx;
+  border-top: 1rpx solid var(--td-component-stroke);
+}
+
+.record-title {
+  font-size: 24rpx;
+  color: var(--td-text-color-placeholder);
+  padding-bottom: 8rpx;
+}
+
+.record-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12rpx 0;
+}
+
+.record-text {
+  font-size: 26rpx;
+  color: var(--td-text-color-secondary);
+}
+
+.record-undo {
+  font-size: 24rpx;
+  color: var(--td-text-color-placeholder);
+  padding: 4rpx 12rpx;
+}
+
 .settlement-tip {
   padding: 16rpx 0;
   font-size: 24rpx;

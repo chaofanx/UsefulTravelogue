@@ -37,7 +37,16 @@
         <view class="form-item">
           <view class="form-label">金额</view>
           <view class="amount-input-wrap">
-            <text class="currency">¥</text>
+            <picker
+              class="currency-picker"
+              range="{{currencyLabels}}"
+              value="{{currencyIndex}}"
+              disabled="{{currencyLabels.length < 2}}"
+              bindchange="onCurrencyChange"
+            >
+              <text class="currency">{{currencySymbol}}</text>
+              <text wx:if="{{currencyLabels.length > 1}}" class="currency-arrow">▾</text>
+            </picker>
             <input
               class="amount-input"
               type="digit"
@@ -47,6 +56,7 @@
               focus="{{!editingId}}"
             />
           </view>
+          <view wx:if="{{convertText}}" class="convert-text">{{convertText}}</view>
         </view>
 
         <view class="form-item">
@@ -109,13 +119,13 @@
           <view class="form-label">付款人</view>
           <view class="payer-options">
             <view
-              wx:for="{{payers}}"
-              wx:key="*this"
-              class="payer-item {{formPayer === item ? 'active' : ''}}"
-              data-name="{{item}}"
+              wx:for="{{members}}"
+              wx:key="id"
+              class="payer-item {{formPayerId === item.id ? 'active' : ''}}"
+              data-id="{{item.id}}"
               bindtap="onPayerTap"
             >
-              <text>{{memberAliases[item] || item}}</text>
+              <text>{{memberAliases[item.name] || item.name}}</text>
             </view>
           </view>
         </view>
@@ -124,13 +134,13 @@
           <view class="form-label">参与分摊的人</view>
           <view class="payer-options">
             <view
-              wx:for="{{payers}}"
-              wx:key="*this"
-              class="payer-item {{participantMap[item] ? 'active' : ''}}"
-              data-name="{{item}}"
+              wx:for="{{members}}"
+              wx:key="id"
+              class="payer-item {{participantMap[item.id] ? 'active' : ''}}"
+              data-id="{{item.id}}"
               bindtap="onParticipantTap"
             >
-              <text>{{memberAliases[item] || item}}</text>
+              <text>{{memberAliases[item.name] || item.name}}</text>
             </view>
           </view>
         </view>
