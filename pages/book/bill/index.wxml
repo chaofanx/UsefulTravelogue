@@ -33,7 +33,7 @@
       </view>
       <view class="popup-title">{{editingId ? '编辑账单' : '记一笔'}}</view>
 
-      <view class="form-scroll">
+      <scroll-view scroll-y class="form-scroll">
         <view class="form-item">
           <view class="form-label">金额</view>
           <view class="amount-input-wrap">
@@ -166,7 +166,7 @@
         <view wx:if="{{editingId}}" class="delete-section" bindtap="onDeleteBill">
           <text class="delete-text">删除此账单</text>
         </view>
-      </view>
+      </scroll-view>
 
       <view class="popup-footer">
         <view class="footer-btn cancel-btn" bindtap="onCancelForm">取消</view>
